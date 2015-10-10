@@ -1,7 +1,13 @@
 box: java
 build:
   steps:
+    - maven
     - script:
         name: run tests with maven
         code: |
           mvn test
+  after-steps:
+    - sherzberg/slack-notify:
+        subdomain: ciaifct
+        token: $SLACK_TOKEN
+        channel: general

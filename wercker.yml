@@ -1,13 +1,12 @@
-box: java
+box: jamesdbloom/docker-java7-maven
 build:
   steps:
-    - maven
     - script:
         name: run tests with maven
         code: |
           mvn test
   after-steps:
-    - sherzberg/slack-notify:
-        subdomain: ciaifct
-        token: $SLACK_TOKEN
+    - slack-notifier:
+        url: $SLACK_URL
+        username: wercker
         channel: general

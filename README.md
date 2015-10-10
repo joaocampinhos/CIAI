@@ -8,9 +8,8 @@
     \/_/\/_/\/___/  \/__/\/____/\/____/ \/_/ 
 ```
 
-Elementos do grupo:
+Elementos do grupo **G03**:
 
 + Gonçalo Cabrita 41743
 + João Campinhos 41721
 + Pedro Durães 41911
-

@@ -12,3 +12,6 @@
 log/
 target/
 /bin/
+
+#db
+*.trace.db

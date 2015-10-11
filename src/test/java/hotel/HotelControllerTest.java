@@ -14,7 +14,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import hotelr.Application;
 import hotelr.model.Hotel;
+import hotelr.model.Manager;
 import hotelr.repository.HotelRepository;
+import hotelr.repository.ManagerRepository;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -36,6 +38,9 @@ public class HotelControllerTest {
 	@Autowired
 	HotelRepository hotels;
 
+	@Autowired
+	ManagerRepository managers;
+
 	@Before
 	public void setUp() {
 		this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
@@ -52,9 +57,17 @@ public class HotelControllerTest {
 	@Test
 	public void testAddHotel() throws Exception {
 		String hotelName = "Salgados";
+		String hotelAddress = "Rua dos Salgados, 4, 20";
+		String hotelCategory = "Alta Categoria";
+		String hotelRating = "5";
+		//Manager hotelManager = managers.findByName("O Chefe");
 		mvc.perform(post("/hotels")
 				.param("id", Integer.toString(0))
-                .param("name", hotelName))
+                .param("name", hotelName)
+								.param("address", hotelAddress)
+								.param("category", hotelCategory)
+								.param("rating", hotelRating))
+								//.param("manager", hotelManager)
 				.andExpect(status().is3xxRedirection())
 				.andExpect(redirectedUrl("/hotels"));;
 

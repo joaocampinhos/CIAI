@@ -8,7 +8,7 @@
     \/_/\/_/\/___/  \/__/\/____/\/____/ \/_/
 ```
 
-[![wercker status](https://app.wercker.com/status/6ed46914da146d83d145103dbabfebbe/s "wercker status")](https://app.wercker.com/project/bykey/6ed46914da146d83d145103dbabfebbe)
+[![wercker status](https://app.wercker.com/status/6ed46914da146d83d145103dbabfebbe/s/master "wercker status")](https://app.wercker.com/project/bykey/6ed46914da146d83d145103dbabfebbe)
 
 Elementos do grupo **G03**:
 

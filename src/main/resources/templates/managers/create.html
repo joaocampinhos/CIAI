@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create new manager</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+</head>
+<body>
+  <div class="container">
+    <h1>New Manager</h1>
+
+    <div th:include="managers/form :: managerform(@{/managers/})"></div>
+
+      <p><a href="/managers/new">Add a new manager</a></p>
+      <p><a href="/managers">List all managers</a></p>
+    </div>
+</body>
+</html>
+

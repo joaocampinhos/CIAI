@@ -31,6 +31,9 @@ public class HotelController {
   @Autowired
   HotelRepository hotels;
 
+  @Autowired
+  ManagerRepository managers;
+
   // GET  /hotels             - the list of hotels
   @RequestMapping(method=RequestMethod.GET)
   public String index(Model model) {
@@ -54,6 +57,8 @@ public class HotelController {
   // POST /hotels             - creates a new hotel
   @RequestMapping(method=RequestMethod.POST)
   public String saveIt(@ModelAttribute Hotel hotel, Model model) {
+    // TODO: set to the manager current logged in instead of manually assigning this
+    hotel.setManager(managers.findByName("O Chefe"));
     hotels.save(hotel);
     model.addAttribute("hotel", hotel);
     return "redirect:/hotels";

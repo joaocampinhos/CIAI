@@ -29,17 +29,24 @@ public class Application implements CommandLineRunner {
   @Autowired
   HotelRepository hotels;
 
+  @Autowired
+  ManagerRepository managers;
+
   @Override
   public void run(String... strings) {
     log.info("Setting up seed data");
 
+    managers.deleteAll();
+    Manager boss = new Manager(1, "O Chefe", "boss@hotelr.com", "boss123");
+    managers.save(boss);
+
     hotels.deleteAll();
-    Hotel myHotels[] = {new Hotel(1,"Marriot"),
-                        new Hotel(2,"Intercontinental"),
-                        new Hotel(3,"Trip"),
-                        new Hotel(4,"Holiday Inn"),
-                        new Hotel(5,"Tulip"),
-                        new Hotel(6,"Hostel da Costa")};
+    Hotel myHotels[] = {new Hotel(1,"Marriot", "address", "category", 5, boss),
+                        new Hotel(2,"Intercontinental", "address", "category", 3, boss),
+                        new Hotel(3,"Trip", "address", "category", 3, boss),
+                        new Hotel(4,"Holiday Inn", "address", "category", 4, boss),
+                        new Hotel(5,"Tulip", "address", "category", 4, boss),
+                        new Hotel(6,"Hostel da Costa", "address", "category", 3, boss)};
 
     for(Hotel hotel : myHotels) hotels.save(hotel);
   }

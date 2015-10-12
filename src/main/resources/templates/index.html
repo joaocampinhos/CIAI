@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      th:include="layout :: page">
-    <head>
-        <title></title>
-    </head>
-    <body>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
+  <head>
+    <title></title>
+  </head>
+  <body>
     <div th:fragment="content" class="container">
-                <h1>Hotel Site Homepage</h1>
-                <a th:href="@{/hotels/}">List of Hotels</a>
-                </div>
-    </body>
+      <h1>Hotel Site Homepage</h1>
+      <a th:href="@{/hotels/}">List of Hotels</a>
+    </div>
+  </body>
 </html>

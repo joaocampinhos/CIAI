@@ -19,25 +19,25 @@ public abstract class Message {
   private long id;
   private String comment;
   private Timestamp creationDate;
-  
+
   public Message() {}
-  
+
   public Message(long id, String comment, Timestamp creationDate) {
     this.id = id;
     this.comment = comment;
     this.creationDate = creationDate;
   }
-  
+
   @Id
   @Column(name="COMMENT_ID")
   public long getId() {
     return id;
   }
-  
+
   public void setId(long id) {
     this.id = id;
   }
-  
+
   @Column(name="COMMENT_COMMENT")
   public String getComment() {
     return comment;
@@ -46,7 +46,7 @@ public abstract class Message {
   public void setComment(String comment){
     this.comment = comment;
   }
-  
+
   @Column(name="COMMENT_CREATION_DATE")
   public Timestamp getCreationDate() {
     return creationDate;

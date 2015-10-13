@@ -63,7 +63,8 @@ public class Booking {
     this.departure = departure;
   }
 
-  @Column(name="BOOKING_ROOM_TYPE")
+  @ManyToOne
+  @JoinColumn(name="BOOKING_ROOM_TYPE")
   public RoomType getRoomType() {
     return roomType;
   }

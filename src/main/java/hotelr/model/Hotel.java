@@ -22,18 +22,26 @@ public class Hotel {
 
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
+  @Column(name="HOTEL_ID")
   private long id;
+
+  @Column(name="HOTEL_NAME")
   private String name;
+
+  @Column(name="HOTEL_ADDRESS")
   private String address;
+
+  @Column(name="HOTEL_CATEGORY")
   private String category;
+
+  @Column(name="HOTEL_RATING")
   private int rating;
+
+  @ManyToOne()
+  @JoinColumn(name="MANAGER_ID")
   private Manager manager;
 
-  //@OneToMany(mappedBy="hotel", targetEntity=Room.class, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-  @OneToMany(cascade=CascadeType.ALL)
-  @JoinTable(name = "HOTEL_ROOMS",
-    joinColumns = @JoinColumn(name = "HOTEL_ID"),
-    inverseJoinColumns = @JoinColumn(name = "ROOM_ID"))
+  @OneToMany(mappedBy="hotel", targetEntity=Room.class, fetch=FetchType.EAGER)
   public List<Room> rooms;
 
   public Hotel() {
@@ -50,8 +58,6 @@ public class Hotel {
     this.rooms = new ArrayList<Room>();
   }
 
-  @Id
-  @Column(name="HOTEL_ID")
   public long getId() {
     return id;
   }
@@ -60,7 +66,6 @@ public class Hotel {
     this.id = id;
   }
 
-  @Column(name="HOTEL_NAME")
   public String getName() {
     return name;
   }
@@ -69,7 +74,6 @@ public class Hotel {
     this.name = name;
   }
 
-  @Column(name="HOTEL_ADDRESS")
   public String getAddress() {
     return address;
   }
@@ -78,7 +82,6 @@ public class Hotel {
     this.address = address;
   }
 
-  @Column(name="HOTEL_CATEGORY")
   public String getCategory(){
     return category;
   }
@@ -87,7 +90,6 @@ public class Hotel {
     this.category = category;
   }
 
-  @Column(name="HOTEL_RATING")
   public int getRating() {
     return rating;
   }
@@ -96,8 +98,6 @@ public class Hotel {
     this.rating = rating;
   }
 
-  @ManyToOne()
-  @JoinColumn(name="MANAGER_ID")
   public Manager getManager() {
     return manager;
   }

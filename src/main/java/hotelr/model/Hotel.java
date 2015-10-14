@@ -1,5 +1,8 @@
 package hotelr.model;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,6 +11,10 @@ import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.FetchType;
+import javax.persistence.CascadeType;
+import javax.persistence.JoinTable;
 
 @Entity
 @Table(name="HOTEL_TABLE")
@@ -22,7 +29,16 @@ public class Hotel {
   private int rating;
   private Manager manager;
 
-  public Hotel() {}
+  //@OneToMany(mappedBy="hotel", targetEntity=Room.class, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+  @OneToMany(cascade=CascadeType.ALL)
+  @JoinTable(name = "HOTEL_ROOMS",
+    joinColumns = @JoinColumn(name = "HOTEL_ID"),
+    inverseJoinColumns = @JoinColumn(name = "ROOM_ID"))
+  public List<Room> rooms;
+
+  public Hotel() {
+    this.rooms = new ArrayList<Room>();
+  }
 
   public Hotel(long id, String name, String address, String category, int rating, Manager manager) {
     this.id = id;
@@ -31,6 +47,7 @@ public class Hotel {
     this.category = category;
     this.rating = rating;
     this.manager = manager;
+    this.rooms = new ArrayList<Room>();
   }
 
   @Id
@@ -87,6 +104,14 @@ public class Hotel {
 
   public void setManager(Manager manager) {
     this.manager = manager;
+  }
+
+  public List<Room> getRooms() {
+    return this.rooms;
+  }
+
+  public void addRoom(Room room) {
+    this.rooms.add(room);
   }
 
   @Override

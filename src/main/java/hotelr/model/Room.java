@@ -23,11 +23,12 @@ public class Room {
 
   public Room() {}
 
-  public Room(long id, Hotel hotel, RoomType type, int number) {
+  public Room(long id, Hotel hotel, RoomType type, int number, int price) {
     this.id = id;
     this.hotel = hotel;
     this.type = type;
     this.number = number;
+    this.price = price;
   }
 
   @Id
@@ -40,7 +41,7 @@ public class Room {
     this.id = id;
   }
 
-  @ManyToOne()
+  @ManyToOne
   @JoinColumn(name="HOTEL_ID")
   public Hotel getHotel() {
     return hotel;

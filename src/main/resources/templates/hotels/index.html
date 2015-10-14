@@ -37,16 +37,27 @@
         <div class="secondary">
           <div class="container">
             <button type="submit">Filter</button>
+            <span th:text="${hotels.size()}+' hoteis encontrados'"></span>
           </div>
         </div>
       </form>
       <div class="secondary">
         <div class="container">
-          <h1>Hotel List</h1>
-          <ul th:each="hotel : ${hotels}">
-            <li> <a th:text="${hotel.name}" th:href="@{|/hotels/${hotel.id}|}"></a></li>
-          </ul>
-          <p><a href="/hotels/new">new hotel</a></p>
+          <div th:each="hotel : ${hotels}">
+            <div class="media hotel-list">
+              <img src="https://placehold.it/150x150" alt="" class="media__img"/>
+              <div class="media__body">
+                <div class="row">
+                  <div class="nine columns">
+                    <h5><a th:text="${hotel.name}" th:href="@{|/hotels/${hotel.id}|}"></a> <span th:class="'star-' + ${hotel.rating}"></span></h5>
+                  </div>
+                  <div class="three columns">
+                    # comments
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -4,7 +4,6 @@
   </head>
   <body>
     <div th:fragment="content">
-
       <!-- foto do hotel -->
       <div class="hotel-cover" style="background-image:url(https://images.unsplash.com/photo-1443479579455-1860f114bf77)"></div>
 
@@ -32,6 +31,10 @@
         </div>
       </div>
       Aqui ficarão os rooms
+    <h2>Rooms</h2>
+        <ul th:each="room : ${hotel.rooms}">
+            <li> <span th:text="${room.type.name}"/>, Price: <span th:text="${room.price}"/>€</li>
+        </ul>
       <br/>
       Aqui ficará o manager
       <h2>Manager <span th:text="${hotel.manager}"></span></h2>

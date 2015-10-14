@@ -15,23 +15,33 @@ public class Room {
 
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
+  @Column(name="ROOM_ID")
   private long id;
+
+  @ManyToOne
+  @JoinColumn(name="HOTEL_ID")
   private Hotel hotel;
+
+  @ManyToOne
+  @JoinColumn(name="ROOM_TYPE_ID")
   private RoomType type;
+
+  @Column(name="ROOM_PRICE")
   private int price;
+
+  @Column(name="ROOM_NUMBER")
   private int number;
 
   public Room() {}
 
-  public Room(long id, Hotel hotel, RoomType type, int number) {
+  public Room(long id, Hotel hotel, RoomType type, int number, int price) {
     this.id = id;
     this.hotel = hotel;
     this.type = type;
     this.number = number;
+    this.price = price;
   }
 
-  @Id
-  @Column(name="ROOM_ID")
   public long getId() {
     return id;
   }
@@ -40,8 +50,6 @@ public class Room {
     this.id = id;
   }
 
-  @ManyToOne()
-  @JoinColumn(name="HOTEL_ID")
   public Hotel getHotel() {
     return hotel;
   }
@@ -50,8 +58,6 @@ public class Room {
     this.hotel = hotel;
   }
 
-  @ManyToOne
-  @JoinColumn(name="ROOM_TYPE_ID")
   public RoomType getType() {
     return type;
   }
@@ -60,7 +66,6 @@ public class Room {
     this.type = type;
   }
 
-  @Column(name="ROOM_PRICE")
   public int getPrice() {
     return price;
   }
@@ -69,7 +74,6 @@ public class Room {
     this.price = price;
   }
 
-  @Column(name="ROOM_NUMBER")
   public int getNumber() {
     return number;
   }

@@ -78,7 +78,6 @@ display:         flex;
   background-size:cover;
   background-position: center;
 
-  //background-image: url("https://images.unsplash.com/39/wdXqHcTwSTmLuKOGz92L_Landscape.jpg?q=80&fm=jpg&s=ffde12a83b16fcef97b704aa4a510f45");
   background-image: url("/images/2.jpg");
 }
 
@@ -203,3 +202,7 @@ header .logo {
   width: 4.5rem;
 }
 
+//hotel list
+.hotel-list {
+  padding: 2rem 0;
+}

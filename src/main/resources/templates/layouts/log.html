@@ -6,13 +6,22 @@
     <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'/>
     <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'/>
     <link href="/css/style.css" rel="stylesheet"/>
+    <style>
+html, body {
+    min-height: 100% !important;
+    height: 100%;
+}
+</style>
   </head>
   <body>
-    <header th:replace="fragments/header_guest :: header"></header>
 
-    <div th:include="this :: content"></div>
+    <div class="log-form">
 
-    <div th:replace="fragments/footer :: footer"></div>
+      <img src="/images/logo.png" class="logo-img"/>
+
+      <div th:include="this :: content"></div>
+
+    </div>
 
     <script src="js/app.js"></script>
   </body>

@@ -4,9 +4,57 @@
     <title></title>
   </head>
   <body>
-    <div th:fragment="content" class="container">
-      <h1>Hotel Site Homepage</h1>
+    <div th:fragment="content">
       <a th:href="@{/hotels/}">List of Hotels</a>
+      <section class="offers">
+      	<br/>
+        <div class="hotel row container">
+          <div class="four columns">
+            <img src="https://images.unsplash.com/photo-1433148749784-5e235e9efd12"/>
+          </div>
+          <div class="desc eight columns">
+            <div class="stars">★★★☆☆</div>
+            <div class="text">
+              <h4 class="name">Holiday Inn</h4>
+              <p>
+              London, United Kingdom
+              <br/>
+              <a href="#">view more</a>
+              </p>
+            </div>
+            <div class="book">
+              <div class="price">
+                from <span>130.00€</span>
+              </div>
+              <a href="#" class="btn-book">BOOK NOW</a>
+            </div>
+          </div>
+        </div>
+        <br/>
+        <div class="hotel row container">
+          <div class="desc eight columns">
+            <div class="stars">★★★★☆</div>
+            <div class="text">
+              <h4 class="name">Marriot</h4>
+              <p>
+              Lisbon, Portugal
+              <br/>
+              <a href="#">view more</a>
+              </p>
+            </div>
+            <div class="book">
+              <a href="#" class="btn-book">BOOK NOW</a>
+              <div class="price">
+                from <span>150.00€</span>
+              </div>
+            </div>
+          </div>
+          <div class="four columns">
+            <img src="https://images.unsplash.com/reserve/8T8J12VQxyqCiQFGa2ct_bahamas-atlantis.jpg"/>
+          </div>
+        </div>
+        <br/>
+      </section>
     </div>
   </body>
 </html>

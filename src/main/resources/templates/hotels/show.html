@@ -1,21 +1,67 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" th:include="layouts/dashboard :: page">
   <head>
-    <title>Hotels</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
   </head>
   <body>
-    <div class="container">
-      <h1>Hotel <span th:text="${hotel.name}"></span></h1>
-      <h2>Address <span th:text="${hotel.address}"></span></h2>
-      <h2>Category <span th:text="${hotel.category}"></span></h2>
-      <h2>Rating <span th:text="${hotel.rating}"></span></h2>
-      <h2>Manager <span th:text="${hotel.manager}"></span></h2>
+    <div th:fragment="content">
 
+      <!-- foto do hotel -->
+      <div class="hotel-cover" style="background-image:url(https://images.unsplash.com/photo-1443479579455-1860f114bf77)"></div>
+
+      <div class="container row">
+        <div class="seven columns">
+          <span th:text="${hotel.name}"></span>
+          <div th:class="'star-' + ${hotel.rating}"></div>
+          <br/>
+          <span th:text="${hotel.address}"></span>,
+          <span th:text="${hotel.category}"></span>
+        </div>
+        <div class="four columns">
+          <form>
+            <label>Check-in</label>
+            <input type="date"/>
+            <label>Check-out</label>
+            <input type="date"/>
+            <label>Room type</label>
+            <select>
+              <option>Tipo de quarto</option>
+            </select>
+          <h4>Preço: <span>100€</span></h4>
+          <button type="submit">Book</button>
+          </form>
+        </div>
+      </div>
+      Aqui ficarão os rooms
+      <br/>
+      Aqui ficará o manager
+      <h2>Manager <span th:text="${hotel.manager}"></span></h2>
+      <div class="comments">
+        <div class="container">
+        <h3 class="text-center">Comments</h3>
+        <div class="media comment">
+          <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
+          <p class="media__body">
+          <span>{{USERNAME}}, {{TIMESTAMP}}</span>
+      <br/>
+          {{COMMENT}}
+          </p>
+          <div class="media comment reply">
+            <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
+            <p class="media__body">
+            <span>{{USERNAME}}, {{TIMESTAMP}}</span>
+      <br/>
+      {{REPLY COMMENT}}
+            </p>
+          </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- só mostrar o edit ao manager
       <p><a th:href="@{|/hotels/${hotel.id}/edit|}">Edit</a></p>
       <p><a href="/hotels/new">Add a new hotel</a></p>
       <p><a href="/hotels">List all hotels</a></p>
+      -->
     </div>
   </body>
 </html>

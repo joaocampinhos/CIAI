@@ -1,0 +1,22 @@
+
+.logo-img {
+  display: block;
+  margin: 0 auto;
+}
+
+.log-full {
+  height: 100%;
+}
+
+.log-form {
+  width: 50%;
+  margin: 0 auto;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  input,button {
+    width: 100%;
+  }
+}
+
+

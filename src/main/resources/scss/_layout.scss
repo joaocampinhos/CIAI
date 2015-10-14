@@ -1,0 +1,191 @@
+// Offers
+.offers {
+  background-color: #f0eff4;
+}
+
+.hotel {
+  background-color: #fff;
+  heigth: 20rem;
+}
+
+.desc {
+  text-align: center;
+  vertical-align: top;
+}
+
+/*.row {
+ display: -webkit-box;
+display: -webkit-flex;
+display: -ms-flexbox;
+display:         flex;
+}
+ */
+
+.stars {
+  height: 3rem;
+  line-height: 3rem;
+  color: #66557d;
+}
+.name {
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 300;
+  color: #555;
+}
+.desc p {
+  line-height: 1.5;
+  margin: 0;
+}
+.desc p a {
+  margin-top: 2rem;
+  display: inline-block;
+}
+.text {
+  padding: 0 0 1rem 0;
+  height: 9rem;
+  color: #aaa;
+}
+.book {
+  line-height: 3rem;
+}
+
+.btn-book {
+  width: 9rem;
+  display: inline-block;
+  background-color: #66557d;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 900;
+}
+
+.price {
+  width: 16rem;
+  display: inline-block;
+  background-color: #f7f7f9;
+}
+.price span {
+  color: #333;
+  font-weight: bold;
+}
+
+
+
+//HEADER
+
+.cover{
+
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position:center;
+
+  background-image: url("https://images.unsplash.com/39/wdXqHcTwSTmLuKOGz92L_Landscape.jpg?q=80&fm=jpg&s=ffde12a83b16fcef97b704aa4a510f45");
+}
+
+.nav {
+  height: 5rem;
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+header .logo {
+  color: #66557d;
+  display: inline-block;
+  font-family: 'Pacifico', cursive;
+  line-height: 5rem;
+  margin: 0;
+  padding: 0 1rem;
+}
+
+.login {
+  display: inline block;
+  line-height: 5rem;
+  text-align: right;
+  font-size: 1.5rem;
+  color: #66557d;
+  padding: 0 1rem;
+}
+
+.login a {
+  color: white;
+  text-decoration: none;
+}
+
+.copy {
+  color: #f0eff4;
+  text-transform: uppercase;
+  font-size: 3rem;
+  font-weight: 400;
+  text-align: center;
+  margin: 6rem;
+}
+
+//PTARALHO
+
+.hotel-cover {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 50%;
+  background-color: #f5f5f5;
+  display: block;
+  height: 30rem;
+}
+
+
+
+//OBJECTS REUTILIZAVEIS
+
+*[class^='star'] {
+  display: inline-block;
+  text-align: center;
+}
+.star-5:after { content: "★★★★★"; }
+.star-4:after { content: "★★★★☆"; }
+.star-3:after { content: "★★★☆☆"; }
+.star-2:after { content: "★★☆☆☆"; }
+.star-1:after { content: "★☆☆☆☆"; }
+
+.media{
+    display:block;
+        &:after{
+        content:"";
+        display:table;
+        clear:both;
+    }
+}
+.media .media {
+  margin-left: 100px;
+}
+    .media__img{
+        float:left;
+        margin-right: 10px;
+    }
+
+    .media__body{
+
+        overflow:hidden;
+        min-height: 80px;
+    }
+        .media__body,
+        .media__body > :last-child{
+            margin-bottom:0;
+        }
+
+.avatar {
+  border-radius: 1000px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+
+//COMENTS LAYOUT
+
+.comments {
+  background-color: #f0eff4;
+  padding: 3rem 0;
+}
+.comments .avatar {
+  width: 4.5rem;
+}
+

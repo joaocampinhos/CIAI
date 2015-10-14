@@ -1,3 +1,17 @@
-<div th:fragment="header">
-<div class="container">Header</div>
+<header th:fragment="header">
+<div class="cover">
+  <div class="container">
+    <div class="nav row">
+      <a href="/"><h3 class="logo six columns">Hotelr</h3></a>
+      <div class="login six columns">
+        <a th:href="@{/register/}">Register</a>
+        &middot;
+        <a href="/login">Login</a>
+      </div>
+    </div>
+    <p class="copy">
+    Find the perfect hotel with us
+    </p>
+  </div>
 </div>
+</header>

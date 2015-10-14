@@ -12,6 +12,10 @@
     <h2>Category <span th:text="${hotel.category}"></span></h2>
     <h2>Rating <span th:text="${hotel.rating}"></span></h2>
     <h2>Manager <span th:text="${hotel.manager}"></span></h2>
+    <h2>Rooms</h2>
+        <ul th:each="room : ${hotel.rooms}">
+            <li> <span th:text="${room.type.name}"/>, Price: <span th:text="${room.price}"/>€</li>
+        </ul>
 
 	    <p><a th:href="@{|/hotels/${hotel.id}/edit|}">Edit</a></p>
 	    <p><a href="/hotels/new">Add a new hotel</a></p>

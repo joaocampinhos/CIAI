@@ -3,6 +3,8 @@ package hotelr;
 import hotelr.model.*;
 import hotelr.repository.*;
 
+import java.util.Arrays;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,13 @@ public class Application implements CommandLineRunner {
   @Autowired
   ManagerRepository managers;
 
+  @Autowired
+  RoomTypeRepository roomTypes;
+
+  @Autowired
+
+  RoomRepository rooms;
+
   @Override
   public void run(String... strings) {
     log.info("Setting up seed data");
@@ -48,7 +57,28 @@ public class Application implements CommandLineRunner {
                         new Hotel(5,"Tulip", "address", "category", 4, boss),
                         new Hotel(6,"Hostel da Costa", "address", "category", 3, boss)};
 
-    for(Hotel hotel : myHotels) hotels.save(hotel);
+    RoomType myRoomTypes[] = {
+      new RoomType(1, "Suite"),
+      new RoomType(2, "Single"),
+      new RoomType(3, "Double")
+    };
+
+    for(RoomType roomType : myRoomTypes) roomTypes.save(roomType);
+
+    int i = 1;
+    for(Hotel hotel : myHotels) {
+      hotels.save(hotel);
+      Room myRooms[] = {
+        new Room(i++, hotel, myRoomTypes[0], 50, 170),
+        new Room(i++, hotel, myRoomTypes[1], 50, 100),
+        new Room(i++, hotel, myRoomTypes[2], 50, 150)
+      };
+
+      for (Room room : myRooms) {
+        rooms.save(room);
+        hotel.addRoom(room);
+      }
+    }
   }
 
 }

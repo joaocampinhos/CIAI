@@ -76,16 +76,16 @@ display:         flex;
 
   background-repeat:no-repeat;
   background-size:cover;
-  background-position:center;
+  background-position: center;
 
-  background-image: url("https://images.unsplash.com/39/wdXqHcTwSTmLuKOGz92L_Landscape.jpg?q=80&fm=jpg&s=ffde12a83b16fcef97b704aa4a510f45");
+  //background-image: url("https://images.unsplash.com/39/wdXqHcTwSTmLuKOGz92L_Landscape.jpg?q=80&fm=jpg&s=ffde12a83b16fcef97b704aa4a510f45");
+  background-image: url("/images/2.jpg");
 }
 
 .nav {
   height: 5rem;
-  max-width: 80rem;
-  margin: 0 auto;
 }
+
 
 header .logo {
   color: #66557d;
@@ -117,6 +117,12 @@ header .logo {
   font-weight: 400;
   text-align: center;
   margin: 6rem;
+  margin-bottom: 9rem;
+  .button {
+    background: rgba(255,255,255,0.5);
+    border-style: none;
+  }
+
 }
 
 //PTARALHO
@@ -134,7 +140,15 @@ header .logo {
 
 //OBJECTS REUTILIZAVEIS
 
-*[class^='star'] {
+.secondary {
+  background-color: #f0eff4;
+}
+
+.clear {
+  margin: 0 !important;
+}
+
+*[class^='star-'] {
   display: inline-block;
   text-align: center;
 }

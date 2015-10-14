@@ -278,6 +278,7 @@ input[type="email"],
 input[type="number"],
 input[type="search"],
 input[type="text"],
+input[type="date"],
 input[type="tel"],
 input[type="url"],
 input[type="password"] {
@@ -287,7 +288,8 @@ input[type="password"] {
   border: 1px solid #d1d1d1;
   border-radius: 4px;
   box-shadow: none;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  font-family: "Lato", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif; }
 
 textarea,
 select {
@@ -300,6 +302,7 @@ select {
   box-sizing: border-box; }
 
 input[type="email"],
+input[type="date"],
 input[type="number"],
 input[type="search"],
 input[type="text"],
@@ -319,6 +322,7 @@ textarea {
   padding-bottom: 6px; }
 
 input[type="email"]:focus,
+input[type="date"]:focus,
 input[type="number"]:focus,
 input[type="search"]:focus,
 input[type="text"]:focus,
@@ -351,6 +355,9 @@ label > .label-body {
   display: inline-block;
   margin-left: .5rem;
   font-weight: normal; }
+
+form input, form .button {
+  width: 100%; }
 
 ul {
   list-style: circle inside; }
@@ -501,6 +508,10 @@ footer {
   transform: translateY(-50%); }
   .log-form input, .log-form button {
     width: 100%; }
+  .log-form .button {
+    width: 90%;
+    display: block;
+    margin: 0 auto; }
 
 .offers {
   background-color: #f0eff4; }
@@ -568,12 +579,10 @@ display:         flex;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  background-image: url("https://images.unsplash.com/39/wdXqHcTwSTmLuKOGz92L_Landscape.jpg?q=80&fm=jpg&s=ffde12a83b16fcef97b704aa4a510f45"); }
+  background-image: url("/images/2.jpg"); }
 
 .nav {
-  height: 5rem;
-  max-width: 80rem;
-  margin: 0 auto; }
+  height: 5rem; }
 
 header .logo {
   color: #66557d;
@@ -601,7 +610,11 @@ header .logo {
   font-size: 3rem;
   font-weight: 400;
   text-align: center;
-  margin: 6rem; }
+  margin: 6rem;
+  margin-bottom: 9rem; }
+  .copy .button {
+    background: rgba(255, 255, 255, 0.5);
+    border-style: none; }
 
 .hotel-cover {
   background-repeat: no-repeat;
@@ -611,7 +624,13 @@ header .logo {
   display: block;
   height: 30rem; }
 
-*[class^='star'] {
+.secondary {
+  background-color: #f0eff4; }
+
+.clear {
+  margin: 0 !important; }
+
+*[class^='star-'] {
   display: inline-block;
   text-align: center; }
 

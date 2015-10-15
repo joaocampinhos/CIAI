@@ -3,6 +3,7 @@ package hotelr;
 import hotelr.model.*;
 import hotelr.repository.*;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 
 import org.slf4j.Logger;
@@ -35,11 +36,19 @@ public class Application implements CommandLineRunner {
   ManagerRepository managers;
 
   @Autowired
+  GuestRepository guests;
+
+  @Autowired
   RoomTypeRepository roomTypes;
 
   @Autowired
-
   RoomRepository rooms;
+
+  @Autowired
+  CommentRepository comments;
+  
+  @Autowired
+  ReplyRepository replys;
 
   @Override
   public void run(String... strings) {
@@ -48,6 +57,13 @@ public class Application implements CommandLineRunner {
     managers.deleteAll();
     Manager boss = new Manager(1, "O Chefe", "boss@hotelr.com", "boss123");
     managers.save(boss);
+
+    guests.deleteAll();
+    Guest myGuests[] = {
+        new Guest(1, "Tozé", "toze@vitominas.pt", "peidalhaco"),
+        new Guest(2, "Toni", "toni@vitominas.pt", "12345")
+    };
+    for(Guest guest: myGuests) guests.save(guest);
 
     hotels.deleteAll();
     Hotel myHotels[] = {new Hotel(1,"Marriot", "address", "category", 5, boss),
@@ -79,6 +95,20 @@ public class Application implements CommandLineRunner {
         hotel.addRoom(room);
       }
     }
+
+    Comment myComments[] = {
+        new Comment(1, myGuests[0], "mlg 420 blaze it", new Timestamp(System.currentTimeMillis()), myHotels[0]),
+        new Comment(2, myGuests[1], "OMG!", new Timestamp(System.currentTimeMillis()), myHotels[0]),
+        new Comment(3, myGuests[1], "WoW!", new Timestamp(System.currentTimeMillis()), myHotels[1])
+    };
+    
+    myHotels[0].addComment(myComments[0]);
+    myHotels[0].addComment(myComments[1]);
+    myHotels[1].addComment(myComments[2]);
+    
+    for(Comment comment: myComments) comments.save(comment);
+
+    //criar replyes
   }
 
 }

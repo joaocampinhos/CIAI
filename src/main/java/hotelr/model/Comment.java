@@ -1,14 +1,18 @@
 package hotelr.model;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,6 +22,9 @@ public class Comment extends Message{
 
   private Guest guest;
   private Hotel hotel;
+
+  @OneToOne(mappedBy="parent", targetEntity=Reply.class, fetch=FetchType.EAGER)
+  private Reply reply;
 
   public Comment() {
     super();
@@ -47,6 +54,14 @@ public class Comment extends Message{
 
   public void setHotel(Hotel hotel) {
     this.hotel = hotel;
+  }
+
+  public Reply getReply() {
+    return reply;
+  }
+
+  public void setReply(Reply reply) {
+    this.reply = reply;
   }
 
   public String toString() {

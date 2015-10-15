@@ -31,6 +31,10 @@ public class Booking {
   private RoomType roomType;
 
   @ManyToOne
+  @JoinColumn(name="BOOKING_ROOM")
+  private Room room;
+
+  @ManyToOne
   @JoinColumn(name="BOOKING_HOTEL")
   private Hotel hotel;
 
@@ -40,11 +44,12 @@ public class Booking {
 
   public Booking() {}
 
-  public Booking(long id, Timestamp arrival, Timestamp departure, RoomType roomType, Hotel hotel, Guest guest) {
+  public Booking(long id, Timestamp arrival, Timestamp departure, RoomType roomType, Room room, Hotel hotel, Guest guest) {
     this.id = id;
     this.arrival = arrival;
     this.departure = departure;
     this.roomType = roomType;
+    this.room = room;
     this.hotel = hotel;
     this.guest = guest;
   }
@@ -79,6 +84,14 @@ public class Booking {
 
   public void setRoomType(RoomType roomType) {
     this.roomType = roomType;
+  }
+
+  public Room getRoom() {
+    return room;
+  }
+
+  public void setRoom(Room room) {
+    this.room = room;
   }
 
   public Hotel getHotel() {

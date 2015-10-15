@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -41,8 +42,17 @@ public class HotelController {
 
   // GET  /hotels             - the list of hotels
   @RequestMapping(method=RequestMethod.GET)
-  public String index(Model model) {
-    model.addAttribute("hotels", hotels.findAll());
+  public String index(@RequestParam(value="arrival", required=false) String arrival, @RequestParam(value="departure", required=false) String departure, Model model) throws Exception {
+    if (arrival == null || departure == null) model.addAttribute("hotels", hotels.findAll());
+    else {
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+      Date dArrival = sdf.parse(arrival);
+      Date dDeparture = sdf.parse(departure);
+
+      List<Hotel> filtered = hotels.findByAvailability(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()));
+      model.addAttribute("hotels", filtered);
+    }
+
     return "hotels/index";
   }
 
@@ -67,18 +77,6 @@ public class HotelController {
     hotels.save(hotel);
     model.addAttribute("hotel", hotel);
     return "redirect:/hotels";
-  }
-
-  @RequestMapping(value="/search?arrival={arrival}&departure={departure}", method=RequestMethod.GET)
-  public String search(@PathVariable("arrival") String arrival, @PathVariable("departure") String departure, Model model) throws Exception {
-    System.out.println("" + arrival + " " + departure);
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Date dArrival = sdf.parse(arrival);
-    Date dDeparture = sdf.parse(departure);
-
-    List<Hotel> filtered = hotels.search(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()));
-    model.addAttribute("hotel", filtered);
-    return "hotels/index";
   }
 
   // GET  /hotels/{id}        - the hotel with identifier {id}

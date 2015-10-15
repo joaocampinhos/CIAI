@@ -4,6 +4,11 @@ import hotelr.repository.*;
 import hotelr.model.*;
 import hotelr.exception.*;
 
+import java.util.List;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -62,6 +67,18 @@ public class HotelController {
     hotels.save(hotel);
     model.addAttribute("hotel", hotel);
     return "redirect:/hotels";
+  }
+
+  @RequestMapping(value="/search?arrival={arrival}&departure={departure}", method=RequestMethod.GET)
+  public String search(@PathVariable("arrival") String arrival, @PathVariable("departure") String departure, Model model) throws Exception {
+    System.out.println("" + arrival + " " + departure);
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Date dArrival = sdf.parse(arrival);
+    Date dDeparture = sdf.parse(departure);
+
+    List<Hotel> filtered = hotels.search(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()));
+    model.addAttribute("hotel", filtered);
+    return "hotels/index";
   }
 
   // GET  /hotels/{id}        - the hotel with identifier {id}

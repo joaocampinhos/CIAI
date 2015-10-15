@@ -17,11 +17,25 @@ public class Booking {
 
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
+  @Column(name="BOOKING_ID")
   private long id;
+
+  @Column(name="BOOKING_ARRIVAL")
   private Timestamp arrival;
+
+  @Column(name="BOOKING_DEPARTURE")
   private Timestamp departure;
+
+  @ManyToOne
+  @JoinColumn(name="BOOKING_ROOM_TYPE")
   private RoomType roomType;
+
+  @ManyToOne
+  @JoinColumn(name="BOOKING_HOTEL")
   private Hotel hotel;
+
+  @ManyToOne
+  @JoinColumn(name="BOOKING_GUEST")
   private Guest guest;
 
   public Booking() {}
@@ -35,8 +49,6 @@ public class Booking {
     this.guest = guest;
   }
 
-  @Id
-  @Column(name="BOOKING_ID")
   public long getId() {
     return id;
   }
@@ -45,7 +57,6 @@ public class Booking {
     this.id = id;
   }
 
-  @Column(name="BOOKING_ARRIVAL")
   public Timestamp getArrival() {
     return arrival;
   }
@@ -54,7 +65,6 @@ public class Booking {
     this.arrival = arrival;
   }
 
-  @Column(name="BOOKING_DEPARTURE")
   public Timestamp getDeparture() {
     return departure;
   }
@@ -63,8 +73,6 @@ public class Booking {
     this.departure = departure;
   }
 
-  @ManyToOne
-  @JoinColumn(name="BOOKING_ROOM_TYPE")
   public RoomType getRoomType() {
     return roomType;
   }
@@ -73,8 +81,6 @@ public class Booking {
     this.roomType = roomType;
   }
 
-  @ManyToOne
-  @JoinColumn(name="BOOKING_HOTEL")
   public Hotel getHotel() {
     return hotel;
   }
@@ -83,8 +89,6 @@ public class Booking {
     this.hotel = hotel;
   }
 
-  @ManyToOne
-  @JoinColumn(name="BOOKING_GUEST")
   public Guest getGuest() {
     return guest;
   }

@@ -12,6 +12,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
+
 
 @SpringBootApplication
 public class Application implements CommandLineRunner {
@@ -35,14 +39,19 @@ public class Application implements CommandLineRunner {
   ManagerRepository managers;
 
   @Autowired
+  BookingRepository bookings;
+
+  @Autowired
+  GuestRepository guests;
+
+  @Autowired
   RoomTypeRepository roomTypes;
 
   @Autowired
-
   RoomRepository rooms;
 
   @Override
-  public void run(String... strings) {
+  public void run(String... strings) throws Exception {
     log.info("Setting up seed data");
 
     managers.deleteAll();
@@ -79,6 +88,29 @@ public class Application implements CommandLineRunner {
         hotel.addRoom(room);
       }
     }
+
+    // Merdas para verificar o search
+    // TODO: mais vale fazer um teste para isto mesmo
+
+/*    Hotel h = new Hotel(7, "Pearson Specter Hotels", "address", "category", 5, boss);
+    Room r = new Room(i++, h, myRoomTypes[0], 1, 5000);
+
+    hotels.save(h);
+    rooms.save(r);
+    h.addRoom(r);
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Date arrival = sdf.parse("2015-10-05");
+    Date departure = sdf.parse("2015-10-06");
+
+    guests.deleteAll();
+    Guest guest = new Guest(2, "Harvey Specter", "harvey@pearsonspecterlitt.com", "imthebest");
+    guests.save(guest);
+
+    bookings.deleteAll();
+    Booking b = new Booking(1, new Timestamp(arrival.getTime()), new Timestamp(departure.getTime()), r.getType(), r, h, guest);
+    bookings.save(b);*/
+
   }
 
 }

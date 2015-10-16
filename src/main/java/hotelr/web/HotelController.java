@@ -4,10 +4,16 @@ import hotelr.repository.*;
 import hotelr.model.*;
 import hotelr.exception.*;
 
+import java.util.List;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,10 +40,22 @@ public class HotelController {
   @Autowired
   ManagerRepository managers;
 
+  @Autowired
+  RoomRepository rooms;
+
   // GET  /hotels             - the list of hotels
   @RequestMapping(method=RequestMethod.GET)
-  public String index(Model model) {
-    model.addAttribute("hotels", hotels.findAll());
+  public String index(@RequestParam(value="arrival", required=false) String arrival, @RequestParam(value="departure", required=false) String departure, Model model) throws Exception {
+    if (arrival == null || departure == null) model.addAttribute("hotels", hotels.findAll());
+    else {
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+      Date dArrival = sdf.parse(arrival);
+      Date dDeparture = sdf.parse(departure);
+
+      List<Hotel> filtered = hotels.findByAvailability(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()));
+      model.addAttribute("hotels", filtered);
+    }
+
     return "hotels/index";
   }
 
@@ -66,11 +84,21 @@ public class HotelController {
 
   // GET  /hotels/{id}        - the hotel with identifier {id}
   @RequestMapping(value="{id}", method=RequestMethod.GET)
-  public String show(@PathVariable("id") long id, Model model) {
+  public String show(@PathVariable("id") long id, @RequestParam(value="arrival", required=false) String arrival, @RequestParam(value="departure", required=false) String departure, Model model) throws Exception {
     Hotel hotel = hotels.findOne(id);
     if( hotel == null )
       throw new HotelNotFoundException();
-    model.addAttribute("hotel", hotel );
+
+    if (arrival != null && departure != null) {
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+      Date dArrival = sdf.parse(arrival);
+      Date dDeparture = sdf.parse(departure);
+
+      List<Room> filtered = rooms.findByAvailability(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), hotel);
+      model.addAttribute("rooms", filtered);
+    }
+
+    model.addAttribute("hotel", hotel);
     return "hotels/show";
   }
 

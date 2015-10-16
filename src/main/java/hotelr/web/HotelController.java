@@ -41,7 +41,13 @@ public class HotelController {
   ManagerRepository managers;
 
   @Autowired
+  GuestRepository guests;
+
+  @Autowired
   RoomRepository rooms;
+
+  @Autowired
+  BookingRepository bookings;
 
   @Autowired
   RoomTypeRepository roomTypes;
@@ -94,7 +100,7 @@ public class HotelController {
 
   // GET  /hotels/{id}        - the hotel with identifier {id}
   @RequestMapping(value="{id}", method=RequestMethod.GET)
-  public String show(@PathVariable("id") long id, @RequestParam(value="arrival", required=false) String arrival, @RequestParam(value="departure", required=false) String departure, Model model) throws Exception {
+  public String show(@PathVariable("id") long id, @RequestParam(value="arrival", required=false) String arrival, @RequestParam(value="departure", required=false) String departure, @RequestParam(value="roomtype", required=false) String roomType, Model model) throws Exception {
     Hotel hotel = hotels.findOne(id);
     if( hotel == null )
       throw new HotelNotFoundException();
@@ -104,8 +110,13 @@ public class HotelController {
       Date dArrival = sdf.parse(arrival);
       Date dDeparture = sdf.parse(departure);
 
-      List<Room> filtered = rooms.findByAvailability(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), hotel);
-      model.addAttribute("rooms", filtered);
+      if (roomType != null) {
+        Room filtered = rooms.findRoomByAvailability(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), hotel, roomTypes.findByName(roomType));
+        model.addAttribute("rooms", filtered);
+      } else {
+        List<Room> filtered = rooms.findByAvailability(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), hotel);
+        model.addAttribute("rooms", filtered);
+      }
     }
 
     model.addAttribute("hotel", hotel);
@@ -133,6 +144,23 @@ public class HotelController {
   public String editSave(@PathVariable("id") long id, Hotel hotel, Model model) {
     hotels.save(hotel);
     return "redirect:/";
+  }
+
+  // POST /hotels/{id}/bookings    - creates a new booking
+  @RequestMapping(value="{id}/bookings", method=RequestMethod.POST)
+  public String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") Long roomid, Model model) throws Exception {
+    Guest guest = guests.findByName("Harvey Specter");
+    Hotel hotel = hotels.findOne(id);
+    Room room = rooms.findOne(roomid);
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Date dArrival = sdf.parse(arrival);
+    Date dDeparture = sdf.parse(departure);
+
+    Booking booking = new Booking(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), room.getType(), room, hotel, guest);;
+    bookings.save(booking);
+
+    return "redirect:/hotels/" + id;
   }
 
 }

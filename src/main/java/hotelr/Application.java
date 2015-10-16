@@ -58,6 +58,10 @@ public class Application implements CommandLineRunner {
     Manager boss = new Manager(1, "O Chefe", "boss@hotelr.com", "boss123");
     managers.save(boss);
 
+    guests.deleteAll();
+    Guest guest = new Guest(2, "Harvey Specter", "harvey@pearsonspecterlitt.com", "imthebest");
+    guests.save(guest);
+
     hotels.deleteAll();
     Hotel myHotels[] = {new Hotel(1,"Marriot", "address", "category", 5, boss),
                         new Hotel(2,"Intercontinental", "address", "category", 3, boss),
@@ -105,10 +109,6 @@ public class Application implements CommandLineRunner {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Date arrival = sdf.parse("2015-10-05");
     Date departure = sdf.parse("2015-10-06");
-
-    guests.deleteAll();
-    Guest guest = new Guest(2, "Harvey Specter", "harvey@pearsonspecterlitt.com", "imthebest");
-    guests.save(guest);
 
     bookings.deleteAll();
     Booking b = new Booking(1, new Timestamp(arrival.getTime()), new Timestamp(departure.getTime()), r.getType(), r, h, guest);

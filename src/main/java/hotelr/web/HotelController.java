@@ -41,7 +41,13 @@ public class HotelController {
   ManagerRepository managers;
 
   @Autowired
+  GuestRepository guests;
+
+  @Autowired
   RoomRepository rooms;
+
+  @Autowired
+  BookingRepository bookings;
 
   @Autowired
   RoomTypeRepository roomTypes;
@@ -137,6 +143,23 @@ public class HotelController {
   public String editSave(@PathVariable("id") long id, Hotel hotel, Model model) {
     hotels.save(hotel);
     return "redirect:/";
+  }
+
+  // POST /hotels/{id}/bookings    - creates a new booking
+  @RequestMapping(value="{id}/bookings", method=RequestMethod.POST)
+  public String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") Long roomid, Model model) throws Exception {
+    Guest guest = guests.findByName("Harvey Specter");
+    Hotel hotel = hotels.findOne(id);
+    Room room = rooms.findOne(roomid);
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Date dArrival = sdf.parse(arrival);
+    Date dDeparture = sdf.parse(departure);
+
+    Booking booking = new Booking(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), room.getType(), room, hotel, guest);;
+    bookings.save(booking);
+
+    return "redirect:/hotels/" + id;
   }
 
 }

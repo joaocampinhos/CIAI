@@ -44,6 +44,15 @@ public class Booking {
 
   public Booking() {}
 
+  public Booking(Timestamp arrival, Timestamp departure, RoomType roomType, Room room, Hotel hotel, Guest guest) {
+    this.arrival = arrival;
+    this.departure = departure;
+    this.roomType = roomType;
+    this.room = room;
+    this.hotel = hotel;
+    this.guest = guest;
+  }
+
   public Booking(long id, Timestamp arrival, Timestamp departure, RoomType roomType, Room room, Hotel hotel, Guest guest) {
     this.id = id;
     this.arrival = arrival;

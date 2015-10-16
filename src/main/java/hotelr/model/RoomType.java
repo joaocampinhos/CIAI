@@ -13,7 +13,10 @@ public class RoomType {
 
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
+  @Column(name="ROOM_TYPE_ID")
   private long id;
+
+  @Column(name="ROOM_TYPE_NAME")
   private String name;
 
   public RoomType() {}
@@ -23,21 +26,18 @@ public class RoomType {
     this.name = name;
   }
 
-  @Id
-  @Column(name="ROOM_TYPE_ID")
   public long getId() {
     return id;
   }
-  
+
   public void setId(long id) {
     this.id = id;
   }
 
-  @Column(name="ROOM_TYPE_NAME")
   public String getName() {
     return name;
   }
-  
+
   public void setName(String name) {
     this.name = name;
   }

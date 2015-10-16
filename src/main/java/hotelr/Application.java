@@ -94,10 +94,13 @@ public class Application implements CommandLineRunner {
 
 /*    Hotel h = new Hotel(7, "Pearson Specter Hotels", "address", "category", 5, boss);
     Room r = new Room(i++, h, myRoomTypes[0], 1, 5000);
+    Room r2 = new Room(i++, h, myRoomTypes[1], 1, 5000);
 
     hotels.save(h);
     rooms.save(r);
+    rooms.save(r2);
     h.addRoom(r);
+    h.addRoom(r2);
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Date arrival = sdf.parse("2015-10-05");
@@ -109,7 +112,9 @@ public class Application implements CommandLineRunner {
 
     bookings.deleteAll();
     Booking b = new Booking(1, new Timestamp(arrival.getTime()), new Timestamp(departure.getTime()), r.getType(), r, h, guest);
-    bookings.save(b);*/
+    bookings.save(b);
+    Booking b2 = new Booking(2, new Timestamp(arrival.getTime()), new Timestamp(departure.getTime()), r2.getType(), r2, h, guest);
+    //bookings.save(b2);*/
 
   }
 

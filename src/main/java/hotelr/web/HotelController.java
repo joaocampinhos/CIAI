@@ -16,12 +16,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /*
  * Mapping
- * GET  /hotels             - the list of hotels
- * GET  /hotels/new         - the form to fill the data for a new hotel
- * POST /hotels             - creates a new hotel
- * GET  /hotels/{id}        - the hotel with identifier {id}
- * GET  /hotels/{id}/edit   - the form to edit the hotel with identifier {id}
- * POST /hotels/{id}        - update the hotel with identifier {id}
+ * GET  /hotels                           - the list of hotels
+ * GET  /hotels/new                       - the form to fill the data for a new hotel
+ * POST /hotels                           - creates a new hotel
+ * GET  /hotels/{id}                      - the hotel with identifier {id}
+ * GET  /hotels/{id}/edit                 - the form to edit the hotel with identifier {id}
+ * POST /hotels/{id}                      - update the hotel with identifier {id}
+ * POST /hotels/{id}/comments             - creates a new comment for the hotel
+ * GET /hotels/{id}/comments              - returns list of comments in the hotel
+ * POST /hotels/{id}/comments/{commentId} - creates a new reply for the comment
+ * GET /hotels/{id}/comments/{commentId}  - return the reply to the comment
  */
 
 @Controller
@@ -33,6 +37,15 @@ public class HotelController {
 
   @Autowired
   ManagerRepository managers;
+
+  @Autowired
+  GuestRepository guests;
+
+  @Autowired
+  CommentRepository comments;
+
+  @Autowired
+  ReplyRepository replies;
 
   // GET  /hotels             - the list of hotels
   @RequestMapping(method=RequestMethod.GET)
@@ -95,6 +108,28 @@ public class HotelController {
   public String editSave(@PathVariable("id") long id, Hotel hotel, Model model) {
     hotels.save(hotel);
     return "redirect:/";
+  }
+
+  // POST /hotels/{id}/comments   - creates a new comment for the hotel
+  @RequestMapping(value="{id}/comments", method=RequestMethod.POST)
+  public String saveComment(@PathVariable("id") long id, @ModelAttribute Comment comment, Model model) {
+    //É sempre o Toni a postar
+    comment.setGuest(guests.findByName("Toni"));
+    comment.setHotel(hotels.findOne(id));
+    comments.save(comment);
+    model.addAttribute("comment", comment);
+    return "redirect:/hotels/{id}";
+  }
+
+  // POST /hotels/{id}/comments/{commentId} - creates a new reply for the comment
+  @RequestMapping(value="{id}/comments/{commentId}")
+  public String saveReply(@PathVariable("id") long id, @PathVariable("commentId") long commentId, Reply reply, Model model){
+    //É sempre O Chefe a responder
+    reply.setManager(managers.findByName("O Chefe"));
+    reply.setParent(comments.findOne(commentId));
+    replies.save(reply);
+    model.addAttribute("reply", reply);
+    return "redirect:/hotels/{id}";
   }
 
 }

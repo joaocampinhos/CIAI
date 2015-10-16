@@ -7,41 +7,47 @@
     <div th:fragment="content">
       <form class="clear">
         <div class="container">
-        <br/>
-        <div class="row">
-          <div class="four columns">
-            <label>Dates</label>
+          <br/>
+          <div class="row">
+            <div class="four columns">
+              <label>Dates</label>
+            </div>
+            <div class="four columns">
+              <div class="isle-1-h">
+                <input class="clear" type="date"/>
+              </div>
+            </div>
+            <div class="four columns">
+              <div class="isle-1-h">
+                <input class="clear" type="date"/>
+              </div>
+            </div>
           </div>
-          <div class="four columns">
-            <input class="clear" type="date"/>
-          </div>
-          <div class="four columns">
-            <input class="clear" type="date"/>
-          </div>
-        </div>
-        <br/>
-        <hr class="clear"/>
-        <br/>
+          <br/>
+          <hr class="clear"/>
+          <br/>
         </div>
         <div class="container">
-        <div class="row">
-          <div class="four columns">
-            <label>Room Type</label>
+          <div class="row">
+            <div class="four columns">
+              <label>Room Type</label>
+            </div>
+            <div class="eight columns">
+              <div class="isle-1-h">
+                <select class="clear">
+                  <option selected="" disabled="">Room Type</option>
+                  <option value="SR">Single Room</option>
+                  <option value="DR">Double Room</option>
+                  <option value="JS">Junior Suite</option>
+                  <option value="ES">Executive Suite</option>
+                  <option value="GS">Grande Suite</option>
+                  <option value="FS">Family Suite</option>
+                  <option value="PS">Presidential Suite</option>
+                </select>
+              </div>
+            </div>
           </div>
-          <div class="eight columns">
-            <select class="clear">
-              <option selected="" disabled="">Room Type</option>
-              <option value="SR">Single Room</option>
-              <option value="DR">Double Room</option>
-              <option value="JS">Junior Suite</option>
-              <option value="ES">Executive Suite</option>
-              <option value="GS">Grande Suite</option>
-              <option value="FS">Family Suite</option>
-              <option value="PS">Presidential Suite</option>
-            </select>
-          </div>
-          </div>
-        <br/>
+          <br/>
         </div>
         <div class="secondary">
           <div class="container isle-1-v">

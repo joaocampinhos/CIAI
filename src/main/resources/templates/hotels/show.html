@@ -12,7 +12,7 @@
           <div>
             <p class="clearmargin text-center isle-1-v">
             <span th:class="'star-' + ${hotel.rating}"></span>
-              <br/>
+            <br/>
             <span class="h3 thin uppercase" th:text="${hotel.name}"/>
             </p>
           </div>
@@ -34,14 +34,14 @@
           <div class="photo-thumb"><img src="https://placehold.it/80x80"/></div>
           <div class="photo-thumb"><img src="https://placehold.it/80x80"/></div>
           <div class="photo-thumb"><img src="https://placehold.it/80x80"/></div>
-        <h4 class="thin">Manager </h4>
-        <div class="media comment">
-          <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
-          <div class="media__body">
-            <h5><span th:text="${hotel.manager.name}"></span></h5>
-            email: <span th:text="${hotel.manager.email}"></span>
+          <h4 class="thin">Manager </h4>
+          <div class="media comment">
+            <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
+            <div class="media__body">
+              <h5><span th:text="${hotel.manager.name}"></span></h5>
+              email: <span th:text="${hotel.manager.email}"></span>
+            </div>
           </div>
-        </div>
         </div>
         <div class="five columns">
           <br/>
@@ -54,13 +54,13 @@
             <select>
               <option>Tipo de quarto</option>
             </select>
-          <h4>Preço: <span>100€</span></h4>
-          <button class="button button-primary" type="submit">Book</button>
+            <h4>Preço: <span>100€</span></h4>
+            <button class="button button-primary" type="submit">Book</button>
           </form>
         </div>
       </div>
       <div class="container">
-          <hr/>
+        <hr/>
         <h3 class="thin">Rooms</h3>
         <table class="u-full-width">
           <thead>
@@ -71,36 +71,43 @@
           </thead>
           <tr th:each="room : ${hotel.rooms}">
             <td th:text="${room.type.name}"/>
-            <td th:text="${room.price}+'€'"/>
+              <td th:text="${room.price}+'€'"/>
           </tr>
         </table>
       </div>
       <div class="comments">
         <div class="container">
-        <h3 class="text-center">Comments</h3>
-        <div class="media comment">
-          <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
-          <p class="media__body">
-          <span>{{USERNAME}}, {{TIMESTAMP}}</span>
-      <br/>
-          {{COMMENT}}
-          </p>
-          <div class="media comment reply">
+          <h3 class="text-center">Comments</h3>
+          <div class="media comment">
             <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
             <p class="media__body">
             <span>{{USERNAME}}, {{TIMESTAMP}}</span>
-      <br/>
-      {{REPLY COMMENT}}
+            <br/>
+            {{COMMENT}}
             </p>
+            <div class="media comment reply">
+              <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
+              <p class="media__body">
+              <span>{{USERNAME}}, {{TIMESTAMP}}</span>
+              <br/>
+              {{REPLY COMMENT}}
+              </p>
+            </div>
           </div>
+          <div class="media comment comment-write">
+            <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
+            <p class="media__body">
+            <textarea></textarea>
+            <button class="right button-primary">Submit</button>
+            </p>
           </div>
         </div>
       </div>
 
       <!-- só mostrar o edit ao manager
-      <p><a th:href="@{|/hotels/${hotel.id}/edit|}">Edit</a></p>
-      <p><a href="/hotels/new">Add a new hotel</a></p>
-      <p><a href="/hotels">List all hotels</a></p>
+        <p><a th:href="@{|/hotels/${hotel.id}/edit|}">Edit</a></p>
+        <p><a href="/hotels/new">Add a new hotel</a></p>
+        <p><a href="/hotels">List all hotels</a></p>
       -->
     </div>
   </body>

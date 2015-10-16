@@ -6,23 +6,30 @@
   <body>
     <div th:fragment="content">
       <form class="clear">
-        <div class="row container">
+        <div class="container">
+        <br/>
+        <div class="row">
           <div class="four columns">
             <label>Dates</label>
           </div>
           <div class="four columns">
-            <input type="date"/>
+            <input class="clear" type="date"/>
           </div>
           <div class="four columns">
-            <input type="date"/>
+            <input class="clear" type="date"/>
           </div>
         </div>
-        <div class="row container">
+        <br/>
+        <hr class="clear"/>
+        <br/>
+        </div>
+        <div class="container">
+        <div class="row">
           <div class="four columns">
             <label>Room Type</label>
           </div>
           <div class="eight columns">
-            <select>
+            <select class="clear">
               <option selected="" disabled="">Room Type</option>
               <option value="SR">Single Room</option>
               <option value="DR">Double Room</option>
@@ -33,11 +40,13 @@
               <option value="PS">Presidential Suite</option>
             </select>
           </div>
+          </div>
+        <br/>
         </div>
         <div class="secondary">
-          <div class="container">
+          <div class="container isle-1-v">
             <button type="submit">Filter</button>
-            <span th:text="${hotels.size()}+' hoteis encontrados'"></span>
+            <span class="right"><b><span th:text="${hotels.size()}"></span> </b>Hotels Found</span>
           </div>
         </div>
       </form>
@@ -49,10 +58,22 @@
               <div class="media__body">
                 <div class="row">
                   <div class="nine columns">
-                    <h5><a th:text="${hotel.name}" th:href="@{|/hotels/${hotel.id}|}"></a> <span th:class="'star-' + ${hotel.rating}"></span></h5>
+                    <h5><a class="a-none" th:text="${hotel.name}" th:href="@{|/hotels/${hotel.id}|}"></a> <span th:class="'star-' + ${hotel.rating}"></span></h5>
+                    <p class="clearmargin"> Adress: <span th:text="${hotel.address}"/></p>
+                    <p class="clearmargin"> Category: <span th:text="${hotel.category}"/></p>
                   </div>
                   <div class="three columns">
-                    # comments
+                    <div class="right">
+                      # comments
+                    </div>
+                  </div>
+                </div>
+                <div class="row bottomrow">
+                  <div class="eight columns">
+                    <h6 class="clearmargin"> From 100€ </h6>
+                  </div>
+                  <div class="four columns">
+                    <a th:href="@{|/hotels/${hotel.id}|}" class="clearmargin button button-full button-primary">Book now</a>
                   </div>
                 </div>
               </div>

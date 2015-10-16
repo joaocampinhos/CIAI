@@ -9,13 +9,42 @@
 
       <div class="container row">
         <div class="seven columns">
-          <span th:text="${hotel.name}"></span>
-          <div th:class="'star-' + ${hotel.rating}"></div>
-          <br/>
-          <span th:text="${hotel.address}"></span>,
-          <span th:text="${hotel.category}"></span>
+          <div>
+            <p class="clearmargin text-center isle-1-v">
+            <span th:class="'star-' + ${hotel.rating}"></span>
+              <br/>
+            <span class="h3 thin uppercase" th:text="${hotel.name}"/>
+            </p>
+          </div>
+          <h5 class="clearmargin thin">
+            Category
+          </h5>
+          <p><span th:text="${hotel.category}"></span></p>
+          <h5 class="clearmargin thin">
+            Adress
+          </h5>
+          <p> <span th:text="${hotel.address}"></span></p>
+          <h5 class="clearmargin thin">
+            Photos
+          </h5>
+          <div class="photo-thumb"><img src="https://placehold.it/80x80"/></div>
+          <div class="photo-thumb"><img src="https://placehold.it/80x80"/></div>
+          <div class="photo-thumb"><img src="https://placehold.it/80x80"/></div>
+          <div class="photo-thumb"><img src="https://placehold.it/80x80"/></div>
+          <div class="photo-thumb"><img src="https://placehold.it/80x80"/></div>
+          <div class="photo-thumb"><img src="https://placehold.it/80x80"/></div>
+          <div class="photo-thumb"><img src="https://placehold.it/80x80"/></div>
+        <h4 class="thin">Manager </h4>
+        <div class="media comment">
+          <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
+          <div class="media__body">
+            <h5><span th:text="${hotel.manager.name}"></span></h5>
+            email: <span th:text="${hotel.manager.email}"></span>
+          </div>
         </div>
-        <div class="four columns">
+        </div>
+        <div class="five columns">
+          <br/>
           <form>
             <label>Check-in</label>
             <input type="date"/>
@@ -26,18 +55,26 @@
               <option>Tipo de quarto</option>
             </select>
           <h4>Preço: <span>100€</span></h4>
-          <button type="submit">Book</button>
+          <button class="button button-primary" type="submit">Book</button>
           </form>
         </div>
       </div>
-      Aqui ficarão os rooms
-    <h2>Rooms</h2>
-        <ul th:each="room : ${hotel.rooms}">
-            <li> <span th:text="${room.type.name}"/>, Price: <span th:text="${room.price}"/>€</li>
-        </ul>
-      <br/>
-      Aqui ficará o manager
-      <h2>Manager <span th:text="${hotel.manager}"></span></h2>
+      <div class="container">
+          <hr/>
+        <h3 class="thin">Rooms</h3>
+        <table class="u-full-width">
+          <thead>
+            <tr>
+              <th>Room Type</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tr th:each="room : ${hotel.rooms}">
+            <td th:text="${room.type.name}"/>
+            <td th:text="${room.price}+'€'"/>
+          </tr>
+        </table>
+      </div>
       <div class="comments">
         <div class="container">
         <h3 class="text-center">Comments</h3>

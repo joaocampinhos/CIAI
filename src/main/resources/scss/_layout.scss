@@ -83,6 +83,7 @@ display:         flex;
 
 .nav {
   height: 5rem;
+  margin: 1rem 0;
 }
 
 
@@ -139,6 +140,14 @@ header .logo {
 
 //OBJECTS REUTILIZAVEIS
 
+.uppercase {
+  text-transform: uppercase;
+}
+
+.thin {
+  font-weight: 300;
+}
+
 .secondary {
   background-color: #f0eff4;
 }
@@ -187,10 +196,24 @@ header .logo {
   border-radius: 1000px;
 }
 
-.text-center {
-  text-align: center;
-}
+.text-center { text-align: center; }
 
+.right { float: right; }
+.left  { float: left;  }
+
+.isle-1-v { padding: 1rem 0; }
+.isle-1-h { padding: 0 1rem; }
+
+.a-none, .a-none:hover { color: inherit; text-decoration: none; }
+
+.clearmargin {margin:0}
+.clearpadding {padding:0}
+
+.button-full { width: 100%; }
+
+.photo-thumb {
+  display: inline;
+}
 
 //COMENTS LAYOUT
 
@@ -205,4 +228,11 @@ header .logo {
 //hotel list
 .hotel-list {
   padding: 2rem 0;
+}
+
+.hotel-list .bottomrow {
+  margin-top: 8px;
+  h6 {
+    margin-top: 14px;
+  }
 }

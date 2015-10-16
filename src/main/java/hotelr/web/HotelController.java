@@ -93,7 +93,7 @@ public class HotelController {
 
   // GET  /hotels/{id}        - the hotel with identifier {id}
   @RequestMapping(value="{id}", method=RequestMethod.GET)
-  public String show(@PathVariable("id") long id, @RequestParam(value="arrival", required=false) String arrival, @RequestParam(value="departure", required=false) String departure, Model model) throws Exception {
+  public String show(@PathVariable("id") long id, @RequestParam(value="arrival", required=false) String arrival, @RequestParam(value="departure", required=false) String departure, @RequestParam(value="roomtype", required=false) String roomType, Model model) throws Exception {
     Hotel hotel = hotels.findOne(id);
     if( hotel == null )
       throw new HotelNotFoundException();
@@ -103,8 +103,13 @@ public class HotelController {
       Date dArrival = sdf.parse(arrival);
       Date dDeparture = sdf.parse(departure);
 
-      List<Room> filtered = rooms.findByAvailability(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), hotel);
-      model.addAttribute("rooms", filtered);
+      if (roomType != null) {
+        Room filtered = rooms.findRoomByAvailability(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), hotel, roomTypes.findByName(roomType));
+        model.addAttribute("rooms", filtered);
+      } else {
+        List<Room> filtered = rooms.findByAvailability(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), hotel);
+        model.addAttribute("rooms", filtered);
+      }
     }
 
     model.addAttribute("hotel", hotel);

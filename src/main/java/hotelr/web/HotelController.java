@@ -44,19 +44,25 @@ public class HotelController {
   RoomRepository rooms;
 
   @Autowired
-  RoomRepository roomType;
+  RoomTypeRepository roomTypes;
 
   // GET  /hotels             - the list of hotels
   @RequestMapping(method=RequestMethod.GET)
-  public String index(@RequestParam(value="arrival", required=false) String arrival, @RequestParam(value="departure", required=false) String departure, Model model) throws Exception {
-    model.addAttribute("rooms", roomType.findAll());
+  public String index(@RequestParam(value="arrival", required=false) String arrival, @RequestParam(value="departure", required=false) String departure, @RequestParam(value="roomtype", required=false) String roomType, Model model) throws Exception {
+    model.addAttribute("roomTypes", roomTypes.findAll());
     if (arrival == null || departure == null) model.addAttribute("hotels", hotels.findAll());
     else {
       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
       Date dArrival = sdf.parse(arrival);
       Date dDeparture = sdf.parse(departure);
 
-      List<Hotel> filtered = hotels.findByAvailability(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()));
+      List<Hotel> filtered;
+      if (roomType != null) {
+        filtered = hotels.findByAvailabilityWithRoomType(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), roomTypes.findByName(roomType));
+      } else {
+        filtered = hotels.findByAvailability(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()));
+      }
+
       model.addAttribute("hotels", filtered);
     }
 

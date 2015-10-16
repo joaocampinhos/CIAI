@@ -5,7 +5,7 @@
   </head>
   <body>
     <div th:fragment="content">
-      <form class="clear">
+      <form class="clear" method="GET">
         <div class="container">
           <br/>
           <div class="row">
@@ -14,12 +14,14 @@
             </div>
             <div class="four columns">
               <div class="isle-1-h">
-                <input class="clear" type="date"/>
+                <input name="arrival" th:value="${param.arrival[0]}" th:unless="${param.arrival == null}" class="clear" type="date"/>
+                <input name="arrival" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.arrival != null}" class="clear" type="date"/>
               </div>
             </div>
             <div class="four columns">
               <div class="isle-1-h">
-                <input class="clear" type="date"/>
+                <input name="departure" th:value="${param.departure[0]}" th:unless="${param.departure == null}" class="clear" type="date"/>
+                <input name="departure" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.departure != null}" class="clear" type="date"/>
               </div>
             </div>
           </div>
@@ -34,16 +36,10 @@
             </div>
             <div class="eight columns">
               <div class="isle-1-h">
-                <label th:text="${rooms}"/>
-                <select class="clear">
+                <select name="roomtype" class="clear">
                   <option selected="" disabled="">Room Type</option>
-                  <option value="SR">Single Room</option>
-                  <option value="DR">Double Room</option>
-                  <option value="JS">Junior Suite</option>
-                  <option value="ES">Executive Suite</option>
-                  <option value="GS">Grande Suite</option>
-                  <option value="FS">Family Suite</option>
-                  <option value="PS">Presidential Suite</option>
+                  <option th:each="type: ${roomTypes}" th:selected="${param.roomtype[0] == type.name+''}" th:value="${type.name}" th:unless="${param.roomtype == null}" th:text="${type.name}"/>
+                  <option th:each="type: ${roomTypes}" th:value="${type.name}" th:unless="${param.roomtype != null}" th:text="${type.name}"/>
                 </select>
               </div>
             </div>

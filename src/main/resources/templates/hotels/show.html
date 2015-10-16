@@ -45,14 +45,18 @@
         </div>
         <div class="five columns">
           <br/>
-          <form method="GET">
+          <form method="GET"><!--mudar aqui para POST criar novo booking-->
             <label>Check-in</label>
-            <input type="date"/>
+            <input name="arrival" th:value="${param.arrival[0]}" th:unless="${param.arrival == null}" class="clear" type="date"/>
+            <input name="arrival" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.arrival != null}" class="clear" type="date"/>
             <label>Check-out</label>
-            <input type="date"/>
+            <input name="departure" th:value="${param.departure[0]}" th:unless="${param.departure == null}" class="clear" type="date"/>
+            <input name="departure" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.departure != null}" class="clear" type="date"/>
             <label>Room type</label>
             <select name="roomtype">
-              <option th:each="room: ${hotel.rooms}" th:selected="${param.roomtype[0] == room.type.id+''}" th:value="${room.type.id}" th:text="${room.type.name}"/>
+              <option selected="" disabled="">Room Type</option>
+              <option th:each="room: ${hotel.rooms}" th:selected="${param.roomtype[0] == room.type.id+''}" th:value="${room.type.id}" th:unless="${param.roomtype == null}" th:text="${room.type.name}"/>
+              <option th:each="room: ${hotel.rooms}" th:value="${room.type.id}" th:unless="${param.roomtype != null}" th:text="${room.type.name}"/>
             </select>
             <h4>Preço: <span>100€</span></h4>
             <button class="button button-primary" type="submit">Book</button>

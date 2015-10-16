@@ -13,5 +13,8 @@ public interface RoomRepository extends CrudRepository<Room, Long> {
 
   @Query("SELECT r FROM Room r WHERE r.hotel = :hotel and r.id NOT IN (SELECT ro.id FROM Booking b join b.hotel h join b.room ro where b.arrival >= :arrival and b.departure <= :departure GROUP BY (h, ro.id) HAVING COUNT(b) >= r.number)")
   List<Room> findByAvailability(@Param("arrival") Timestamp arrival, @Param("departure") Timestamp departure, @Param("hotel") Hotel hotel);
+
+  @Query("FROM Room r WHERE r.hotel = :hotel and r.type = :roomtype and r.id NOT IN (SELECT ro.id FROM Booking b join b.hotel h join b.room ro where ro.type = :roomtype and b.arrival >= :arrival and b.departure <= :departure GROUP BY (h, ro.id) HAVING COUNT(b) >= r.number)")
+  Room findRoomByAvailability(@Param("arrival") Timestamp arrival, @Param("departure") Timestamp departure, @Param("hotel") Hotel hotel, @Param("roomtype") RoomType roomType);
 }
 

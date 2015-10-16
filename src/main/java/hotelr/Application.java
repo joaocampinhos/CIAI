@@ -46,9 +46,9 @@ public class Application implements CommandLineRunner {
 
   @Autowired
   CommentRepository comments;
-  
+
   @Autowired
-  ReplyRepository replys;
+  ReplyRepository replies;
 
   @Override
   public void run(String... strings) {
@@ -60,8 +60,8 @@ public class Application implements CommandLineRunner {
 
     guests.deleteAll();
     Guest myGuests[] = {
-        new Guest(1, "Tozé", "toze@vitominas.pt", "peidalhaco"),
-        new Guest(2, "Toni", "toni@vitominas.pt", "12345")
+        new Guest(2, "Tozé", "toze@vitominas.pt", "peidalhaco"),
+        new Guest(3, "Toni", "toni@vitominas.pt", "12345")
     };
     for(Guest guest: myGuests) guests.save(guest);
 
@@ -108,7 +108,12 @@ public class Application implements CommandLineRunner {
     
     for(Comment comment: myComments) comments.save(comment);
 
-    //criar replyes
+    Reply myReplies[] = {
+        new Reply(4, myComments[0], "noScope", new Timestamp(System.currentTimeMillis()), boss),
+        new Reply(5, myComments[1], "Thank you, very nice!", new Timestamp(System.currentTimeMillis()), boss)
+    };
+    
+    for(Reply reply: myReplies) replies.save(reply);
   }
 
 }

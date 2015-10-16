@@ -40,7 +40,6 @@ public class Application implements CommandLineRunner {
   ManagerRepository managers;
 
   @Autowired
-<<<<<<< HEAD
   BookingRepository bookings;
 
   @Autowired
@@ -50,21 +49,13 @@ public class Application implements CommandLineRunner {
   RoomTypeRepository roomTypes;
 
   @Autowired
-=======
-  GuestRepository guests;
-
-  @Autowired
-  RoomTypeRepository roomTypes;
-
-  @Autowired
->>>>>>> criar exemplos para bd
   RoomRepository rooms;
 
   @Autowired
   CommentRepository comments;
 
   @Autowired
-  ReplyRepository replys;
+  ReplyRepository replies;
 
   @Override
   public void run(String... strings) throws Exception {
@@ -77,7 +68,7 @@ public class Application implements CommandLineRunner {
     guests.deleteAll();
     Guest myGuests[] = {
         new Guest(2, "Harvey Specter", "harvey@pearsonspecterlitt.com", "imthebest"),
-        new Guest(2, "Toni", "toni@vitominas.pt", "12345")
+        new Guest(3, "Toni", "toni@vitominas.pt", "12345")
     };
     for(Guest guest: myGuests) guests.save(guest);
 
@@ -124,7 +115,12 @@ public class Application implements CommandLineRunner {
 
     for(Comment comment: myComments) comments.save(comment);
 
-    //criar replyes
+    Reply myReplies[] = {
+        new Reply(4, myComments[0], "noScope", new Timestamp(System.currentTimeMillis()), boss),
+        new Reply(5, myComments[1], "Thank you, very nice!", new Timestamp(System.currentTimeMillis()), boss)
+    };
+
+    for(Reply reply: myReplies) replies.save(reply);
   }
 
 }

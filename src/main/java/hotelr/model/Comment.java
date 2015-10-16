@@ -23,7 +23,6 @@ public class Comment extends Message{
   private Guest guest;
   private Hotel hotel;
 
-  @OneToOne(mappedBy="parent", targetEntity=Reply.class, fetch=FetchType.EAGER)
   private Reply reply;
 
   public Comment() {
@@ -56,6 +55,7 @@ public class Comment extends Message{
     this.hotel = hotel;
   }
 
+  @OneToOne(mappedBy="parent", targetEntity=Reply.class, fetch=FetchType.EAGER)
   public Reply getReply() {
     return reply;
   }

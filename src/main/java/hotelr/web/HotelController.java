@@ -16,18 +16,27 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.sql.Timestamp;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 /*
  * Mapping
- * GET  /hotels             - the list of hotels
- * GET  /hotels/new         - the form to fill the data for a new hotel
- * POST /hotels             - creates a new hotel
- * GET  /hotels/{id}        - the hotel with identifier {id}
- * GET  /hotels/{id}/edit   - the form to edit the hotel with identifier {id}
- * POST /hotels/{id}        - update the hotel with identifier {id}
+ * GET  /hotels                           - the list of hotels
+ * GET  /hotels/new                       - the form to fill the data for a new hotel
+ * POST /hotels                           - creates a new hotel
+ * GET  /hotels/{id}                      - the hotel with identifier {id}
+ * GET  /hotels/{id}/edit                 - the form to edit the hotel with identifier {id}
+ * POST /hotels/{id}                      - update the hotel with identifier {id}
+ * POST /hotels/{id}/comments             - creates a new comment for the hotel
+ * GET /hotels/{id}/comments              - returns list of comments in the hotel
+ * POST /hotels/{id}/comments/{commentId} - creates a new reply for the comment
+ * GET /hotels/{id}/comments/{commentId}  - return the reply to the comment
  */
 
 @Controller
@@ -42,6 +51,12 @@ public class HotelController {
 
   @Autowired
   GuestRepository guests;
+
+  @Autowired
+  CommentRepository comments;
+
+  @Autowired
+  ReplyRepository replies;
 
   @Autowired
   RoomRepository rooms;
@@ -144,6 +159,40 @@ public class HotelController {
   public String editSave(@PathVariable("id") long id, Hotel hotel, Model model) {
     hotels.save(hotel);
     return "redirect:/";
+  }
+
+  // POST /hotels/{id}/comments   - creates a new comment for the hotel
+  @RequestMapping(value="{id}/comments", method=RequestMethod.POST)
+  public String saveComment(@PathVariable("id") long id, @RequestParam("comment") String comment, Model model) {
+    //É sempre o Toni a postar
+    Guest guest = guests.findByName("Toni");
+    Hotel hotel = hotels.findOne(id);
+    Comment commentObj = new Comment(id, guest, "cenas", new Timestamp(System.currentTimeMillis()), hotel);
+    comments.save(commentObj);
+    return "redirect:/hotels/{id}";
+  }
+
+  // GET /hotels/{id}/comments              - returns list of comments in the hotel
+  @RequestMapping(value="{id}/comments", method=RequestMethod.GET, produces={"text/plain","application/json"})
+  public @ResponseBody Iterable<String> commentsJSON(@PathVariable("id") long id, Model model) {
+    LinkedList<String> tmp = new LinkedList<String>();
+      Iterator<Comment> it= comments.findByHotel(hotels.findOne(id)).iterator();
+      while(it.hasNext()){
+        tmp.add(it.next().getComment());
+      }
+    return tmp;
+  }
+
+
+  // POST /hotels/{id}/comments/{commentId} - creates a new reply for the comment
+  @RequestMapping(value="{id}/comments/{commentId}")
+  public String saveReply(@PathVariable("id") long id, @PathVariable("commentId") long commentId, Reply reply, Model model){
+    //É sempre O Chefe a responder
+    reply.setManager(managers.findByName("O Chefe"));
+    reply.setParent(comments.findOne(commentId));
+    replies.save(reply);
+    model.addAttribute("reply", reply);
+    return "redirect:/hotels/{id}";
   }
 
   // POST /hotels/{id}/bookings    - creates a new booking

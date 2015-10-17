@@ -3,6 +3,7 @@ package hotelr;
 import hotelr.model.*;
 import hotelr.repository.*;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 
 import org.slf4j.Logger;
@@ -39,16 +40,22 @@ public class Application implements CommandLineRunner {
   ManagerRepository managers;
 
   @Autowired
-  BookingRepository bookings;
-
-  @Autowired
   GuestRepository guests;
 
   @Autowired
   RoomTypeRepository roomTypes;
 
   @Autowired
+  BookingRepository bookings;
+
+  @Autowired
   RoomRepository rooms;
+
+  @Autowired
+  CommentRepository comments;
+
+  @Autowired
+  ReplyRepository replies;
 
   @Override
   public void run(String... strings) throws Exception {
@@ -59,8 +66,11 @@ public class Application implements CommandLineRunner {
     managers.save(boss);
 
     guests.deleteAll();
-    Guest guest = new Guest(2, "Harvey Specter", "harvey@pearsonspecterlitt.com", "imthebest");
-    guests.save(guest);
+    Guest myGuests[] = {
+        new Guest(2, "Harvey Specter", "harvey@pearsonspecterlitt.com", "imthebest"),
+        new Guest(3, "Toni", "toni@vitominas.pt", "12345")
+    };
+    for(Guest guest: myGuests) guests.save(guest);
 
     hotels.deleteAll();
     Hotel myHotels[] = {new Hotel(1,"Marriot", "address", "category", 5, boss),
@@ -93,6 +103,24 @@ public class Application implements CommandLineRunner {
       }
     }
 
+    Comment myComments[] = {
+        new Comment(1, myGuests[0], "mlg 420 blaze it", new Timestamp(System.currentTimeMillis()), myHotels[0]),
+        new Comment(2, myGuests[1], "OMG!", new Timestamp(System.currentTimeMillis()), myHotels[0]),
+        new Comment(3, myGuests[1], "WoW!", new Timestamp(System.currentTimeMillis()), myHotels[1])
+    };
+    
+    myHotels[0].addComment(myComments[0]);
+    myHotels[0].addComment(myComments[1]);
+    myHotels[1].addComment(myComments[2]);
+    
+    for(Comment comment: myComments) comments.save(comment);
+
+    Reply myReplies[] = {
+        new Reply(4, myComments[0], "noScope", new Timestamp(System.currentTimeMillis()), boss),
+        new Reply(5, myComments[1], "Thank you, very nice!", new Timestamp(System.currentTimeMillis()), boss)
+    };
+    
+    for(Reply reply: myReplies) replies.save(reply);
     // Merdas para verificar o search
     // TODO: mais vale fazer um teste para isto mesmo
 

@@ -164,6 +164,17 @@ public class HotelController {
     return "redirect:/hotels/{id}";
   }
 
+  // POST /hotels/{id}/rooms   - creates a new collection of rooms for the hotel
+  @RequestMapping(value="{id}/rooms", method=RequestMethod.POST)
+  public String addRooms(@PathVariable("id") long id, @RequestParam("roomtype") String roomType, @RequestParam("number") int number, @RequestParam("price") int price, Model model) {
+    Hotel hotel = hotels.findOne(id);
+    RoomType type = roomTypes.findByName(roomType);
+    Room room = new Room(hotel, type, number, price);
+    rooms.save(room);
+
+    return "redirect:/hotels/{id}";
+  }
+
   // POST /hotels/{id}/comments   - creates a new comment for the hotel
   @RequestMapping(value="{id}/comments", method=RequestMethod.POST)
   public String saveComment(@PathVariable("id") long id, @RequestParam("comment") String comment, Model model) {

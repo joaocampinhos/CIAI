@@ -147,6 +147,19 @@ public class HotelController {
     return "redirect:/";
   }
 
+  @RequestMapping(value="{id}/bookings", method=RequestMethod.GET)
+  public String listBookings(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, Model model) throws Exception {
+    Hotel hotel = hotels.findOne(id);
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Date dArrival = sdf.parse(arrival);
+    Date dDeparture = sdf.parse(departure);
+
+    model.addAttribute("bookings", bookings.findOccupation(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), hotel));
+
+    return "hotels/bookings/index";
+  }
+
   // POST /hotels/{id}/bookings    - creates a new booking
   @RequestMapping(value="{id}/bookings", method=RequestMethod.POST)
   public String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") Long roomid, Model model) throws Exception {

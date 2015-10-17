@@ -23,7 +23,8 @@
                     <th></th>
                   </tr>
                 </thead>
-                <tr th:each="booking : ${bookings}">
+                <div th:each="booking : ${bookings}">
+                  <tr>
                   <td th:text="${booking.hotel.name}"/>
                   <td th:text="${#dates.format(booking.arrival , 'yyyy-MM-dd')}"/>
                   <td th:text="${#dates.format(booking.departure , 'yyyy-MM-dd')}"/>
@@ -35,25 +36,16 @@
                 <tr class="details">
                   <td colspan="5" class="details">
                     <div>
-
-                      das
+                    Div que vai mostrar tudo e botoes para editar cancelar etc.
                     </div>
                   </td>
                 </tr>
+                </div>
               </table>
             </div>
           </div>
         </div>
-        <div class="container">
-          <h1>Booking List</h1>
-          <ul th:each="booking : ${bookings}">
-            <li>
-              <a th:text="${booking.hotel.name}" th:href="@{|/hotels/${booking.hotel.id}|}"></a>
-              <p> Arrival: <span th:text="${booking.arrival}"/>, Departure: <span th:text="${booking.departure}"/>, Type: <span th:text="${booking.roomType.name}"/> </p>
-            </li>
-          </ul>
-          <p> <a href="/hotels/new">new hotel</a></p>
-        </div>
+        <br/>
       </div>
     </div>
   </body>

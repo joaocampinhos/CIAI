@@ -15,7 +15,8 @@ function gup( name, url ) {
 var departure = gup('departure')
 if (!departure) {
   var tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toISOString().substring(0,10);
-  document.getElementsByName('departure')[0].value = tomorrow;
+  var d = document.getElementsByName('departure');
+  if (d.length > 0) d[0].value = tomorrow;
 }
 
 // pass get parameters to hotel page

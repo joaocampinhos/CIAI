@@ -66,16 +66,17 @@
                     <p class="clearmargin"> Category: <span th:text="${hotel.category}"/></p>
                   </div>
                   <div class="three columns">
-                    <div class="right">
-                      # comments
+                    <div th:text="${hotel.comments.size()}+' Comments'" class="right">
+                      comments
                     </div>
                   </div>
                 </div>
                 <div class="row bottomrow">
                   <div class="eight columns">
-                    <h6 class="clearmargin"> From 100€ </h6>
+                    <!--<h6 class="clearmargin"> From 100€ </h6>-->
+
                   </div>
-                  <div class="four columns">
+                  <div class="right four columns">
                     <a th:href="@{|/hotels/${hotel.id}|}" class="gohotel clearmargin button button-full button-primary">Book now</a>
                   </div>
                 </div>

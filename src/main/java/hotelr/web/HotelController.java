@@ -178,7 +178,7 @@ public class HotelController {
   @RequestMapping(value="{id}/comments", method=RequestMethod.GET, produces={"text/plain","application/json"})
   public @ResponseBody Iterable<String> commentsJSON(@PathVariable("id") long id, Model model) {
     LinkedList<String> tmp = new LinkedList<String>();
-      Iterator<Comment> it= comments.findByHotel(hotels.findOne(id)).iterator();
+      Iterator<Comment> it = hotels.findOne(id).getComments().iterator();
       while(it.hasNext()){
         tmp.add(it.next().getComment());
       }

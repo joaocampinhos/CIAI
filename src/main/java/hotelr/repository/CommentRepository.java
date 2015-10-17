@@ -8,8 +8,4 @@ import org.springframework.data.repository.query.Param;
 
 import hotelr.model.*;
 
-public interface CommentRepository extends CrudRepository<Comment, Long>{
-
-  @Query("SELECT r FROM Comment r where r.hotel = ?1")
-  List<Comment> findByHotel(Hotel id);
-}
+public interface CommentRepository extends CrudRepository<Comment, Long>{}

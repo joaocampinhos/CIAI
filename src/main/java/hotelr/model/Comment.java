@@ -20,9 +20,16 @@ import javax.persistence.Table;
 public class Comment extends Message{
 
 
+  @ManyToOne
+  @JoinColumn(name="GUEST_ID")
   private Guest guest;
+
+  @ManyToOne
+  @JoinColumn(name="HOTEL_ID")
   private Hotel hotel;
 
+  @OneToOne
+  @JoinColumn(name="REPLY_ID")
   private Reply reply;
 
   public Comment() {
@@ -35,8 +42,12 @@ public class Comment extends Message{
     this.hotel = hotel;
   }
 
-  @ManyToOne()
-  @JoinColumn(name="GUEST_ID")
+  public Comment(Guest guest, String comment, Timestamp creationDate, Hotel hotel){
+    super(comment, creationDate);
+    this.guest = guest;
+    this.hotel = hotel;
+  }
+
   public Guest getGuest() {
     return guest;
   }
@@ -45,8 +56,6 @@ public class Comment extends Message{
     this.guest = guest;
   }
 
-  @ManyToOne
-  @JoinColumn(name="HOTEL_ID")
   public Hotel getHotel() {
     return hotel;
   }
@@ -55,7 +64,6 @@ public class Comment extends Message{
     this.hotel = hotel;
   }
 
-  @OneToOne(mappedBy="parent", targetEntity=Reply.class, fetch=FetchType.EAGER)
   public Reply getReply() {
     return reply;
   }

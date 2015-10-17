@@ -41,10 +41,10 @@ public class Hotel {
   @JoinColumn(name="MANAGER_ID")
   private Manager manager;
 
-  @OneToMany(mappedBy="hotel", targetEntity=Room.class, fetch=FetchType.EAGER)
+  @OneToMany(mappedBy="hotel", targetEntity=Room.class, fetch=FetchType.LAZY)
   public List<Room> rooms;
 
-  @OneToMany(mappedBy="hotel", targetEntity=Comment.class, fetch=FetchType.EAGER)
+  @OneToMany(mappedBy="hotel", targetEntity=Comment.class, fetch=FetchType.LAZY)
   private List<Comment> comments;
 
   public Hotel() {

@@ -161,7 +161,7 @@ public class HotelController {
     Booking booking = new Booking(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), room.getType(), room, hotel, guest);;
     bookings.save(booking);
 
-    return "redirect:/hotels/" + id;
+    return "redirect:/hotels/{id}";
   }
 
   // POST /hotels/{id}/comments   - creates a new comment for the hotel
@@ -173,7 +173,7 @@ public class HotelController {
     Comment commentObj = new Comment(guest, comment, new Timestamp(System.currentTimeMillis()), hotel);
     comments.save(commentObj);
 
-    return "redirect:/hotels/" + id;
+    return "redirect:/hotels/{id}";
   }
 
   // GET /hotels/{id}/comments              - returns list of comments in the hotel

@@ -12,7 +12,7 @@ import javax.persistence.FetchType;
 @Table(name="GUEST_TABLE")
 public class Guest extends User {
 
-  @OneToMany(mappedBy="guest", targetEntity=Booking.class, fetch=FetchType.EAGER)
+  @OneToMany(mappedBy="guest", targetEntity=Booking.class, fetch=FetchType.LAZY)
   public List<Booking> bookings;
 
   public Guest() {

@@ -99,7 +99,7 @@ public class Application implements CommandLineRunner {
 
       for (Room room : myRooms) {
         rooms.save(room);
-        hotel.addRoom(room);
+        // hotel.addRoom(room);
       }
     }
 
@@ -109,9 +109,9 @@ public class Application implements CommandLineRunner {
         new Comment(3, myGuests[1], "WoW!", new Timestamp(System.currentTimeMillis()), myHotels[1])
     };
 
-    myHotels[0].addComment(myComments[0]);
-    myHotels[0].addComment(myComments[1]);
-    myHotels[1].addComment(myComments[2]);
+    // myHotels[0].addComment(myComments[0]);
+    // myHotels[0].addComment(myComments[1]);
+    // myHotels[1].addComment(myComments[2]);
 
     for(Comment comment: myComments) comments.save(comment);
 

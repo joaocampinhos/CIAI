@@ -82,13 +82,16 @@
       <div class="comments">
         <div class="container">
           <h3 class="thin">Comments</h3>
-          <div class="media comment">
+          <div th:each="comment: ${hotel.comments}" class="media comment">
             <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
-            <p class="media__body">
-            <span>{{USERNAME}}, {{TIMESTAMP}}</span>
-            <br/>
-            {{COMMENT}}
-            </p>
+            <div class="media__body">
+              <h5 class="clear">
+                <span th:text="${comment.guest.name}"/>
+                  <small class="thin">(<small class="thin" th:text="${#dates.format(comment.creationDate, 'yyy-MM-dd hh:mm')}"/>)</small>
+              </h5>
+              <span th:text="${comment.comment}"/>
+            </div>
+            <hr class="clear isle-1-v"/>
             <div class="media comment reply">
               <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
               <p class="media__body">
@@ -99,11 +102,13 @@
             </div>
           </div>
           <div class="media comment comment-write">
+            <form method="post" th:action="@{|/hotels/${hotel.id}/comments|}">
             <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
             <p class="media__body">
-            <textarea></textarea>
-            <button class="right button-primary">Submit</button>
+              <textarea name="comment"></textarea>
+              <button class="right button-primary">Submit</button>
             </p>
+            </form>
           </div>
         </div>
       </div>

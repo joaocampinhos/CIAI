@@ -170,9 +170,10 @@ public class HotelController {
     //É sempre o Toni a postar
     Guest guest = guests.findByName("Harvey Specter");
     Hotel hotel = hotels.findOne(id);
-    Comment commentObj = new Comment(guest, "cenas", new Timestamp(System.currentTimeMillis()), hotel);
+    Comment commentObj = new Comment(guest, comment, new Timestamp(System.currentTimeMillis()), hotel);
     comments.save(commentObj);
-    return "redirect:/hotels/{id}";
+
+    return "redirect:/hotels/" + id;
   }
 
   // GET /hotels/{id}/comments              - returns list of comments in the hotel

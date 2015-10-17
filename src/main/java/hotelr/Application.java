@@ -108,42 +108,19 @@ public class Application implements CommandLineRunner {
         new Comment(2, myGuests[1], "OMG!", new Timestamp(System.currentTimeMillis()), myHotels[0]),
         new Comment(3, myGuests[1], "WoW!", new Timestamp(System.currentTimeMillis()), myHotels[1])
     };
-    
+
     myHotels[0].addComment(myComments[0]);
     myHotels[0].addComment(myComments[1]);
     myHotels[1].addComment(myComments[2]);
-    
+
     for(Comment comment: myComments) comments.save(comment);
 
     Reply myReplies[] = {
-        new Reply(4, myComments[0], "noScope", new Timestamp(System.currentTimeMillis()), boss),
-        new Reply(5, myComments[1], "Thank you, very nice!", new Timestamp(System.currentTimeMillis()), boss)
+        new Reply(myComments[0], "noScope", new Timestamp(System.currentTimeMillis()), boss),
+        new Reply(myComments[1], "Thank you, very nice!", new Timestamp(System.currentTimeMillis()), boss)
     };
-    
+
     for(Reply reply: myReplies) replies.save(reply);
-    // Merdas para verificar o search
-    // TODO: mais vale fazer um teste para isto mesmo
-
-/*    Hotel h = new Hotel(7, "Pearson Specter Hotels", "address", "category", 5, boss);
-    Room r = new Room(i++, h, myRoomTypes[0], 1, 5000);
-    Room r2 = new Room(i++, h, myRoomTypes[1], 1, 5000);
-
-    hotels.save(h);
-    rooms.save(r);
-    rooms.save(r2);
-    h.addRoom(r);
-    h.addRoom(r2);
-
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Date arrival = sdf.parse("2015-10-05");
-    Date departure = sdf.parse("2015-10-06");
-
-    bookings.deleteAll();
-    Booking b = new Booking(1, new Timestamp(arrival.getTime()), new Timestamp(departure.getTime()), r.getType(), r, h, guest);
-    bookings.save(b);
-    Booking b2 = new Booking(2, new Timestamp(arrival.getTime()), new Timestamp(departure.getTime()), r2.getType(), r2, h, guest);
-    //bookings.save(b2);*/
-
   }
 
 }

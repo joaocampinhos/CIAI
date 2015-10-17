@@ -15,12 +15,22 @@ import javax.persistence.InheritanceType;
 public abstract class Message {
 
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy=GenerationType.TABLE)
+  @Column(name="COMMENT_ID")
   private long id;
+
+  @Column(name="COMMENT_COMMENT")
   private String comment;
+
+  @Column(name="COMMENT_CREATION_DATE")
   private Timestamp creationDate;
 
   public Message() {}
+
+  public Message(String comment, Timestamp creationDate) {
+    this.comment = comment;
+    this.creationDate = creationDate;
+  }
 
   public Message(long id, String comment, Timestamp creationDate) {
     this.id = id;
@@ -28,8 +38,6 @@ public abstract class Message {
     this.creationDate = creationDate;
   }
 
-  @Id
-  @Column(name="COMMENT_ID")
   public long getId() {
     return id;
   }
@@ -38,7 +46,6 @@ public abstract class Message {
     this.id = id;
   }
 
-  @Column(name="COMMENT_COMMENT")
   public String getComment() {
     return comment;
   }
@@ -47,7 +54,6 @@ public abstract class Message {
     this.comment = comment;
   }
 
-  @Column(name="COMMENT_CREATION_DATE")
   public Timestamp getCreationDate() {
     return creationDate;
   }

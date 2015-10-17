@@ -25,20 +25,6 @@ import java.util.LinkedList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-/*
- * Mapping
- * GET  /hotels                           - the list of hotels
- * GET  /hotels/new                       - the form to fill the data for a new hotel
- * POST /hotels                           - creates a new hotel
- * GET  /hotels/{id}                      - the hotel with identifier {id}
- * GET  /hotels/{id}/edit                 - the form to edit the hotel with identifier {id}
- * POST /hotels/{id}                      - update the hotel with identifier {id}
- * POST /hotels/{id}/comments             - creates a new comment for the hotel
- * GET /hotels/{id}/comments              - returns list of comments in the hotel
- * POST /hotels/{id}/comments/{commentId} - creates a new reply for the comment
- * GET /hotels/{id}/comments/{commentId}  - return the reply to the comment
- */
-
 @Controller
 @RequestMapping(value="/hotels")
 public class HotelController {
@@ -53,12 +39,6 @@ public class HotelController {
   GuestRepository guests;
 
   @Autowired
-  CommentRepository comments;
-
-  @Autowired
-  ReplyRepository replies;
-
-  @Autowired
   RoomRepository rooms;
 
   @Autowired
@@ -66,6 +46,12 @@ public class HotelController {
 
   @Autowired
   RoomTypeRepository roomTypes;
+
+  @Autowired
+  CommentRepository comments;
+
+  @Autowired
+  ReplyRepository replies;
 
   // GET  /hotels             - the list of hotels
   @RequestMapping(method=RequestMethod.GET)
@@ -161,13 +147,30 @@ public class HotelController {
     return "redirect:/";
   }
 
+  // POST /hotels/{id}/bookings    - creates a new booking
+  @RequestMapping(value="{id}/bookings", method=RequestMethod.POST)
+  public String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") Long roomid, Model model) throws Exception {
+    Guest guest = guests.findByName("Harvey Specter");
+    Hotel hotel = hotels.findOne(id);
+    Room room = rooms.findOne(roomid);
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Date dArrival = sdf.parse(arrival);
+    Date dDeparture = sdf.parse(departure);
+
+    Booking booking = new Booking(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), room.getType(), room, hotel, guest);;
+    bookings.save(booking);
+
+    return "redirect:/hotels/" + id;
+  }
+
   // POST /hotels/{id}/comments   - creates a new comment for the hotel
   @RequestMapping(value="{id}/comments", method=RequestMethod.POST)
   public String saveComment(@PathVariable("id") long id, @RequestParam("comment") String comment, Model model) {
     //É sempre o Toni a postar
-    Guest guest = guests.findByName("Toni");
+    Guest guest = guests.findByName("Harvey Specter");
     Hotel hotel = hotels.findOne(id);
-    Comment commentObj = new Comment(id, guest, "cenas", new Timestamp(System.currentTimeMillis()), hotel);
+    Comment commentObj = new Comment(guest, "cenas", new Timestamp(System.currentTimeMillis()), hotel);
     comments.save(commentObj);
     return "redirect:/hotels/{id}";
   }
@@ -176,7 +179,7 @@ public class HotelController {
   @RequestMapping(value="{id}/comments", method=RequestMethod.GET, produces={"text/plain","application/json"})
   public @ResponseBody Iterable<String> commentsJSON(@PathVariable("id") long id, Model model) {
     LinkedList<String> tmp = new LinkedList<String>();
-      Iterator<Comment> it= comments.findByHotel(hotels.findOne(id)).iterator();
+      Iterator<Comment> it = hotels.findOne(id).getComments().iterator();
       while(it.hasNext()){
         tmp.add(it.next().getComment());
       }
@@ -193,23 +196,6 @@ public class HotelController {
     replies.save(reply);
     model.addAttribute("reply", reply);
     return "redirect:/hotels/{id}";
-  }
-
-  // POST /hotels/{id}/bookings    - creates a new booking
-  @RequestMapping(value="{id}/bookings", method=RequestMethod.POST)
-  public String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") Long roomid, Model model) throws Exception {
-    Guest guest = guests.findByName("Harvey Specter");
-    Hotel hotel = hotels.findOne(id);
-    Room room = rooms.findOne(roomid);
-
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Date dArrival = sdf.parse(arrival);
-    Date dDeparture = sdf.parse(departure);
-
-    Booking booking = new Booking(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), room.getType(), room, hotel, guest);;
-    bookings.save(booking);
-
-    return "redirect:/hotels/" + id;
   }
 
 }

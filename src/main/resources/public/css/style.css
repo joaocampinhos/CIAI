@@ -737,3 +737,85 @@ header .logo {
   margin-top: 8px; }
   .hotel-list .bottomrow h6 {
     margin-top: 14px; }
+
+@media only screen and (max-width: 700px), (min-device-width: 768px) and (max-device-width: 1024px) {
+  .panel {
+    /* Force table to not be like tables anymore */ }
+    .panel table, .panel thead, .panel tbody, .panel th, .panel td, .panel tr {
+      display: block; }
+    .panel thead {
+      display: none; }
+    .panel tr {
+      border-bottom: 1px solid #f0eff4; }
+    .panel tr:last-child {
+      border-bottom: 0px; }
+    .panel td {
+      /* Behave  like a "row" */
+      border: none;
+      position: relative;
+      padding: 12px 15px !important; }
+    .panel td:last-child {
+      text-align: center !important; }
+      .panel td:last-child button, .panel td:last-child .button {
+        width: 100%; } }
+
+.panel {
+  border-radius: 3px;
+  background-color: white; }
+
+.panel .title {
+  border-radius: 3px 3px 0 0;
+  font-size: 2rem;
+  font-weight: 300;
+  background-color: #4A5C6F;
+  color: white;
+  padding: 1rem; }
+
+.panel .body {
+  padding: 1rem; }
+
+.button.button-red,
+button.button-red {
+  color: #fff;
+  background-color: #EC6969;
+  border-color: #EC6969; }
+
+.button.button-green,
+button.button-green {
+  color: #fff;
+  background-color: #43bb95;
+  border-color: #43bb95; }
+
+.button.button-grey,
+button.button-grey {
+  color: #fff;
+  background-color: #B8BCC6;
+  border-color: #B8BCC6; }
+
+.button.button-blue,
+button.button-blue {
+  color: #fff;
+  background-color: #5ab0ee;
+  border-color: #5ab0ee; }
+
+.button-small {
+  margin-bottom: 0.5rem;
+  padding: 0 1.5rem;
+  height: 28px;
+  line-height: 28px; }
+
+.table-dash {
+  width: 100%;
+  margin: 0; }
+
+.table-dash td:last-child {
+  text-align: right; }
+
+.table-dash tr:last-child td {
+  border-bottom: 0; }
+
+.disabled {
+  color: #ddd; }
+
+.hidden {
+  display: none; }

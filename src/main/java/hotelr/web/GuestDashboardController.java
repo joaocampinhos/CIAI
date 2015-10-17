@@ -28,7 +28,14 @@ public class GuestDashboardController {
   @Autowired
   BookingRepository bookings;
 
-  @RequestMapping(value="bookings", method=RequestMethod.GET)
+  @RequestMapping(method=RequestMethod.GET)
+  public String index(Model model) {
+    Guest guest = guests.findByName("Harvey Specter");
+    model.addAttribute("bookings", guest.getBookings());
+    return "dashboards/guest/index";
+  }
+
+  @RequestMapping(method=RequestMethod.GET)
   public String bookings(Model model) {
     Guest guest = guests.findByName("Harvey Specter");
     model.addAttribute("bookings", guest.getBookings());

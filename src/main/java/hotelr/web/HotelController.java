@@ -16,7 +16,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.sql.Timestamp;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -160,14 +165,26 @@ public class HotelController {
 
   // POST /hotels/{id}/comments   - creates a new comment for the hotel
   @RequestMapping(value="{id}/comments", method=RequestMethod.POST)
-  public String saveComment(@PathVariable("id") long id, @ModelAttribute Comment comment, Model model) {
-    //É sempre o Harvey Specter a postar
-    comment.setGuest(guests.findByName("Harvey Specter"));
-    comment.setHotel(hotels.findOne(id));
-    comments.save(comment);
-    model.addAttribute("comment", comment);
+  public String saveComment(@PathVariable("id") long id, @RequestParam("comment") String comment, Model model) {
+    //É sempre o Toni a postar
+    Guest guest = guests.findByName("Harvey Specter");
+    Hotel hotel = hotels.findOne(id);
+    Comment commentObj = new Comment(id, guest, "cenas", new Timestamp(System.currentTimeMillis()), hotel);
+    comments.save(commentObj);
     return "redirect:/hotels/{id}";
   }
+
+  // GET /hotels/{id}/comments              - returns list of comments in the hotel
+  @RequestMapping(value="{id}/comments", method=RequestMethod.GET, produces={"text/plain","application/json"})
+  public @ResponseBody Iterable<String> commentsJSON(@PathVariable("id") long id, Model model) {
+    LinkedList<String> tmp = new LinkedList<String>();
+      Iterator<Comment> it= comments.findByHotel(hotels.findOne(id)).iterator();
+      while(it.hasNext()){
+        tmp.add(it.next().getComment());
+      }
+    return tmp;
+  }
+
 
   // POST /hotels/{id}/comments/{commentId} - creates a new reply for the comment
   @RequestMapping(value="{id}/comments/{commentId}")

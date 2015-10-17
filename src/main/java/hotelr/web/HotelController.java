@@ -148,14 +148,19 @@ public class HotelController {
   }
 
   @RequestMapping(value="{id}/bookings", method=RequestMethod.GET)
-  public String listBookings(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, Model model) throws Exception {
+  public String listBookings(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam(value="roomtype", required=false) String roomType, Model model) throws Exception {
     Hotel hotel = hotels.findOne(id);
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Date dArrival = sdf.parse(arrival);
     Date dDeparture = sdf.parse(departure);
 
-    model.addAttribute("bookings", bookings.findOccupation(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), hotel));
+    if (roomType != null) {
+      model.addAttribute("bookings", bookings.findOccupationWithType(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), hotel, roomTypes.findByName(roomType)));
+
+    } else {
+      model.addAttribute("bookings", bookings.findOccupation(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), hotel));
+    }
 
     return "hotels/bookings/index";
   }

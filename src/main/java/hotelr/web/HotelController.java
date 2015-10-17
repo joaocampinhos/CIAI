@@ -194,7 +194,6 @@ public class HotelController {
     //É sempre O Chefe a responder
     Manager manager = managers.findByName("O Chefe");
     Comment commentObj = comments.findOne(commentId);
-    System.out.println(commentObj);
     Reply reply = new Reply(commentObj, comment, new Timestamp(System.currentTimeMillis()), manager);
     commentObj.setReply(reply);
     replies.save(reply);

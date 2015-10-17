@@ -16,10 +16,17 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 public abstract class User {
 
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy=GenerationType.TABLE)
+  @Column(name="ID")
   private long id;
+
+  @Column(name="NAME")
   private String name;
+
+  @Column(name="EMAIL")
   private String email;
+
+  @Column(name="PASSWORD")
   private String password;
   // TODO: Add photo
 
@@ -32,8 +39,6 @@ public abstract class User {
     this.password = BCrypt.hashpw(password, BCrypt.gensalt());
   }
 
-  @Id
-  @Column(name="ID")
   public long getId() {
     return id;
   }
@@ -42,7 +47,6 @@ public abstract class User {
     this.id = id;
   }
 
-  @Column(name="NAME")
   public String getName() {
     return name;
   }
@@ -51,7 +55,6 @@ public abstract class User {
     this.name = name;
   }
 
-  @Column(name="EMAIL")
   public String getEmail() {
     return email;
   }
@@ -60,7 +63,6 @@ public abstract class User {
     this.email = email;
   }
 
-  @Column(name="PASSWORD")
   public String getPassword() {
     return password;
   }

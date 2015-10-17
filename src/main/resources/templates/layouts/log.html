@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="page">
+  <!--
+     __  __          __           ___
+    /\ \/\ \        /\ \__       /\_ \
+    \ \ \_\ \    ___\ \ ,_\    __\//\ \    _ __
+     \ \  _  \  / __`\ \ \/  /'__`\\ \ \  /\`'__\
+      \ \ \ \ \/\ \L\ \ \ \_/\  __/ \_\ \_\ \ \/
+       \ \_\ \_\ \____/\ \__\ \____\/\____\\ \_\
+        \/_/\/_/\/___/  \/__/\/____/\/____/ \/_/
+
+  -->
+  <head>
+    <title>Hotelr</title>
+    <meta charset="utf-8"></meta>
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'/>
+    <link href="/css/style.css" rel="stylesheet"/>
+    <style>
+html, body {
+    min-height: 100% !important;
+    height: 100%;
+}
+</style>
+  </head>
+  <body>
+
+    <div class="log-form">
+
+      <img src="/images/logo.png" class="logo-img"/>
+
+      <div th:include="this :: content"></div>
+
+    </div>
+
+    <script src="/js/app.js"></script>
+  </body>
+</html>

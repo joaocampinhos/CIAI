@@ -12,4 +12,16 @@ public class ApplicationController {
     return "/index";
   }
 
+  // Sign up form
+  @RequestMapping(value="/register")
+  public String registerform(Model model) {
+    return "/register";
+  }
+
+  // Sign in form
+  @RequestMapping(value="/login")
+  public String loginform(Model model) {
+    return "/login";
+  }
+
 }

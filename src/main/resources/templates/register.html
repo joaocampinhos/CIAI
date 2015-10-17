@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:include="layouts/log :: page">
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <div th:fragment="content">
+      <form method="post" action="/register" th:fragment="content">
+        <input placeholder="Username" type="text" name="username"/>
+        <input placeholder="Email" type="text" name="email"/>
+        <input placeholder="Password" type="password" name="password"/>
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  </body>
+</html>

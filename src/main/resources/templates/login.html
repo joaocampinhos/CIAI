@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:include="layouts/log :: page">
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <div th:fragment="content">
+      <form method="post" action="/login" th:fragment="content">
+        <input placeholder="Username" type="text" name="username"/>
+        <input placeholder="Password" type="password" name="password"/>
+        <button type="submit">Log-in</button>
+        <div class="row">
+          <div class="three columns"><a class="button button-primary" href="/dashboards/guest">User</a></div>
+          <div class="three columns"><a class="button button-primary" href="/">Manager</a></div>
+          <div class="three columns"><a class="button button-primary" href="/">Moderator</a></div>
+          <div class="three columns"><a class="button button-primary" href="/">Admin</a></div>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

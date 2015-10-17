@@ -1,26 +1,136 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Hotels</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
-</head>
-<body>
-	<div class="container">
-		<h1>Hotel <span th:text="${hotel.name}"></span></h1>
-    <h2>Address <span th:text="${hotel.address}"></span></h2>
-    <h2>Category <span th:text="${hotel.category}"></span></h2>
-    <h2>Rating <span th:text="${hotel.rating}"></span></h2>
-    <h2>Manager <span th:text="${hotel.manager}"></span></h2>
-    <h2>Rooms</h2>
-        <ul th:each="room : ${rooms}">
-            <li> <span th:text="${room.type.name}"/>, Price: <span th:text="${room.price}"/>€</li>
-        </ul>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layouts/dashboard :: page">
+  <head>
+  </head>
+  <body>
+    <div th:fragment="content">
+      <!-- foto do hotel -->
+      <div class="hotel-cover" style="background-image:url(https://images.unsplash.com/photo-1443479579455-1860f114bf77)"></div>
 
-	    <p><a th:href="@{|/hotels/${hotel.id}/edit|}">Edit</a></p>
-	    <p><a href="/hotels/new">Add a new hotel</a></p>
-    	<p><a href="/hotels">List all hotels</a></p>
+      <div class="container row">
+        <div class="seven columns">
+          <div>
+            <p class="clearmargin text-center isle-1-v">
+            <span th:class="'star-' + ${hotel.rating}"></span>
+            <br/>
+            <span class="h3 thin uppercase" th:text="${hotel.name}"/>
+            </p>
+          </div>
+          <h5 class="clearmargin thin">
+            Category
+          </h5>
+          <p><span th:text="${hotel.category}"></span></p>
+          <h5 class="clearmargin thin">
+            Adress
+          </h5>
+          <p> <span th:text="${hotel.address}"></span></p>
+          <h5 class="clearmargin thin">
+            Photos
+          </h5>
+          <div class="photo-thumb"><img src="https://placehold.it/80x80"/></div>
+          <div class="photo-thumb"><img src="https://placehold.it/80x80"/></div>
+          <div class="photo-thumb"><img src="https://placehold.it/80x80"/></div>
+          <div class="photo-thumb"><img src="https://placehold.it/80x80"/></div>
+          <div class="photo-thumb"><img src="https://placehold.it/80x80"/></div>
+          <div class="photo-thumb"><img src="https://placehold.it/80x80"/></div>
+          <div class="photo-thumb"><img src="https://placehold.it/80x80"/></div>
+          <h4 class="thin">Manager </h4>
+          <div class="media comment">
+            <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
+            <div class="media__body">
+              <h5><span th:text="${hotel.manager.name}"></span></h5>
+              email: <span th:text="${hotel.manager.email}"></span>
+            </div>
+          </div>
+        </div>
+        <div class="five columns">
+          <br/>
+          <form th:action="'/hotels/'+${hotel.id}+'/bookings'" method="POST">
+            <label>Check-in</label>
+            <input name="arrival" th:value="${param.arrival[0]}" th:unless="${param.arrival == null}" class="clear" type="date"/>
+            <input name="arrival" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.arrival != null}" class="clear" type="date"/>
+            <label>Check-out</label>
+            <input name="departure" th:value="${param.departure[0]}" th:unless="${param.departure == null}" class="clear" type="date"/>
+            <input name="departure" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.departure != null}" class="clear" type="date"/>
+            <label>Room type</label>
+            <select name="roomtype">
+              <option selected="" disabled="">Room Type</option>
+              <option th:each="room: ${hotel.rooms}" th:selected="${param.roomtype[0] == room.type.name+''}" th:value="${room.type.id}" th:unless="${param.roomtype == null}" th:text="${room.type.name}"/>
+              <option th:each="room: ${hotel.rooms}" th:value="${room.type.id}" th:unless="${param.roomtype != null}" th:text="${room.type.name}"/>
+            </select>
+            <h4>Preço: <span>100€</span></h4>
+            <button class="button button-primary" type="submit">Book</button>
+          </form>
+        </div>
+      </div>
+      <div class="container">
+        <hr/>
+        <h3 class="thin">Rooms</h3>
+        <table class="u-full-width">
+          <thead>
+            <tr>
+              <th>Room Type</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tr th:each="room : ${hotel.rooms}">
+            <td th:text="${room.type.name}"/>
+              <td th:text="${room.price}+'€'"/>
+          </tr>
+        </table>
+      </div>
+      <div class="comments">
+        <div class="container">
+          <h3 class="thin">Comments</h3>
+          <div th:each="comment: ${hotel.comments}" class="media comment">
+            <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
+            <div class="media__body">
+              <h5 class="clear">
+                <span th:text="${comment.guest.name}"/>
+                  <small class="thin">(<small class="thin" th:text="${#dates.format(comment.creationDate, 'yyy-MM-dd HH:mm')}"/>)</small>
+              </h5>
+              <span th:text="${comment.comment}"/>
+            </div>
+            <hr class="clear isle-1-v"/>
+            <div th:each="reply: ${comment.reply}" class="media comment reply">
+              <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
+              <div class="media__body">
+                <h5 class="clear">
+                  <span th:text="${reply.manager.name}"/>
+                    <small class="thin">(<small class="thin" th:text="${#dates.format(reply.creationDate, 'yyy-MM-dd HH:mm')}"/>)</small>
+                </h5>
+                <span th:text="${reply.comment}"/>
+              </div>
+            </div>
+            <hr class="clear isle-1-v"/>
+            <div th:unless="${comment.reply}" class="media comment comment-write">
+              <form method="post" th:action="@{|/hotels/${hotel.id}/comments/${comment.id}|}">
+                <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
+                <p class="media__body">
+                <textarea name="comment"></textarea>
+                <button class="right button-primary">Submit</button>
+                </p>
+              </form>
+            </div>
+          </div>
+          <div class="media comment comment-write">
+            <form method="post" th:action="@{|/hotels/${hotel.id}/comments|}">
+              <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
+              <p class="media__body">
+              <textarea name="comment"></textarea>
+              <button class="right button-primary">Submit</button>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- só mostrar o edit ao manager
+        <p><a th:href="@{|/hotels/${hotel.id}/edit|}">Edit</a></p>
+        <p><a href="/hotels/new">Add a new hotel</a></p>
+        <p><a href="/hotels">List all hotels</a></p>
+      -->
     </div>
-</body>
+  </body>
 </html>
 

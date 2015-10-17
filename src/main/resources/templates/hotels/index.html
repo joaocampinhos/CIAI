@@ -1,18 +1,89 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head> 
-    <title>Hotel List</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen"/>    
-</head>
-<body>
-    <div class="container">
-	<h1>Hotel List</h1>
-    <ul th:each="hotel : ${hotels}">
-  	   	<li> <a th:text="${hotel.name}" th:href="@{|/hotels/${hotel.id}|}"></a></li>
-	</ul>
-	<p>	<a href="/hotels/new">new hotel</a></p>
-	</div>
-</body>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:include="layouts/dashboard :: page">
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <div th:fragment="content">
+      <form class="clear" method="GET">
+        <div class="container">
+          <br/>
+          <div class="row">
+            <div class="four columns">
+              <label>Dates</label>
+            </div>
+            <div class="four columns">
+              <div class="isle-1-h">
+                <input name="arrival" th:value="${param.arrival[0]}" th:unless="${param.arrival == null}" class="clear" type="date"/>
+                <input name="arrival" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.arrival != null}" class="clear" type="date"/>
+              </div>
+            </div>
+            <div class="four columns">
+              <div class="isle-1-h">
+                <input name="departure" th:value="${param.departure[0]}" th:unless="${param.departure == null}" class="clear" type="date"/>
+                <input name="departure" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.departure != null}" class="clear" type="date"/>
+              </div>
+            </div>
+          </div>
+          <br/>
+          <hr class="clear"/>
+          <br/>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="four columns">
+              <label>Room Type</label>
+            </div>
+            <div class="eight columns">
+              <div class="isle-1-h">
+                <select name="roomtype" class="clear">
+                  <option selected="" disabled="">Room Type</option>
+                  <option th:each="type: ${roomTypes}" th:selected="${param.roomtype[0] == type.name+''}" th:value="${type.name}" th:unless="${param.roomtype == null}" th:text="${type.name}"/>
+                  <option th:each="type: ${roomTypes}" th:value="${type.name}" th:unless="${param.roomtype != null}" th:text="${type.name}"/>
+                </select>
+              </div>
+            </div>
+          </div>
+          <br/>
+        </div>
+        <div class="secondary">
+          <div class="container isle-1-v">
+            <button type="submit">Filter</button>
+            <span class="right"><b><span th:text="${hotels.size()}"></span> </b>Hotels Found</span>
+          </div>
+        </div>
+      </form>
+      <div class="secondary">
+        <div class="container">
+          <div th:each="hotel : ${hotels}">
+            <div class="media hotel-list">
+              <img src="https://placehold.it/150x150" alt="" class="media__img"/>
+              <div class="media__body">
+                <div class="row">
+                  <div class="nine columns">
+                    <h5><a class="a-none" th:text="${hotel.name}" th:href="@{|/hotels/${hotel.id}|}"></a> <span th:class="'star-' + ${hotel.rating}"></span></h5>
+                    <p class="clearmargin"> Adress: <span th:text="${hotel.address}"/></p>
+                    <p class="clearmargin"> Category: <span th:text="${hotel.category}"/></p>
+                  </div>
+                  <div class="three columns">
+                    <div class="right">
+                      # comments
+                    </div>
+                  </div>
+                </div>
+                <div class="row bottomrow">
+                  <div class="eight columns">
+                    <h6 class="clearmargin"> From 100€ </h6>
+                  </div>
+                  <div class="four columns">
+                    <a th:href="@{|/hotels/${hotel.id}|}" class="gohotel clearmargin button button-full button-primary">Book now</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
-

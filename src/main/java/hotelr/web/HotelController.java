@@ -56,6 +56,7 @@ public class HotelController {
   // GET  /hotels             - the list of hotels
   @RequestMapping(method=RequestMethod.GET)
   public String index(@RequestParam(value="arrival", required=false) String arrival, @RequestParam(value="departure", required=false) String departure, @RequestParam(value="roomtype", required=false) String roomType, Model model) throws Exception {
+    model.addAttribute("roomTypes", roomTypes.findAll());
     if (arrival == null || departure == null) model.addAttribute("hotels", hotels.findAll());
     else {
       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -169,9 +170,10 @@ public class HotelController {
     //É sempre o Toni a postar
     Guest guest = guests.findByName("Harvey Specter");
     Hotel hotel = hotels.findOne(id);
-    Comment commentObj = new Comment(guest, "cenas", new Timestamp(System.currentTimeMillis()), hotel);
+    Comment commentObj = new Comment(guest, comment, new Timestamp(System.currentTimeMillis()), hotel);
     comments.save(commentObj);
-    return "redirect:/hotels/{id}";
+
+    return "redirect:/hotels/" + id;
   }
 
   // GET /hotels/{id}/comments              - returns list of comments in the hotel
@@ -187,12 +189,13 @@ public class HotelController {
 
 
   // POST /hotels/{id}/comments/{commentId} - creates a new reply for the comment
-  @RequestMapping(value="{id}/comments/{commentId}")
+  @RequestMapping(value="{id}/comments/{commentId}", method=RequestMethod.POST)
   public String saveReply(@PathVariable("id") long id, @PathVariable("commentId") long commentId, @RequestParam("comment") String comment, Model model){
     //É sempre O Chefe a responder
     Manager manager = managers.findByName("O Chefe");
     Comment commentObj = comments.findOne(commentId);
     Reply reply = new Reply(commentObj, comment, new Timestamp(System.currentTimeMillis()), manager);
+    commentObj.setReply(reply);
     replies.save(reply);
     return "redirect:/hotels/{id}";
   }

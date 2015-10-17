@@ -13,6 +13,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
+
 
 @SpringBootApplication
 public class Application implements CommandLineRunner {
@@ -42,6 +46,9 @@ public class Application implements CommandLineRunner {
   RoomTypeRepository roomTypes;
 
   @Autowired
+  BookingRepository bookings;
+
+  @Autowired
   RoomRepository rooms;
 
   @Autowired
@@ -51,7 +58,7 @@ public class Application implements CommandLineRunner {
   ReplyRepository replies;
 
   @Override
-  public void run(String... strings) {
+  public void run(String... strings) throws Exception {
     log.info("Setting up seed data");
 
     managers.deleteAll();
@@ -60,7 +67,7 @@ public class Application implements CommandLineRunner {
 
     guests.deleteAll();
     Guest myGuests[] = {
-        new Guest(2, "Tozé", "toze@vitominas.pt", "peidalhaco"),
+        new Guest(2, "Harvey Specter", "harvey@pearsonspecterlitt.com", "imthebest"),
         new Guest(3, "Toni", "toni@vitominas.pt", "12345")
     };
     for(Guest guest: myGuests) guests.save(guest);
@@ -114,6 +121,29 @@ public class Application implements CommandLineRunner {
     };
     
     for(Reply reply: myReplies) replies.save(reply);
+    // Merdas para verificar o search
+    // TODO: mais vale fazer um teste para isto mesmo
+
+/*    Hotel h = new Hotel(7, "Pearson Specter Hotels", "address", "category", 5, boss);
+    Room r = new Room(i++, h, myRoomTypes[0], 1, 5000);
+    Room r2 = new Room(i++, h, myRoomTypes[1], 1, 5000);
+
+    hotels.save(h);
+    rooms.save(r);
+    rooms.save(r2);
+    h.addRoom(r);
+    h.addRoom(r2);
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Date arrival = sdf.parse("2015-10-05");
+    Date departure = sdf.parse("2015-10-06");
+
+    bookings.deleteAll();
+    Booking b = new Booking(1, new Timestamp(arrival.getTime()), new Timestamp(departure.getTime()), r.getType(), r, h, guest);
+    bookings.save(b);
+    Booking b2 = new Booking(2, new Timestamp(arrival.getTime()), new Timestamp(departure.getTime()), r2.getType(), r2, h, guest);
+    //bookings.save(b2);*/
+
   }
 
 }

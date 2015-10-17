@@ -4,10 +4,16 @@ import hotelr.repository.*;
 import hotelr.model.*;
 import hotelr.exception.*;
 
+import java.util.List;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,10 +58,34 @@ public class HotelController {
   @Autowired
   ReplyRepository replies;
 
+  @Autowired
+  RoomRepository rooms;
+
+  @Autowired
+  BookingRepository bookings;
+
+  @Autowired
+  RoomTypeRepository roomTypes;
+
   // GET  /hotels             - the list of hotels
   @RequestMapping(method=RequestMethod.GET)
-  public String index(Model model) {
-    model.addAttribute("hotels", hotels.findAll());
+  public String index(@RequestParam(value="arrival", required=false) String arrival, @RequestParam(value="departure", required=false) String departure, @RequestParam(value="roomtype", required=false) String roomType, Model model) throws Exception {
+    if (arrival == null || departure == null) model.addAttribute("hotels", hotels.findAll());
+    else {
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+      Date dArrival = sdf.parse(arrival);
+      Date dDeparture = sdf.parse(departure);
+
+      List<Hotel> filtered;
+      if (roomType != null) {
+        filtered = hotels.findByAvailabilityWithRoomType(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), roomTypes.findByName(roomType));
+      } else {
+        filtered = hotels.findByAvailability(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()));
+      }
+
+      model.addAttribute("hotels", filtered);
+    }
+
     return "hotels/index";
   }
 
@@ -84,11 +114,26 @@ public class HotelController {
 
   // GET  /hotels/{id}        - the hotel with identifier {id}
   @RequestMapping(value="{id}", method=RequestMethod.GET)
-  public String show(@PathVariable("id") long id, Model model) {
+  public String show(@PathVariable("id") long id, @RequestParam(value="arrival", required=false) String arrival, @RequestParam(value="departure", required=false) String departure, @RequestParam(value="roomtype", required=false) String roomType, Model model) throws Exception {
     Hotel hotel = hotels.findOne(id);
     if( hotel == null )
       throw new HotelNotFoundException();
-    model.addAttribute("hotel", hotel );
+
+    if (arrival != null && departure != null) {
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+      Date dArrival = sdf.parse(arrival);
+      Date dDeparture = sdf.parse(departure);
+
+      if (roomType != null) {
+        Room filtered = rooms.findRoomByAvailability(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), hotel, roomTypes.findByName(roomType));
+        model.addAttribute("rooms", filtered);
+      } else {
+        List<Room> filtered = rooms.findByAvailability(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), hotel);
+        model.addAttribute("rooms", filtered);
+      }
+    }
+
+    model.addAttribute("hotel", hotel);
     return "hotels/show";
   }
 
@@ -147,6 +192,23 @@ public class HotelController {
     replies.save(reply);
     model.addAttribute("reply", reply);
     return "redirect:/hotels/{id}";
+  }
+
+  // POST /hotels/{id}/bookings    - creates a new booking
+  @RequestMapping(value="{id}/bookings", method=RequestMethod.POST)
+  public String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") Long roomid, Model model) throws Exception {
+    Guest guest = guests.findByName("Harvey Specter");
+    Hotel hotel = hotels.findOne(id);
+    Room room = rooms.findOne(roomid);
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Date dArrival = sdf.parse(arrival);
+    Date dDeparture = sdf.parse(departure);
+
+    Booking booking = new Booking(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), room.getType(), room, hotel, guest);;
+    bookings.save(booking);
+
+    return "redirect:/hotels/" + id;
   }
 
 }

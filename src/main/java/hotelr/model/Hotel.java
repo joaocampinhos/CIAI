@@ -44,8 +44,12 @@ public class Hotel {
   @OneToMany(mappedBy="hotel", targetEntity=Room.class, fetch=FetchType.EAGER)
   public List<Room> rooms;
 
+  @OneToMany(mappedBy="hotel", targetEntity=Comment.class, fetch=FetchType.EAGER)
+  private List<Comment> comments;
+
   public Hotel() {
     this.rooms = new ArrayList<Room>();
+    this.comments = new ArrayList<Comment>();
   }
 
   public Hotel(long id, String name, String address, String category, int rating, Manager manager) {
@@ -56,6 +60,7 @@ public class Hotel {
     this.rating = rating;
     this.manager = manager;
     this.rooms = new ArrayList<Room>();
+    this.comments = new ArrayList<Comment>();
   }
 
   public long getId() {
@@ -112,6 +117,14 @@ public class Hotel {
 
   public void addRoom(Room room) {
     this.rooms.add(room);
+  }
+
+  public List<Comment> getComments() {
+    return comments;
+  }
+
+  public void addComment(Comment comment) {
+    this.comments.add(comment);
   }
 
   @Override

@@ -35,7 +35,7 @@ public class GuestDashboardController {
     return "dashboards/guest/index";
   }
 
-  @RequestMapping(value="bookings/", method=RequestMethod.GET)
+  @RequestMapping(value="bookings", method=RequestMethod.GET)
   public String bookings(Model model) {
     Guest guest = guests.findByName("Harvey Specter");
     model.addAttribute("bookings", guest.getBookings());

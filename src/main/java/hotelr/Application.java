@@ -40,13 +40,13 @@ public class Application implements CommandLineRunner {
   ManagerRepository managers;
 
   @Autowired
-  BookingRepository bookings;
-
-  @Autowired
   GuestRepository guests;
 
   @Autowired
   RoomTypeRepository roomTypes;
+
+  @Autowired
+  BookingRepository bookings;
 
   @Autowired
   RoomRepository rooms;
@@ -116,8 +116,8 @@ public class Application implements CommandLineRunner {
     for(Comment comment: myComments) comments.save(comment);
 
     Reply myReplies[] = {
-        new Reply(4, myComments[0], "noScope", new Timestamp(System.currentTimeMillis()), boss),
-        new Reply(5, myComments[1], "Thank you, very nice!", new Timestamp(System.currentTimeMillis()), boss)
+        new Reply(myComments[0], "noScope", new Timestamp(System.currentTimeMillis()), boss),
+        new Reply(myComments[1], "Thank you, very nice!", new Timestamp(System.currentTimeMillis()), boss)
     };
 
     for(Reply reply: myReplies) replies.save(reply);

@@ -196,6 +196,7 @@ public class HotelController {
     Comment commentObj = comments.findOne(commentId);
     System.out.println(commentObj);
     Reply reply = new Reply(commentObj, comment, new Timestamp(System.currentTimeMillis()), manager);
+    commentObj.setReply(reply);
     replies.save(reply);
     return "redirect:/hotels/{id}";
   }

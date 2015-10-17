@@ -73,6 +73,6 @@ public class Comment extends Message{
   }
 
   public String toString() {
-    return "Id: " + getId() + "\nGuest: " + getGuest().getName() + "\nComment: " + getComment() + "\nCreation Date: " + getCreationDate().toString() + "\nHotel: " + getHotel().getName();
+    return "Id: " + getReply() + "\nGuest: " + getGuest().getName() + "\nComment: " + getComment() + "\nCreation Date: " + getCreationDate().toString() + "\nHotel: " + getHotel().getName();
   }
 }

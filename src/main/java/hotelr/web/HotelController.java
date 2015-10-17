@@ -188,12 +188,12 @@ public class HotelController {
 
   // POST /hotels/{id}/comments/{commentId} - creates a new reply for the comment
   @RequestMapping(value="{id}/comments/{commentId}")
-  public String saveReply(@PathVariable("id") long id, @PathVariable("commentId") long commentId, Reply reply, Model model){
+  public String saveReply(@PathVariable("id") long id, @PathVariable("commentId") long commentId, @RequestParam("comment") String comment, Model model){
     //É sempre O Chefe a responder
-    reply.setManager(managers.findByName("O Chefe"));
-    reply.setParent(comments.findOne(commentId));
+    Manager manager = managers.findByName("O Chefe");
+    Comment commentObj = comments.findOne(commentId);
+    Reply reply = new Reply(commentObj, comment, new Timestamp(System.currentTimeMillis()), manager);
     replies.save(reply);
-    model.addAttribute("reply", reply);
     return "redirect:/hotels/{id}";
   }
 

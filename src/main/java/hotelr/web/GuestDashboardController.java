@@ -45,7 +45,7 @@ public class GuestDashboardController {
   @RequestMapping(value="bookings/{id}", method=RequestMethod.DELETE)
   public String cancel(@PathVariable("id") long id, Model model) {
     bookings.delete(id);
-    return "redirect:dashboards/guest/bookings";
+    return "redirect:/dashboards/guest";
   }
 
 }

@@ -720,6 +720,9 @@ header .logo {
 .photo-thumb {
   display: inline; }
 
+.inline-block {
+  display: inline-block; }
+
 .comments {
   background-color: #f0eff4;
   padding: 3rem 0; }
@@ -773,6 +776,9 @@ header .logo {
 
 .panel .body {
   padding: 1rem; }
+
+.details > td {
+  text-align: left !important; }
 
 .button.button-red,
 button.button-red {

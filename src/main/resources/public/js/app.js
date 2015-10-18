@@ -38,4 +38,13 @@ function updatePrice() {
   }
 };updatePrice();
 
+// Dashboard expand button
+Array.prototype.slice.call(document.querySelectorAll('button.view')).forEach(function(e) {
+  e.addEventListener("click", llog(e));
+});
+function llog(i) {
+  return function () {
+    i.parentNode.parentNode.nextElementSibling.classList.toggle('hidden');
+  };
+};
 

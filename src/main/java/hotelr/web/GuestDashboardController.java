@@ -49,7 +49,7 @@ public class GuestDashboardController {
       bookings.delete(id);
       redirectAttrs.addFlashAttribute("message", "Booking deleted!");
     } else {
-      redirectAttrs.addFlashAttribute("message", "Booking doesn't exist!");
+      redirectAttrs.addFlashAttribute("error", "Booking doesn't exist!");
     }
     return "redirect:dashboards/guest/bookings";
   }

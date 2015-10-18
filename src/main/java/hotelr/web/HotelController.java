@@ -155,7 +155,7 @@ public class HotelController {
       hotels.delete(id);
       redirectAttrs.addFlashAttribute("message", "Hotel deleted!");
     } else {
-      redirectAttrs.addFlashAttribute("message", "Hotel doesn't exist!");
+      redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
     }
     return "redirect:/hotels";
   }
@@ -199,14 +199,14 @@ public class HotelController {
 
           redirectAttrs.addFlashAttribute("message", "Booking created!");
         } catch (Exception e) {
-          redirectAttrs.addFlashAttribute("message", "Dates are incorrect!");
+          redirectAttrs.addFlashAttribute("error", "Dates are incorrect!");
         }
       } else {
-        redirectAttrs.addFlashAttribute("message", "Room doesn't exist!");
+        redirectAttrs.addFlashAttribute("error", "Room doesn't exist!");
       }
 
     } else {
-      redirectAttrs.addFlashAttribute("message", "Hotel doesn't exist!");
+      redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
     }
 
     return "redirect:/hotels/{id}";

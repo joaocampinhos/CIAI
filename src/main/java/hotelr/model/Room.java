@@ -1,5 +1,8 @@
 package hotelr.model;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,7 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
 
 @Entity
 @Table(name="ROOM_TABLE")
@@ -32,7 +38,12 @@ public class Room {
   @Column(name="ROOM_NUMBER")
   private int number;
 
-  public Room() {}
+  @OneToMany(mappedBy="room", cascade=CascadeType.ALL, targetEntity=Booking.class, fetch=FetchType.LAZY)
+  private List<Booking> bookings;
+
+  public Room() {
+    this.bookings = new ArrayList<Booking>();
+  }
 
   public Room(Hotel hotel, RoomType type, int number, int price) {
     this.hotel = hotel;

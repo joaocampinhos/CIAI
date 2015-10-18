@@ -147,6 +147,13 @@ public class HotelController {
     return "redirect:/";
   }
 
+  // DELETE /hotels/{id}  - deletes the hotel with identifier {id}
+  @RequestMapping(value="{id}", method=RequestMethod.DELETE)
+  public String cancel(@PathVariable("id") long id, Model model) {
+    hotels.delete(id);
+    return "redirect:/hotels";
+  }
+
   @RequestMapping(value="{id}/bookings", method=RequestMethod.GET)
   public String listBookings(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam(value="roomtype", required=false) String roomType, Model model) throws Exception {
     Hotel hotel = hotels.findOne(id);
@@ -224,7 +231,6 @@ public class HotelController {
     Manager manager = managers.findByName("O Chefe");
     Comment commentObj = comments.findOne(commentId);
     Reply reply = new Reply(commentObj, comment, new Timestamp(System.currentTimeMillis()), manager);
-    commentObj.setReply(reply);
     replies.save(reply);
     return "redirect:/hotels/{id}";
   }

@@ -10,7 +10,7 @@ import hotelr.model.*;
 
 public interface CommentRepository extends CrudRepository<Comment, Long>{
 
-  @Query("SELECT c from Comment c where c.reply is NULL and c.hotel.manager = :manager")
+  @Query("SELECT c FROM Comment c LEFT JOIN c.reply r WHERE c.hotel.manager = :manager AND r is null")
   List<Comment> findWithNoReply(@Param("manager") Manager manager);
 
 }

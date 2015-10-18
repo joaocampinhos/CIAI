@@ -54,6 +54,31 @@ public class GuestDashboardController {
     return "redirect:/dashboards/guest";
   }
 
+  @RequestMapping(value="bookings/{id}/edit", method=RequestMethod.GET)
+  public String edit(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
+    if (bookings.exists(id)) {
+      Booking booking = bookings.findOne(id);
+      model.addAttribute("booking", booking);
+
+      return "dashboards/guest/bookings/edit";
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Booking doesn't exist!");
+
+      return "redirect:/dashboards/guest";
+    }
+  }
+
+  @RequestMapping(value="bookings/{id}", method=RequestMethod.POST)
+  public String edit(@PathVariable("id") long id, Booking booking, Model model, RedirectAttributes redirectAttrs) {
+    if (bookings.exists(id)) {
+      bookings.save(booking);
+      redirectAttrs.addFlashAttribute("message", "Booking edited!");
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Booking doesn't exist!");
+    }
+    return "redirect:/dashboards/guest";
+  }
+
 }
 
 

@@ -147,6 +147,24 @@ public class HotelController {
     return "redirect:/";
   }
 
+  @RequestMapping(value="{id}/bookings", method=RequestMethod.GET)
+  public String listBookings(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam(value="roomtype", required=false) String roomType, Model model) throws Exception {
+    Hotel hotel = hotels.findOne(id);
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Date dArrival = sdf.parse(arrival);
+    Date dDeparture = sdf.parse(departure);
+
+    if (roomType != null) {
+      model.addAttribute("bookings", bookings.findOccupationWithType(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), hotel, roomTypes.findByName(roomType)));
+
+    } else {
+      model.addAttribute("bookings", bookings.findOccupation(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), hotel));
+    }
+
+    return "hotels/bookings/index";
+  }
+
   // POST /hotels/{id}/bookings    - creates a new booking
   @RequestMapping(value="{id}/bookings", method=RequestMethod.POST)
   public String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") Long roomid, Model model) throws Exception {
@@ -160,6 +178,17 @@ public class HotelController {
 
     Booking booking = new Booking(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), room.getType(), room, hotel, guest);;
     bookings.save(booking);
+
+    return "redirect:/hotels/{id}";
+  }
+
+  // POST /hotels/{id}/rooms   - creates a new collection of rooms for the hotel
+  @RequestMapping(value="{id}/rooms", method=RequestMethod.POST)
+  public String addRooms(@PathVariable("id") long id, @RequestParam("roomtype") String roomType, @RequestParam("number") int number, @RequestParam("price") int price, Model model) {
+    Hotel hotel = hotels.findOne(id);
+    RoomType type = roomTypes.findByName(roomType);
+    Room room = new Room(hotel, type, number, price);
+    rooms.save(room);
 
     return "redirect:/hotels/{id}";
   }

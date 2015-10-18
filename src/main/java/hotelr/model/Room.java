@@ -34,6 +34,13 @@ public class Room {
 
   public Room() {}
 
+  public Room(Hotel hotel, RoomType type, int number, int price) {
+    this.hotel = hotel;
+    this.type = type;
+    this.number = number;
+    this.price = price;
+  }
+
   public Room(long id, Hotel hotel, RoomType type, int number, int price) {
     this.id = id;
     this.hotel = hotel;

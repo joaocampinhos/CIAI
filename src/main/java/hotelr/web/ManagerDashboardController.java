@@ -34,7 +34,6 @@ public class ManagerDashboardController {
   public String index(Model model) {
     Manager manager = managers.findByName("O Chefe");
     model.addAttribute("comments", comments.findWithNoReply(manager));
-    System.out.println(comments.findWithNoReply(manager));
     model.addAttribute("manager", manager);
     return "dashboards/manager/index";
   }

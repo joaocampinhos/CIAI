@@ -113,13 +113,17 @@
               <table th:if="${comments.size() > 0}" class="table-dash">
                 <thead>
                   <tr>
+                    <th>Hotel</th>
                     <th>Username</th>
+                    <th>Date</th>
                     <th></th>
                   </tr>
                 </thead>
                 <div th:each="comment : ${comments}">
                   <tr>
-                    <td th:text="${comment}"/>
+                    <td th:text="${comment.hotel.name}"/>
+                    <td th:text="${comment.guest.name}"/>
+                    <td th:text="${#dates.format(comment.creationDate, 'yyy-MM-dd HH:mm')}"/>
                       <td>
                         <button class="view button-primary button-small">view</button>
                       </td>
@@ -127,7 +131,15 @@
                   <tr class="hidden details">
                     <td colspan="5" class="details">
                       <div>
-                        <h5> Hotels </h5>
+                        <h5> Comment </h5>
+                        <p th:text="${comment.comment}"/>
+              <form method="post" th:action="@{|/hotels/${comment.hotel.id}/comments/${comment.id}|}">
+                        <h5> Reply </h5>
+              <p class="media__body">
+              <textarea class="button-full" name="comment"></textarea>
+              <button class="right button-primary">Submit</button>
+              </p>
+            </form>
                       </div>
                     </td>
                   </tr>

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.Timestamp;
 import java.util.Iterator;
@@ -149,8 +150,13 @@ public class HotelController {
 
   // DELETE /hotels/{id}  - deletes the hotel with identifier {id}
   @RequestMapping(value="{id}", method=RequestMethod.DELETE)
-  public String cancel(@PathVariable("id") long id, Model model) {
-    hotels.delete(id);
+  public String cancel(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
+    if (hotels.exists(id)) {
+      hotels.delete(id);
+      redirectAttrs.addFlashAttribute("message", "Hotel deleted!");
+    } else {
+      redirectAttrs.addFlashAttribute("message", "Hotel doesn't exist!");
+    }
     return "redirect:/hotels";
   }
 
@@ -174,17 +180,34 @@ public class HotelController {
 
   // POST /hotels/{id}/bookings    - creates a new booking
   @RequestMapping(value="{id}/bookings", method=RequestMethod.POST)
-  public String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") Long roomid, Model model) throws Exception {
+  public String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") Long roomid, Model model, RedirectAttributes redirectAttrs) throws Exception {
     Guest guest = guests.findByName("Harvey Specter");
-    Hotel hotel = hotels.findOne(id);
-    Room room = rooms.findOne(roomid);
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Date dArrival = sdf.parse(arrival);
-    Date dDeparture = sdf.parse(departure);
+    if (hotels.exists(id)) {
+      Hotel hotel = hotels.findOne(id);
 
-    Booking booking = new Booking(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), room.getType(), room, hotel, guest);;
-    bookings.save(booking);
+      if (rooms.exists(roomid)) {
+        Room room = rooms.findOne(roomid);
+
+        try {
+          SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+          Date dArrival = sdf.parse(arrival);
+          Date dDeparture = sdf.parse(departure);
+
+          Booking booking = new Booking(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), room.getType(), room, hotel, guest);;
+          bookings.save(booking);
+
+          redirectAttrs.addFlashAttribute("message", "Booking created!");
+        } catch (Exception e) {
+          redirectAttrs.addFlashAttribute("message", "Dates are incorrect!");
+        }
+      } else {
+        redirectAttrs.addFlashAttribute("message", "Room doesn't exist!");
+      }
+
+    } else {
+      redirectAttrs.addFlashAttribute("message", "Hotel doesn't exist!");
+    }
 
     return "redirect:/hotels/{id}";
   }

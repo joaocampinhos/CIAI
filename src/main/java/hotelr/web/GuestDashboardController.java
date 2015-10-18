@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Controller
@@ -43,8 +44,13 @@ public class GuestDashboardController {
   }
 
   @RequestMapping(value="bookings/{id}", method=RequestMethod.DELETE)
-  public String cancel(@PathVariable("id") long id, Model model) {
-    bookings.delete(id);
+  public String cancel(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
+    if (bookings.exists(id)) {
+      bookings.delete(id);
+      redirectAttrs.addFlashAttribute("message", "Booking deleted!");
+    } else {
+      redirectAttrs.addFlashAttribute("message", "Booking doesn't exist!");
+    }
     return "redirect:dashboards/guest/bookings";
   }
 

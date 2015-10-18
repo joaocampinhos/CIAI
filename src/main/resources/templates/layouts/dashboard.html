@@ -18,6 +18,18 @@
     <link href="/css/style.css" rel="stylesheet"/>
   </head>
   <body>
+    <div th:if="${message != null}" class="message-info">
+      <div class="container message isle-1-v">
+        <span th:text="${message}"/>
+        <span class="message-close right">✖</span>
+      </div>
+    </div>
+    <div th:if="${error != null}" class="message-error">
+      <div class="container message isle-1-v">
+        <span th:text="${error}"/>
+        <span class="message-close right">✖</span>
+      </div>
+    </div>
     <header th:replace="fragments/header :: header"></header>
 
     <div th:include="this :: content"></div>

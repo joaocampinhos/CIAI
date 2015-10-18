@@ -362,3 +362,20 @@ button.button-blue {
   display: none;
 }
 
+// Flash messages
+.message {
+  font-size: 2rem;
+}
+
+.message-info {
+  color: #fff;
+  background-color: #5ab0ee;
+}
+.message-error {
+  color: #fff;
+  background-color: #EC6969;
+}
+
+.message-close {
+  cursor: pointer;
+}

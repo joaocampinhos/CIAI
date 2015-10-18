@@ -27,3 +27,15 @@ Array.prototype.slice.call(document.querySelectorAll('a.gohotel')).forEach(funct
     e.href += req;
   }
 });
+
+// change room price based on room type
+var e = document.getElementsByName("roomtype")[0];
+if (e) { e.onchange=updatePrice; }
+function updatePrice() {
+  var p = document.getElementById('price');
+  if (p) {
+    p.textContent = e.options[e.selectedIndex].getAttribute("data-price");
+  }
+};updatePrice();
+
+

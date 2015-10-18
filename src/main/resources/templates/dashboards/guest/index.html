@@ -13,7 +13,7 @@
               Bookings
             </div>
             <div class="body">
-              <table class="table-dash">
+              <table th:if="${bookings.size() > 0}" class="table-dash">
                 <thead>
                   <tr>
                     <th>Hotel</th>
@@ -42,8 +42,11 @@
                 </tr>
                 </div>
               </table>
+              <h5 th:if="${bookings.size() == 0}" class="clear isle-1-v isle-1-h">You have no bookings</h5>
             </div>
           </div>
+          <br/>
+          <a class="button button-blue" href="/hotels">New Booking</a>
         </div>
         <br/>
       </div>

@@ -29,6 +29,9 @@ public class GuestDashboardController {
   @Autowired
   BookingRepository bookings;
 
+  @Autowired
+  RoomRepository rooms;
+
   @RequestMapping(method=RequestMethod.GET)
   public String index(Model model) {
     Guest guest = guests.findByName("Harvey Specter");
@@ -69,10 +72,45 @@ public class GuestDashboardController {
   }
 
   @RequestMapping(value="bookings/{id}", method=RequestMethod.POST)
-  public String edit(@PathVariable("id") long id, Booking booking, Model model, RedirectAttributes redirectAttrs) {
+  public String edit(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") long roomid, Model model, RedirectAttributes redirectAttrs) throws Exception {
     if (bookings.exists(id)) {
-      bookings.save(booking);
-      redirectAttrs.addFlashAttribute("message", "Booking edited!");
+      Booking current = bookings.findOne(id);
+
+      if (rooms.exists(roomid)) {
+        Room room = rooms.findOne(roomid);
+        Hotel hotel = current.getHotel();
+
+        try {
+          SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+          Date dArrival = sdf.parse(arrival);
+          Date dDeparture = sdf.parse(departure);
+
+          Timestamp tArrival = new Timestamp(dArrival.getTime());
+          Timestamp tDeparture = new Timestamp(dDeparture.getTime());
+
+          if (tArrival.before(tDeparture)) {
+            Room exists = rooms.findRoomByAvailability(tArrival, tDeparture, hotel, room.getType());
+
+            if (exists != null) {
+              current.setArrival(tArrival);
+              current.setDeparture(tDeparture);
+              current.setRoom(room);
+              current.setRoomType(room.getType());
+
+              redirectAttrs.addFlashAttribute("message", "Booking edited!");
+            } else {
+              redirectAttrs.addFlashAttribute("error", "Room not available for this time interval!");
+            }
+          } else {
+            redirectAttrs.addFlashAttribute("error", "Arrival date has to be before departure!");
+          }
+        } catch (Exception e) {
+          redirectAttrs.addFlashAttribute("error", "Dates are incorrect!");
+        }
+      } else {
+        redirectAttrs.addFlashAttribute("error", "Room doesn't exist!");
+      }
+
     } else {
       redirectAttrs.addFlashAttribute("error", "Booking doesn't exist!");
     }

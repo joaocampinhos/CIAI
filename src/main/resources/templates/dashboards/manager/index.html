@@ -64,7 +64,7 @@
             </div>
           </div>
           <br/>
-          <a class="button button-blue" href="/hotels">New Hotel</a>
+          <a class="button button-blue" href="/hotels/new">New Hotel</a>
           <br/>
           <br/>
           <br/>
@@ -76,13 +76,21 @@
               <table th:if="${manager.hotels.size() > 0}" class="table-dash">
                 <thead>
                   <tr>
-                    <th>Username</th>
+                    <th>Hotel</th>
+                    <th>Room Type</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
                     <th></th>
                   </tr>
                 </thead>
                 <div th:each="hotel : ${manager.hotels}">
-                  <tr>
-                    <td th:text="${hotel.name}"/>
+                  <div th:each="room: ${hotel.rooms}">
+                  <div th:each="booking: ${room.bookings}">
+                    <tr>
+                      <td th:text="${booking.hotel.name}"/>
+                      <td th:text="${booking.room.type.name}"/>
+                      <td th:text="${#dates.format(booking.arrival, 'yyyy-MM-dd')}"/>
+                      <td th:text="${#dates.format(booking.departure, 'yyyy-MM-dd')}"/>
                       <td>
                         <button class="view button-primary button-small">view</button>
                       </td>
@@ -94,6 +102,8 @@
                       </div>
                     </td>
                   </tr>
+                </div>
+                </div>
                 </div>
               </table>
               <h5 th:if="${manager.hotels.size() == 0}" class="clear isle-1-v isle-1-h">There are no Hotels</h5>
@@ -107,7 +117,6 @@
           <div class="panel">
             <div class="title">
               Comments
-              <p th:text="${comment}"/>
             </div>
             <div class="body">
               <table th:if="${comments.size() > 0}" class="table-dash">

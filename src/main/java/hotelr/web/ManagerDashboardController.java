@@ -99,8 +99,14 @@ public class ManagerDashboardController {
     if (hotels.exists(id)) {
       if (rooms.exists(roomid)) {
         if (room.getId() == roomid) {
-          rooms.save(room);
-          redirectAttrs.addFlashAttribute("message", "Room edited!");
+          Room oldRoom = rooms.findOne(roomid);
+
+          if (oldRoom.getNumber() <= room.getNumber()) {
+            rooms.save(room);
+            redirectAttrs.addFlashAttribute("message", "Room edited!");
+          } else {
+            redirectAttrs.addFlashAttribute("error", "You cannot lower the number of rooms!");
+          }
         } else {
           redirectAttrs.addFlashAttribute("error", "Id doesn't match with the given room!");
         }

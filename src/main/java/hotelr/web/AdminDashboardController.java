@@ -30,6 +30,9 @@ public class AdminDashboardController {
   ManagerRepository managers;
 
   @Autowired
+  GuestRepository guests;
+
+  @Autowired
   BookingRepository bookings;
 
   @RequestMapping(method=RequestMethod.GET)
@@ -53,12 +56,52 @@ public class AdminDashboardController {
     return "dashboards/admin/managers/show";
   }
 
+  @RequestMapping(value="managers/{id}", method=RequestMethod.DELETE)
+  public String deleteManager(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
+    // Admin admin = admins.findByName("Jessica Pearson");
+
+    if (managers.exists(id)) {
+      managers.delete(id);
+      redirectAttrs.addFlashAttribute("message", "Manager deleted!");
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Manager doesn't exist!");
+    }
+    return "redirect:/dashboards/admin/managers/index";
+  }
+
   @RequestMapping(value="managers/{id}/hotels", method=RequestMethod.GET)
   public String managerHotels(@PathVariable("id") long id, Model model) {
     // Admin admin = admins.findByName("Jessica Pearson");
     model.addAttribute("manager", managers.findOne(id));
     model.addAttribute("hotels", managers.findOne(id).getHotels());
     return "dashboards/admin/managers/hotels/index";
+  }
+
+    @RequestMapping(value="guests", method=RequestMethod.GET)
+  public String guests(Model model) {
+    //Admin admin = admins.findByName("Jessica Pearson");
+    model.addAttribute("guests", guests.findAll());
+    return "dashboards/admin/guests/index";
+  }
+
+  @RequestMapping(value="guests/{id}", method=RequestMethod.GET)
+  public String guest(@PathVariable("id") long id, Model model) {
+    // Admin admin = admins.findByName("Jessica Pearson");
+    model.addAttribute("guest", managers.findOne(id));
+    return "dashboards/admin/guests/show";
+  }
+
+  @RequestMapping(value="guests/{id}", method=RequestMethod.DELETE)
+  public String deleteGuest(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
+    // Admin admin = admins.findByName("Jessica Pearson");
+
+    if (guests.exists(id)) {
+      guests.delete(id);
+      redirectAttrs.addFlashAttribute("message", "Guest deleted!");
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Guest doesn't exist!");
+    }
+    return "redirect:/dashboards/admin/guests/index";
   }
 
 }

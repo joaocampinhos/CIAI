@@ -28,6 +28,9 @@ public class ManagerDashboardController {
   HotelRepository hotels;
 
   @Autowired
+  RoomRepository rooms;
+
+  @Autowired
   ManagerRepository managers;
 
   @Autowired
@@ -42,7 +45,7 @@ public class ManagerDashboardController {
   }
 
   @RequestMapping(value="hotels/{id}/edit",method=RequestMethod.GET)
-  public String edit(@PathVariable("id") long id, Hotel hotel, Model model, RedirectAttributes redirectAttrs) {
+  public String edit(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(id)) {
       model.addAttribute("hotel", hotels.findOne(id));
 
@@ -62,6 +65,47 @@ public class ManagerDashboardController {
         redirectAttrs.addFlashAttribute("message", "Hotel edited!");
       } else {
         redirectAttrs.addFlashAttribute("error", "Id doesn't match with the given hotel!");
+      }
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
+    }
+    return "redirect:/dashboards/manager/index";
+  }
+
+  @RequestMapping(value="hotels/{id}/rooms/{roomid}/edit",method=RequestMethod.GET)
+  public String editRoom(@PathVariable("id") long id, @PathVariable("roomid") long roomid, Model model, RedirectAttributes redirectAttrs) {
+    if (hotels.exists(id)) {
+      if (rooms.exists(roomid)) {
+        Room room = rooms.findOne(roomid);
+        if (room.getHotel().getId() == id) {
+          model.addAttribute("room", room);
+
+          return "dashboards/manager/hotels/rooms/edit";
+        } else {
+          redirectAttrs.addFlashAttribute("error", "Room doesn't belong to this hotel!");
+        }
+      } else {
+        redirectAttrs.addFlashAttribute("error", "Room doesn't exist!");
+      }
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
+    }
+
+    return "redirect:/dashboards/manager/index";
+  }
+
+  @RequestMapping(value="hotels/{id}/rooms/{roomid}",method=RequestMethod.POST)
+  public String updateRoom(@PathVariable("id") long id, @PathVariable("roomid") long roomid, Room room, Model model, RedirectAttributes redirectAttrs) {
+    if (hotels.exists(id)) {
+      if (rooms.exists(roomid)) {
+        if (room.getId() == roomid) {
+          rooms.save(room);
+          redirectAttrs.addFlashAttribute("message", "Room edited!");
+        } else {
+          redirectAttrs.addFlashAttribute("error", "Id doesn't match with the given room!");
+        }
+      } else {
+        redirectAttrs.addFlashAttribute("error", "Room doesn't exist!");
       }
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");

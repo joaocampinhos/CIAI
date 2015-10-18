@@ -214,6 +214,10 @@ header .logo {
   display: inline;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 //COMENTS LAYOUT
 
 .comments {
@@ -297,6 +301,10 @@ header .logo {
 
 .panel .body {
   padding: 1rem;
+}
+
+.details > td {
+  text-align: left !important;
 }
 
 

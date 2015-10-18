@@ -54,11 +54,10 @@
             <input name="departure" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.departure != null}" class="clear" type="date"/>
             <label>Room type</label>
             <select name="roomtype">
-              <option selected="" disabled="">Room Type</option>
-              <option th:each="room: ${hotel.rooms}" th:selected="${param.roomtype[0] == room.type.name+''}" th:value="${room.type.id}" th:unless="${param.roomtype == null}" th:text="${room.type.name}"/>
-              <option th:each="room: ${hotel.rooms}" th:value="${room.type.id}" th:unless="${param.roomtype != null}" th:text="${room.type.name}"/>
+              <option th:each="room: ${hotel.rooms}" data-th-attr="data-price=${room.price}" th:selected="${param.roomtype[0] == room.type.name+''}" th:value="${room.type.id}" th:unless="${param.roomtype == null}" th:text="${room.type.name}"/>
+              <option th:each="room: ${hotel.rooms}" data-th-attr="data-price=${room.price}" th:value="${room.type.id}" th:unless="${param.roomtype != null}" th:text="${room.type.name}"/>
             </select>
-            <h4>Preço: <span>100€</span></h4>
+            <h4>Preço: <span id="price"></span>€</h4>
             <button class="button button-primary" type="submit">Book</button>
           </form>
         </div>

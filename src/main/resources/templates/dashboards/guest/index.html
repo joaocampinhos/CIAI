@@ -13,7 +13,7 @@
               Bookings
             </div>
             <div class="body">
-              <table class="table-dash">
+              <table th:if="${bookings.size() > 0}" class="table-dash">
                 <thead>
                   <tr>
                     <th>Hotel</th>
@@ -30,20 +30,34 @@
                   <td th:text="${#dates.format(booking.departure , 'yyyy-MM-dd')}"/>
                   <td th:text="${booking.roomType.name}"/>
                   <td>
-                    <button class="button-primary button-small">view</button>
+                    <button class="view button-primary button-small">view</button>
                   </td>
                 </tr>
-                <tr class="details">
+                <tr class="hidden details">
                   <td colspan="5" class="details">
                     <div>
-                    Div que vai mostrar tudo e botoes para editar cancelar etc.
+                      <h6> Booking <small class="disabled" th:text="'#'+${booking.id}"/></h6>
+                      <p><b>Hotel: </b><span th:text="${booking.hotel.name}"/></p>
+                      <p><b>Check-in: </b> <span th:text="${#dates.format(booking.arrival , 'yyyy-MM-dd')}"/></p>
+                      <p><b>Check-out: </b><span th:text="${#dates.format(booking.departure , 'yyyy-MM-dd')}"/></p>
+                      <p><b>Room type: </b><span th:text="${booking.roomType.name}"/></p>
+                      <p><b>Price: </b><span th:text="${booking.room.price}"/>€</p>
+                      <div class="right">
+                        <a class="button button-small button-blue">Edit</a>
+                        <form class="clear inline-block" th:action="'/dashboards/guest/bookings/'+${booking.id}" th:method="delete">
+                          <button class="button button-small button-red" type="submit">Cancel</button>
+                        </form>
+                      </div>
                     </div>
                   </td>
                 </tr>
                 </div>
               </table>
+              <h5 th:if="${bookings.size() == 0}" class="clear isle-1-v isle-1-h">You have no bookings</h5>
             </div>
           </div>
+          <br/>
+          <a class="button button-blue" href="/hotels">New Booking</a>
         </div>
         <br/>
       </div>

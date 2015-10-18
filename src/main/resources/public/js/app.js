@@ -27,3 +27,24 @@ Array.prototype.slice.call(document.querySelectorAll('a.gohotel')).forEach(funct
     e.href += req;
   }
 });
+
+// change room price based on room type
+var e = document.getElementsByName("roomtype")[0];
+if (e) { e.onchange=updatePrice; }
+function updatePrice() {
+  var p = document.getElementById('price');
+  if (p) {
+    p.textContent = e.options[e.selectedIndex].getAttribute("data-price");
+  }
+};updatePrice();
+
+// Dashboard expand button
+Array.prototype.slice.call(document.querySelectorAll('button.view')).forEach(function(e) {
+  e.addEventListener("click", llog(e));
+});
+function llog(i) {
+  return function () {
+    i.parentNode.parentNode.nextElementSibling.classList.toggle('hidden');
+  };
+};
+

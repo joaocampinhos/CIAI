@@ -51,7 +51,7 @@ public class GuestDashboardController {
     } else {
       redirectAttrs.addFlashAttribute("error", "Booking doesn't exist!");
     }
-    return "redirect:dashboards/guest/bookings";
+    return "redirect:/dashboards/guest";
   }
 
 }

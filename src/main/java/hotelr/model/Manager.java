@@ -30,4 +30,8 @@ public class Manager extends User {
     this.hotels = new ArrayList<Hotel>();
     this.replies = new ArrayList<Reply>();
   }
+
+  public List<Hotel> getHotels() {
+    return hotels;
+  }
 }

@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layouts/dashboard :: page">
+  <head>
+  </head>
+  <body>
+    <div th:fragment="content">
+      <div class="secondary">
+        <div class="container">
+          <br/>
+          <h3>Dashboard</h3>
+          <div class="panel">
+            <div class="title">
+              Managers
+            </div>
+            <div class="body">
+              <table th:if="${managers.size() > 0}" class="table-dash">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <div th:each="manager : ${managers}">
+                  <tr>
+                    <td th:text="${manager.name}"/>
+                  <td>
+                    <button class="view button-primary button-small">view</button>
+                  </td>
+                </tr>
+                <tr class="hidden details">
+                  <td colspan="5" class="details">
+                    <div>
+                      <h5> Hotels </h5>
+                      <p th:each="hotel: ${manager.hotels}" th:text="${hotel.name}"></p>
+                      <div class="right">
+                      <form class="clear inline-block" th:method="DELETE" th:action="'/dashboards/admin/managers/'+${manager.id}">
+                        <button class="button-red button-small">Remove</button>
+                      </form>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                </div>
+              </table>
+              <h5 th:if="${managers.size() == 0}" class="clear isle-1-v isle-1-h">There are no managers</h5>
+            </div>
+          </div>
+          <br/>
+          <div class="panel">
+            <div class="title">
+              Guests
+            </div>
+            <div class="body">
+              <table th:if="${guests.size() > 0}" class="table-dash">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <div th:each="guest : ${guests}">
+                  <tr>
+                    <td th:text="${guest.name}"/>
+                    <td th:text="${guest.email}"/>
+                    <td>
+                      <form class="clear inline-block" th:method="DELETE" th:action="'/dashboards/admin/guests/'+${guest.id}">
+                        <button class="button-red button-small">Remove</button>
+                      </form>
+                    </td>
+                  </tr>
+                </div>
+              </table>
+              <h5 th:if="${guests.size() == 0}" class="clear isle-1-v isle-1-h">There are no guests</h5>
+            </div>
+          </div>
+          <br/>
+        </div>
+        <br/>
+      </div>
+    </div>
+  </body>
+</html>
+

@@ -39,6 +39,7 @@ public class AdminDashboardController {
   public String index(Model model) {
     // Admin admin = admins.findByName("Jessica Pearson");
     model.addAttribute("managers", managers.findAll());
+    model.addAttribute("guests", guests.findAll());
     return "dashboards/admin/index";
   }
 
@@ -66,7 +67,7 @@ public class AdminDashboardController {
     } else {
       redirectAttrs.addFlashAttribute("error", "Manager doesn't exist!");
     }
-    return "redirect:/dashboards/admin/managers/index";
+    return "redirect:/dashboards/admin/";
   }
 
   @RequestMapping(value="managers/{id}/hotels", method=RequestMethod.GET)
@@ -101,7 +102,7 @@ public class AdminDashboardController {
     } else {
       redirectAttrs.addFlashAttribute("error", "Guest doesn't exist!");
     }
-    return "redirect:/dashboards/admin/guests/index";
+    return "redirect:/dashboards/admin/";
   }
 
 }

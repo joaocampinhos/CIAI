@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.CascadeType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -28,8 +29,7 @@ public class Comment extends Message{
   @JoinColumn(name="HOTEL_ID")
   private Hotel hotel;
 
-  @OneToOne
-  @JoinColumn(name="REPLY_ID")
+  @OneToOne(mappedBy="parent", cascade=CascadeType.ALL, targetEntity=Reply.class, fetch=FetchType.LAZY)
   private Reply reply;
 
   public Comment() {

@@ -34,6 +34,9 @@ public class Application implements CommandLineRunner {
   }
 
   @Autowired
+  AdminRepository admins;
+
+  @Autowired
   HotelRepository hotels;
 
   @Autowired
@@ -71,6 +74,10 @@ public class Application implements CommandLineRunner {
         new Guest(3, "Toni", "toni@vitominas.pt", "12345")
     };
     for(Guest guest: myGuests) guests.save(guest);
+
+    admins.deleteAll();
+    Admin admin = new Admin(4, "Jessica Pearson", "jessica@pearsonspecterlitt.com", "god");
+    admins.save(admin);
 
     hotels.deleteAll();
     Hotel myHotels[] = {new Hotel(1,"Marriot", "address", "category", 5, boss),

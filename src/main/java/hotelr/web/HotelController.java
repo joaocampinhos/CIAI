@@ -180,7 +180,7 @@ public class HotelController {
 
   // POST /hotels/{id}/bookings    - creates a new booking
   @RequestMapping(value="{id}/bookings", method=RequestMethod.POST)
-  public String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") Long roomid, Model model, RedirectAttributes redirectAttrs) throws Exception {
+  public String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") long roomid, Model model, RedirectAttributes redirectAttrs) throws Exception {
     Guest guest = guests.findByName("Harvey Specter");
 
     if (hotels.exists(id)) {
@@ -194,10 +194,17 @@ public class HotelController {
           Date dArrival = sdf.parse(arrival);
           Date dDeparture = sdf.parse(departure);
 
-          Booking booking = new Booking(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), room.getType(), room, hotel, guest);;
-          bookings.save(booking);
+          Timestamp tArrival = new Timestamp(dArrival.getTime());
+          Timestamp tDeparture = new Timestamp(dDeparture.getTime());
 
-          redirectAttrs.addFlashAttribute("message", "Booking created!");
+          if (tArrival.before(tDeparture)){
+            Booking booking = new Booking(tArrival, tDeparture, room.getType(), room, hotel, guest);
+            bookings.save(booking);
+
+            redirectAttrs.addFlashAttribute("message", "Booking created!");
+          } else {
+            redirectAttrs.addFlashAttribute("error", "Arrival date has to be before departure!");
+          }
         } catch (Exception e) {
           redirectAttrs.addFlashAttribute("error", "Dates are incorrect!");
         }

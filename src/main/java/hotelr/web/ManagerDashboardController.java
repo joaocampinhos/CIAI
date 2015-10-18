@@ -25,6 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ManagerDashboardController {
 
   @Autowired
+  HotelRepository hotels;
+
+  @Autowired
   ManagerRepository managers;
 
   @Autowired
@@ -36,6 +39,45 @@ public class ManagerDashboardController {
     model.addAttribute("comments", comments.findWithNoReply(manager));
     model.addAttribute("manager", manager);
     return "dashboards/manager/index";
+  }
+
+  @RequestMapping(value="hotels/{id}/edit",method=RequestMethod.GET)
+  public String edit(@PathVariable("id") long id, Hotel hotel, Model model, RedirectAttributes redirectAttrs) {
+    if (hotels.exists(id)) {
+      model.addAttribute("hotel", hotels.findOne(id));
+
+      return "dashboards/manager/hotels/edit";
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
+
+      return "redirect:/dashboards/manager/index";
+    }
+  }
+
+  @RequestMapping(value="hotels/{id}",method=RequestMethod.POST)
+  public String update(@PathVariable("id") long id, Hotel hotel, Model model, RedirectAttributes redirectAttrs) {
+    if (hotels.exists(id)) {
+      if (hotel.getId() == id) {
+        hotels.save(hotel);
+        redirectAttrs.addFlashAttribute("message", "Hotel edited!");
+      } else {
+        redirectAttrs.addFlashAttribute("error", "Id doesn't match with the given hotel!");
+      }
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
+    }
+    return "redirect:/dashboards/manager/index";
+  }
+
+  @RequestMapping(value="hotels/{id}", method=RequestMethod.DELETE)
+  public String cancel(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
+    if (hotels.exists(id)) {
+      hotels.delete(id);
+      redirectAttrs.addFlashAttribute("message", "Hotel deleted!");
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
+    }
+    return "redirect:/hotels";
   }
 
 }

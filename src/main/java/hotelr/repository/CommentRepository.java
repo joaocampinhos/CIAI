@@ -8,4 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 import hotelr.model.*;
 
-public interface CommentRepository extends CrudRepository<Comment, Long>{}
+public interface CommentRepository extends CrudRepository<Comment, Long>{
+
+  @Query("SELECT c from Comment c where c.reply is NULL and c.hotel.manager = :manager")
+  List<Comment> findWithNoReply(@Param("manager") Manager manager);
+
+}

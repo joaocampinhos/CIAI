@@ -48,3 +48,12 @@ function llog(i) {
   };
 };
 
+// Close flash messages
+Array.prototype.slice.call(document.querySelectorAll('.message-close')).forEach(function(e) {
+  e.addEventListener("click", function(){
+    document.querySelectorAll('.message')[0].classList.toggle('hidden');
+  });
+});
+
+
+

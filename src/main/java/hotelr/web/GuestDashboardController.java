@@ -63,7 +63,7 @@ public class GuestDashboardController {
       Booking booking = bookings.findOne(id);
       model.addAttribute("booking", booking);
 
-      return "dashboards/guest/bookings/edit";
+      return "bookings/edit";
     } else {
       redirectAttrs.addFlashAttribute("error", "Booking doesn't exist!");
 
@@ -72,7 +72,7 @@ public class GuestDashboardController {
   }
 
   @RequestMapping(value="bookings/{id}", method=RequestMethod.POST)
-  public String edit(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") long roomid, Model model, RedirectAttributes redirectAttrs) throws Exception {
+  public String edit(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departuree") String departure, @RequestParam("roomtype") long roomid, Model model, RedirectAttributes redirectAttrs) throws Exception {
     if (bookings.exists(id)) {
       Booking current = bookings.findOne(id);
 
@@ -96,6 +96,7 @@ public class GuestDashboardController {
               current.setDeparture(tDeparture);
               current.setRoom(room);
               current.setRoomType(room.getType());
+              bookings.save(current);
 
               redirectAttrs.addFlashAttribute("message", "Booking edited!");
             } else {

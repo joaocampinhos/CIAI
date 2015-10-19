@@ -207,16 +207,15 @@ public class ManagerDashboardController {
   }
 
   @RequestMapping(value="bookings",method=RequestMethod.POST)
-  public String update(@RequestParam("hotelid") long hotelid, @RequestParam("guestid") long guestid, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") long roomid, Model model, RedirectAttributes redirectAttrs) {
+  public String update(@RequestParam("hotel") long hotelid, @RequestParam("guest") long guestid, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") RoomType roomType, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(hotelid)) {
       Hotel hotel = hotels.findOne(hotelid);
 
       if (guests.exists(guestid)) {
         Guest guest = guests.findOne(guestid);
+        Room room = rooms.findByHotelAndType(hotel, roomType);
 
-        if (rooms.exists(roomid)) {
-          Room room = rooms.findOne(roomid);
-
+        if (room != null) {
           try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date dArrival = sdf.parse(arrival);

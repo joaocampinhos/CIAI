@@ -13,7 +13,7 @@
               Booking
             </div>
             <div class="body">
-              <form th:action="'/dashboards//bookings'" method="POST">
+              <form th:action="'/dashboards/manager/bookings/'" method="POST">
             <label>Guest</label>
             <select name="guest">
               <option th:each="guest: ${guests}" th:value="${guest.id}" th:text="${guest.name}"/>
@@ -24,7 +24,7 @@
             </select>
             <label>RoomType</label>
             <select name="roomtype">
-              <option th:each="type: ${roomtype}" th:value="${type.name}" th:text="${type.name}"/>
+              <option th:each="type: ${roomtype}" th:value="${{type}}" th:text="${type.name}"/>
             </select>
             <label>Check-in</label>
             <input name="arrival" th:value="${param.arrival[0]}" th:unless="${param.arrival == null}" class="clear" type="date"/>

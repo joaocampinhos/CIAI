@@ -93,7 +93,7 @@ public class ManagerDashboardController {
   public String newRoom(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(id)) {
       model.addAttribute("room", new Room());
-      model.addAttribute("types", roomTypes.findAll());
+      model.addAttribute("types", roomTypes.findTypesNotInHotel(hotels.findOne(id)));
       return "dashboards/manager/hotels/rooms/create";
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");

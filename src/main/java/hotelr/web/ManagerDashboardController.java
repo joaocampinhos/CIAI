@@ -31,6 +31,12 @@ public class ManagerDashboardController {
   RoomRepository rooms;
 
   @Autowired
+  GuestRepository guests;
+
+  @Autowired
+  BookingRepository bookings;
+
+  @Autowired
   ManagerRepository managers;
 
   @Autowired
@@ -170,13 +176,77 @@ public class ManagerDashboardController {
   }
 
   @RequestMapping(value="hotels/{id}", method=RequestMethod.DELETE)
-  public String cancel(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
+  public String deleteHotel(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(id)) {
       hotels.delete(id);
       redirectAttrs.addFlashAttribute("message", "Hotel deleted!");
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
     }
+    return "redirect:/dashboards/manager";
+  }
+
+  @RequestMapping(value="bookings/{id}", method=RequestMethod.DELETE)
+  public String cancel(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
+    if (bookings.exists(id)) {
+      bookings.delete(id);
+      redirectAttrs.addFlashAttribute("message", "Booking deleted!");
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Booking doesn't exist!");
+    }
+    return "redirect:/dashboards/manager";
+  }
+
+  @RequestMapping(value="bookings/new",method=RequestMethod.GET)
+  public String newBooking(Model model, RedirectAttributes redirectAttrs) {
+    Manager manager = managers.findByName("O Chefe");
+    model.addAttribute("manager", manager);
+    model.addAttribute("guests", guests.findAll());
+    model.addAttribute("roomtype", roomTypes.findAll());
+    return "dashboards/manager/bookingnew";
+  }
+
+  @RequestMapping(value="bookings",method=RequestMethod.POST)
+  public String update(@RequestParam("hotel") long hotelid, @RequestParam("guest") long guestid, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") RoomType roomType, Model model, RedirectAttributes redirectAttrs) {
+    if (hotels.exists(hotelid)) {
+      Hotel hotel = hotels.findOne(hotelid);
+
+      if (guests.exists(guestid)) {
+        Guest guest = guests.findOne(guestid);
+        Room room = rooms.findByHotelAndType(hotel, roomType);
+
+        if (room != null) {
+          try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date dArrival = sdf.parse(arrival);
+            Date dDeparture = sdf.parse(departure);
+
+            Timestamp tArrival = new Timestamp(dArrival.getTime());
+            Timestamp tDeparture = new Timestamp(dDeparture.getTime());
+
+            if (tArrival.before(tDeparture)){
+              Booking booking = new Booking(tArrival, tDeparture, room.getType(), room, hotel, guest);
+              bookings.save(booking);
+
+              redirectAttrs.addFlashAttribute("message", "Booking created!");
+            } else {
+              redirectAttrs.addFlashAttribute("error", "Arrival date has to be before departure!");
+            }
+          } catch (Exception e) {
+            redirectAttrs.addFlashAttribute("error", "Dates are incorrect!");
+          }
+        } else {
+          redirectAttrs.addFlashAttribute("error", "Room doesn't exist!");
+        }
+
+      } else {
+        redirectAttrs.addFlashAttribute("error", "Guest doesn't exist!");
+      }
+
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
+    }
+
     return "redirect:/dashboards/manager";
   }
 

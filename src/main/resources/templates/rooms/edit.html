@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layouts/dashboard :: page">
+  <head>
+  </head>
+  <body>
+    <div th:fragment="content">
+      <div class="secondary">
+        <div class="container">
+          <br/>
+          <h3>Editing room</h3>
+          <div class="panel">
+            <!-- <div class="title"/> -->
+            <div class="title">
+              <span th:text="@{|${room.type.name} of ${room.hotel.name}|}"/>
+            </div>
+            <div class="body">
+              <div th:include="rooms/form :: roomform(@{|/dashboards/manager/hotels/${room.hotel.id}/rooms/${room.id}|})"/>
+            </div>
+          </div>
+          <br/>
+        </div>
+        <br/>
+      </div>
+    </div>
+  </body>
+</html>
+

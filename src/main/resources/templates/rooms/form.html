@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Handling Form Submission</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    <div th:fragment="roomform(url)">
+      <form  action="#" th:action="${url}" th:object="${room}" method="post">
+        <p>
+        <input type="hidden" th:field="*{id}" />
+        Number: <input type="text" th:field="*{number}" />
+        Price: <input type="text" th:field="*{price}" />
+        <input type="hidden" th:field="*{hotel}" />
+        <input type="hidden" th:field="*{type}" th:unless="${types != null}"/>
+        <select name="type" th:unless="${types == null || types.isEmpty() }">
+          <option th:each="type: ${types}" th:field="*{type}" th:value="${{type}}" th:unless="${types == null || types.isEmpty()}" th:text="${type.name}" />
+        </select>
+        <input class="button button-small button-green block" type="submit" value="Submit" />
+        <input class="button button-small button-blue block" type="reset" value="Reset" />
+        </p>
+      </form>
+    </div>
+  </body>
+</html>

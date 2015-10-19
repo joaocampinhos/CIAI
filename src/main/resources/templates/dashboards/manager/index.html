@@ -1,0 +1,177 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layouts/dashboard :: page">
+  <head>
+  </head>
+  <body>
+    <div th:fragment="content">
+      <div class="secondary">
+        <div class="container">
+          <br/>
+          <h3>Dashboard</h3>
+          <div class="panel">
+            <div class="title">
+              Hotels
+            </div>
+            <div class="body">
+              <table th:if="${manager.hotels.size() > 0}" class="table-dash">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <div th:each="hotel : ${manager.hotels}">
+                  <tr>
+                    <td th:text="${hotel.name}"/>
+                      <td>
+                        <button class="view button-primary button-small">view</button>
+                      </td>
+                  </tr>
+                  <tr class="hidden details">
+                    <td colspan="5" class="details">
+                      <div>
+                        <h5> Ocupation rate </h5>
+                        <div class="row">
+                          <div class="four columns">
+                            <div class="isle-1-h">
+                              <input name="arrival" th:value="${param.arrival[0]}" th:unless="${param.arrival == null}" class="clear" type="date"/>
+                              <input name="arrival" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.arrival != null}" class="button-full clear" type="date"/>
+                            </div>
+                          </div>
+                          <div class="four columns">
+                            <div class="isle-1-h">
+                              <input name="departure" th:value="${param.departure[0]}" th:unless="${param.departure == null}" class="clear" type="date"/>
+                              <input name="departure" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.departure != null}" class="button-full clear" type="date"/>
+                            </div>
+                          </div>
+                          <div class="four columns">
+                            <button type="submit" class="button-full button button-green">Calculate</button>
+                          </div>
+                        </div>
+                        <br/>
+                        <div class="right">
+                          <a class="button button-small button-blue" th:href="@{|/dashboards/manager/hotels/${hotel.id}/edit|}">Edit</a>
+                          <form class="clear inline-block" th:action="'/dashboards/guest/bookings/'" th:method="delete">
+                            <button class="button button-small button-red" type="submit">Remove</button>
+                          </form>
+                        </div>
+                        <div class="left">
+                          <h5> Rooms </h5>
+                          <div th:each="room: ${hotel.rooms}" class="isle-1-h">
+                            <p th:text="@{|${room.type.name} ${room.number}|}"/>
+                            <a class="button button-small button-blue" th:href="@{|/dashboards/manager/hotels/${hotel.id}/rooms/${room.id}/edit|}">Edit Room</a>
+                          </div>
+
+                          <a class="button button-small button-green" th:href="@{|/dashboards/manager/hotels/${hotel.id}/rooms/new|}">Add Room collection</a>
+
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </div>
+              </table>
+              <h5 th:if="${manager.hotels.size() == 0}" class="clear isle-1-v isle-1-h">There are no Hotels</h5>
+            </div>
+          </div>
+          <br/>
+          <a class="button button-blue" href="/dashboards/manager/hotels/new">New Hotel</a>
+          <br/>
+          <br/>
+          <br/>
+          <div class="panel">
+            <div class="title">
+              Bookings
+            </div>
+            <div class="body">
+              <table th:if="${manager.hotels.size() > 0}" class="table-dash">
+                <thead>
+                  <tr>
+                    <th>Hotel</th>
+                    <th>Room Type</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <div th:each="hotel : ${manager.hotels}">
+                  <div th:each="room: ${hotel.rooms}">
+                  <div th:each="booking: ${room.bookings}">
+                    <tr>
+                      <td th:text="${booking.hotel.name}"/>
+                      <td th:text="${booking.room.type.name}"/>
+                      <td th:text="${#dates.format(booking.arrival, 'yyyy-MM-dd')}"/>
+                      <td th:text="${#dates.format(booking.departure, 'yyyy-MM-dd')}"/>
+                      <td>
+                        <button class="view button-primary button-small">view</button>
+                      </td>
+                  </tr>
+                  <tr class="hidden details">
+                    <td colspan="5" class="details">
+                      <div>
+                        <h5> Hotels </h5>
+                      </div>
+                    </td>
+                  </tr>
+                </div>
+                </div>
+                </div>
+              </table>
+              <h5 th:if="${manager.hotels.size() == 0}" class="clear isle-1-v isle-1-h">There are no Hotels</h5>
+            </div>
+          </div>
+          <br/>
+          <a class="button button-blue" href="/hotels">New Booking</a>
+          <br/>
+          <br/>
+          <br/>
+          <div class="panel">
+            <div class="title">
+              Comments
+            </div>
+            <div class="body">
+              <table th:if="${comments.size() > 0}" class="table-dash">
+                <thead>
+                  <tr>
+                    <th>Hotel</th>
+                    <th>Username</th>
+                    <th>Date</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <div th:each="comment : ${comments}">
+                  <tr>
+                    <td th:text="${comment.hotel.name}"/>
+                    <td th:text="${comment.guest.name}"/>
+                    <td th:text="${#dates.format(comment.creationDate, 'yyy-MM-dd HH:mm')}"/>
+                      <td>
+                        <button class="view button-primary button-small">view</button>
+                      </td>
+                  </tr>
+                  <tr class="hidden details">
+                    <td colspan="5" class="details">
+                      <div>
+                        <h5> Comment </h5>
+                        <p th:text="${comment.comment}"/>
+              <form method="post" th:action="@{|/hotels/${comment.hotel.id}/comments/${comment.id}|}">
+                        <h5> Reply </h5>
+              <p class="media__body">
+              <textarea class="button-full" name="comment"></textarea>
+              <button class="right button-primary">Submit</button>
+              </p>
+            </form>
+                      </div>
+                    </td>
+                  </tr>
+                </div>
+              </table>
+              <h5 th:if="${comments.size() == 0}" class="clear isle-1-v isle-1-h">There are no new comments</h5>
+            </div>
+          </div>
+          <br/>
+        </div>
+        <br/>
+      </div>
+    </div>
+  </body>
+</html>
+

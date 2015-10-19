@@ -96,6 +96,10 @@ public class Room {
     return number;
   }
 
+  public List<Booking> getBookings() {
+    return bookings;
+  }
+
   public void setNumber(int number) {
     this.number = number;
   }

@@ -92,6 +92,7 @@ public class ManagerDashboardController {
   @RequestMapping(value="hotels/{id}/rooms/new", method=RequestMethod.GET)
   public String newRoom(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(id)) {
+      model.addAttribute("hotel", hotels.findOne(id));
       model.addAttribute("room", new Room());
       model.addAttribute("types", roomTypes.findTypesNotInHotel(hotels.findOne(id)));
       return "rooms/create";

@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Add new room collection</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Creating room</h1>
+
+      <div th:include="rooms/form :: roomform(@{|/dashboards/manager/hotels/${hotel.id}/rooms/|})"></div>
+
+    </div>
+  </body>
+</html>
+

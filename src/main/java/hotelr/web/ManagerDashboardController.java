@@ -92,10 +92,17 @@ public class ManagerDashboardController {
   @RequestMapping(value="hotels/{id}/rooms/new", method=RequestMethod.GET)
   public String newRoom(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(id)) {
-      model.addAttribute("hotel", hotels.findOne(id));
-      model.addAttribute("room", new Room());
-      model.addAttribute("types", roomTypes.findTypesNotInHotel(hotels.findOne(id)));
-      return "rooms/create";
+      List<RoomType> listTypes = roomTypes.findTypesNotInHotel(hotels.findOne(id));
+
+      if (!listTypes.isEmpty()) {
+        model.addAttribute("hotel", hotels.findOne(id));
+        model.addAttribute("room", new Room());
+        model.addAttribute("types", listTypes);
+        return "rooms/create";
+      } else {
+        redirectAttrs.addFlashAttribute("error", "Hotel already has room collections for all the room types!");
+        return "redirect:/dashboards/manager";
+      }
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
       return "redirect:/dashboards/manager";
@@ -107,6 +114,7 @@ public class ManagerDashboardController {
     if (hotels.exists(id)) {
       room.setHotel(hotels.findOne(id));
       rooms.save(room);
+      System.out.println(room.getType());
       redirectAttrs.addFlashAttribute("message", "Hotel created!");
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");

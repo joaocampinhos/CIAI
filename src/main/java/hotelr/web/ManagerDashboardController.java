@@ -31,6 +31,9 @@ public class ManagerDashboardController {
   RoomRepository rooms;
 
   @Autowired
+  BookingRepository bookings;
+
+  @Autowired
   ManagerRepository managers;
 
   @Autowired
@@ -170,12 +173,23 @@ public class ManagerDashboardController {
   }
 
   @RequestMapping(value="hotels/{id}", method=RequestMethod.DELETE)
-  public String cancel(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
+  public String deleteHotel(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(id)) {
       hotels.delete(id);
       redirectAttrs.addFlashAttribute("message", "Hotel deleted!");
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
+    }
+    return "redirect:/dashboards/manager";
+  }
+
+  @RequestMapping(value="bookings/{id}", method=RequestMethod.DELETE)
+  public String cancel(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
+    if (bookings.exists(id)) {
+      bookings.delete(id);
+      redirectAttrs.addFlashAttribute("message", "Booking deleted!");
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Booking doesn't exist!");
     }
     return "redirect:/dashboards/manager";
   }

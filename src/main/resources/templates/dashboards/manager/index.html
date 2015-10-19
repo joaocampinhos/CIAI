@@ -108,7 +108,18 @@
                   <tr class="hidden details">
                     <td colspan="5" class="details">
                       <div>
-                        <h5> Hotels </h5>
+                      <h6> Booking <small class="disabled" th:text="'#'+${booking.id}"/></h6>
+                      <p><b>Username: </b><span th:text="${booking.Guest.name}"/></p>
+                      <p><b>Hotel: </b><span th:text="${booking.hotel.name}"/></p>
+                      <p><b>Check-in: </b> <span th:text="${#dates.format(booking.arrival , 'yyyy-MM-dd')}"/></p>
+                      <p><b>Check-out: </b><span th:text="${#dates.format(booking.departure , 'yyyy-MM-dd')}"/></p>
+                      <p><b>Room type: </b><span th:text="${booking.roomType.name}"/></p>
+                      <p><b>Price: </b><span th:text="${booking.room.price}"/>€</p>
+                      <div class="right">
+                        <form class="clear inline-block" th:action="'/dashboards/manager/bookings/'+${booking.id}" th:method="delete">
+                          <button class="button button-small button-red" type="submit">Cancel</button>
+                        </form>
+                      </div>
                       </div>
                     </td>
                   </tr>

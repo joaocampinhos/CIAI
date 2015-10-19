@@ -12,7 +12,7 @@ public interface RoomTypeRepository extends CrudRepository<RoomType, Long> {
 
   RoomType findByName(String name);
 
-  @Query("SELECT rt FROM RoomType rt WHERE rt.id NOT IN (SELECT rt.id FROM Hotel h JOIN h.rooms r JOIN r.type t WHERE h = :hotel)")
+  @Query("SELECT rt FROM RoomType rt WHERE rt.id NOT IN (SELECT t.id FROM Hotel h JOIN h.rooms r JOIN r.type t WHERE h = :hotel)")
   List<RoomType> findTypesNotInHotel(@Param("hotel") Hotel hotel);
 }
 

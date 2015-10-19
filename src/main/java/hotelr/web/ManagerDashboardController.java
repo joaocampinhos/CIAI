@@ -5,6 +5,7 @@ import hotelr.model.*;
 import hotelr.exception.*;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.sql.Timestamp;
@@ -75,7 +76,16 @@ public class ManagerDashboardController {
   @RequestMapping(value="hotels", method=RequestMethod.POST)
   public String createHotel(@ModelAttribute Hotel hotel, Model model, RedirectAttributes redirectAttrs) {
     hotel.setManager(managers.findByName("O Chefe"));
+    Room singleRoom = new Room(hotel, roomTypes.findByName("Single"), hotel.getSingleRooms(), hotel.getSinglePrice());
+    Room doubleRoom = new Room(hotel, roomTypes.findByName("Double"), hotel.getDoubleRooms(), hotel.getDoublePrice());
+    Room suiteRoom = new Room(hotel, roomTypes.findByName("Suite"), hotel.getSuiteRooms(), hotel.getSuitePrice());
+    ArrayList<Room> tmp = new ArrayList<Room>();
+    tmp.add(singleRoom);
+    tmp.add(doubleRoom);
+    tmp.add(suiteRoom);
+    hotel.setRooms(tmp);
     hotels.save(hotel);
+    
     redirectAttrs.addFlashAttribute("message", "Hotel created!");
     return "redirect:/dashboards/manager";
   }

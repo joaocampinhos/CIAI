@@ -36,6 +36,9 @@ public class ManagerDashboardController {
   @Autowired
   CommentRepository comments;
 
+  @Autowired
+  RoomTypeRepository roomTypes;
+
   @RequestMapping(method=RequestMethod.GET)
   public String index(Model model) {
     Manager manager = managers.findByName("O Chefe");
@@ -67,7 +70,6 @@ public class ManagerDashboardController {
   public String createHotel(@ModelAttribute Hotel hotel, Model model, RedirectAttributes redirectAttrs) {
     hotel.setManager(managers.findByName("O Chefe"));
     hotels.save(hotel);
-    model.addAttribute("hotel", hotel);
     redirectAttrs.addFlashAttribute("message", "Hotel created!");
     return "redirect:/dashboards/manager/index";
   }
@@ -81,6 +83,30 @@ public class ManagerDashboardController {
       } else {
         redirectAttrs.addFlashAttribute("error", "Id doesn't match with the given hotel!");
       }
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
+    }
+    return "redirect:/dashboards/manager/index";
+  }
+
+  @RequestMapping(value="hotels/{id}/rooms/new", method=RequestMethod.GET)
+  public String newRoom(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
+    if (hotels.exists(id)) {
+      model.addAttribute("room", new Room());
+      model.addAttribute("types", roomTypes.findAll());
+      return "dashboards/manager/hotels/rooms/create";
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
+      return "redirect:/dashboards/manager/index";
+    }
+  }
+
+  @RequestMapping(value="hotels/{id}/rooms", method=RequestMethod.POST)
+  public String createRoom(@PathVariable("id") long id, @ModelAttribute Room room, Model model, RedirectAttributes redirectAttrs) {
+    if (hotels.exists(id)) {
+      room.setHotel(hotels.findOne(id));
+      rooms.save(room);
+      redirectAttrs.addFlashAttribute("message", "Hotel created!");
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
     }

@@ -57,6 +57,21 @@ public class ManagerDashboardController {
     }
   }
 
+  @RequestMapping(value="hotels/new", method=RequestMethod.GET)
+  public String newHotel(Model model) {
+    model.addAttribute("hotel", new Hotel());
+    return "dashboards/manager/hotels/create";
+  }
+
+  @RequestMapping(value="hotels", method=RequestMethod.POST)
+  public String createHotel(@ModelAttribute Hotel hotel, Model model, RedirectAttributes redirectAttrs) {
+    hotel.setManager(managers.findByName("O Chefe"));
+    hotels.save(hotel);
+    model.addAttribute("hotel", hotel);
+    redirectAttrs.addFlashAttribute("message", "Hotel created!");
+    return "redirect:/dashboards/manager/index";
+  }
+
   @RequestMapping(value="hotels/{id}",method=RequestMethod.POST)
   public String update(@PathVariable("id") long id, Hotel hotel, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(id)) {

@@ -47,6 +47,13 @@ public class Hotel {
   @OneToMany(mappedBy="hotel", cascade=CascadeType.ALL, targetEntity=Comment.class, fetch=FetchType.LAZY)
   private List<Comment> comments;
 
+  private int singleRooms;
+  private int singlePrice;
+  private int doubleRooms;
+  private int doublePrice;
+  private int suiteRooms;
+  private int suitePrice;
+
   public Hotel() {
     this.rooms = new ArrayList<Room>();
     this.comments = new ArrayList<Comment>();
@@ -59,6 +66,23 @@ public class Hotel {
     this.category = category;
     this.rating = rating;
     this.manager = manager;
+    this.rooms = new ArrayList<Room>();
+    this.comments = new ArrayList<Comment>();
+  }
+  
+  public Hotel(long id, String name, String address, String category, int rating, Manager manager, int singleRooms, int singlePrice, int doubleRooms, int doublePrice, int suiteRooms, int suitePrice) {
+    this.id = id;
+    this.name = name;
+    this.address = address;
+    this.category = category;
+    this.rating = rating;
+    this.manager = manager;
+    this.setSingleRooms(singleRooms);
+    this.setSinglePrice(singlePrice);
+    this.setDoubleRooms(doubleRooms);
+    this.setDoublePrice(doublePrice);
+    this.setSuiteRooms(suiteRooms);
+    this.setSuitePrice(suitePrice);
     this.rooms = new ArrayList<Room>();
     this.comments = new ArrayList<Comment>();
   }
@@ -125,6 +149,58 @@ public class Hotel {
 
   public void addComment(Comment comment) {
     this.comments.add(comment);
+  }
+
+  public int getSingleRooms() {
+    return singleRooms;
+  }
+
+  public void setSingleRooms(int singleRooms) {
+    this.singleRooms = singleRooms;
+  }
+
+  public int getSinglePrice() {
+    return singlePrice;
+  }
+
+  public void setSinglePrice(int singlePrice) {
+    this.singlePrice = singlePrice;
+  }
+
+  public int getDoubleRooms() {
+    return doubleRooms;
+  }
+
+  public void setDoubleRooms(int doubleRooms) {
+    this.doubleRooms = doubleRooms;
+  }
+
+  public int getDoublePrice() {
+    return doublePrice;
+  }
+
+  public void setDoublePrice(int doublePrice) {
+    this.doublePrice = doublePrice;
+  }
+
+  public int getSuiteRooms() {
+    return suiteRooms;
+  }
+
+  public void setSuiteRooms(int suiteRooms) {
+    this.suiteRooms = suiteRooms;
+  }
+
+  public int getSuitePrice() {
+    return suitePrice;
+  }
+
+  public void setSuitePrice(int suitePrice) {
+    this.suitePrice = suitePrice;
+  }
+
+  public void setRooms(ArrayList<Room> rooms){
+    this.rooms = rooms;
   }
 
   @Override

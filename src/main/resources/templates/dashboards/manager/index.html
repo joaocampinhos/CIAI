@@ -50,7 +50,7 @@
                         </div>
                         <br/>
                         <div class="right">
-                          <a class="button button-small button-blue">Edit</a>
+                          <a class="button button-small button-blue" th:href="@{|/dashboards/manager/hotels/${hotel.id}/edit|}">Edit</a>
                           <form class="clear inline-block" th:action="'/dashboards/guest/bookings/'" th:method="delete">
                             <button class="button button-small button-red" type="submit">Remove</button>
                           </form>
@@ -64,7 +64,7 @@
             </div>
           </div>
           <br/>
-          <a class="button button-blue" href="/hotels/new">New Hotel</a>
+          <a class="button button-blue" href="/dashboards/manager/hotels/new">New Hotel</a>
           <br/>
           <br/>
           <br/>

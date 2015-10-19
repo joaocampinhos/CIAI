@@ -52,18 +52,18 @@ public class ManagerDashboardController {
     if (hotels.exists(id)) {
       model.addAttribute("hotel", hotels.findOne(id));
 
-      return "dashboards/manager/hotels/edit";
+      return "hotels/edit";
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
 
-      return "redirect:/dashboards/manager/index";
+      return "redirect:/dashboards/manager";
     }
   }
 
   @RequestMapping(value="hotels/new", method=RequestMethod.GET)
   public String newHotel(Model model) {
     model.addAttribute("hotel", new Hotel());
-    return "dashboards/manager/hotels/create";
+    return "hotels/create";
   }
 
   @RequestMapping(value="hotels", method=RequestMethod.POST)
@@ -71,7 +71,7 @@ public class ManagerDashboardController {
     hotel.setManager(managers.findByName("O Chefe"));
     hotels.save(hotel);
     redirectAttrs.addFlashAttribute("message", "Hotel created!");
-    return "redirect:/dashboards/manager/index";
+    return "redirect:/dashboards/manager";
   }
 
   @RequestMapping(value="hotels/{id}",method=RequestMethod.POST)
@@ -86,7 +86,7 @@ public class ManagerDashboardController {
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
     }
-    return "redirect:/dashboards/manager/index";
+    return "redirect:/dashboards/manager";
   }
 
   @RequestMapping(value="hotels/{id}/rooms/new", method=RequestMethod.GET)
@@ -94,10 +94,10 @@ public class ManagerDashboardController {
     if (hotels.exists(id)) {
       model.addAttribute("room", new Room());
       model.addAttribute("types", roomTypes.findTypesNotInHotel(hotels.findOne(id)));
-      return "dashboards/manager/hotels/rooms/create";
+      return "rooms/create";
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
-      return "redirect:/dashboards/manager/index";
+      return "redirect:/dashboards/manager";
     }
   }
 
@@ -110,7 +110,7 @@ public class ManagerDashboardController {
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
     }
-    return "redirect:/dashboards/manager/index";
+    return "redirect:/dashboards/manager";
   }
 
   @RequestMapping(value="hotels/{id}/rooms/{roomid}/edit",method=RequestMethod.GET)
@@ -121,7 +121,7 @@ public class ManagerDashboardController {
         if (room.getHotel().getId() == id) {
           model.addAttribute("room", room);
 
-          return "dashboards/manager/hotels/rooms/edit";
+          return "rooms/edit";
         } else {
           redirectAttrs.addFlashAttribute("error", "Room doesn't belong to this hotel!");
         }
@@ -132,7 +132,7 @@ public class ManagerDashboardController {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
     }
 
-    return "redirect:/dashboards/manager/index";
+    return "redirect:/dashboards/manager";
   }
 
   @RequestMapping(value="hotels/{id}/rooms/{roomid}",method=RequestMethod.POST)
@@ -157,7 +157,7 @@ public class ManagerDashboardController {
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
     }
-    return "redirect:/dashboards/manager/index";
+    return "redirect:/dashboards/manager";
   }
 
   @RequestMapping(value="hotels/{id}", method=RequestMethod.DELETE)
@@ -168,7 +168,7 @@ public class ManagerDashboardController {
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
     }
-    return "redirect:/hotels";
+    return "redirect:/dashboards/manager";
   }
 
 }

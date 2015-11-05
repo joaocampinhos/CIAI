@@ -8,10 +8,10 @@ import javax.persistence.Table;
 public class Moderator extends User {
 
   public Moderator() {
-    super();
+    super("MODERATOR");
   }
 
   public Moderator(long id, String name, String email, String password) {
-    super(id, name, email, password);
+    super(id, name, email, password, "MODERATOR");
   }
 }

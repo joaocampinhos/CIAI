@@ -20,13 +20,13 @@ public class Manager extends User {
   public List<Reply> replies;
 
   public Manager() {
-    super();
+    super("MANAGER");
     this.hotels = new ArrayList<Hotel>();
     this.replies = new ArrayList<Reply>();
   }
 
   public Manager(long id, String name, String email, String password) {
-    super(id, name, email, password);
+    super(id, name, email, password, "MANAGER");
     this.hotels = new ArrayList<Hotel>();
     this.replies = new ArrayList<Reply>();
   }

@@ -20,13 +20,13 @@ public class Guest extends User {
   public List<Comment> comments;
 
   public Guest() {
-    super();
+    super("GUEST");
     this.bookings = new ArrayList<Booking>();
     this.comments = new ArrayList<Comment>();
   }
 
   public Guest(long id, String name, String email, String password) {
-    super(id, name, email, password);
+    super(id, name, email, password, "GUEST");
     this.bookings = new ArrayList<Booking>();
     this.comments = new ArrayList<Comment>();
   }

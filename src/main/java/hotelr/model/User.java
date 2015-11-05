@@ -30,12 +30,18 @@ public abstract class User {
   private String password;
   // TODO: Add photo
 
-  public User() {}
+  @Column(name="ROLE")
+  private String role;
 
-  public User(long id, String name, String email, String password) {
+  public User(String role) {
+    this.role = role;
+  }
+
+  public User(long id, String name, String email, String password, String role) {
     this.id = id;
     this.name = name;
     this.email = email;
+    this.role = role;
     this.password = BCrypt.hashpw(password, BCrypt.gensalt());
   }
 
@@ -73,6 +79,10 @@ public abstract class User {
 
   public boolean checkPassword(String candidate) {
     return BCrypt.checkpw(candidate, this.password);
+  }
+
+  public String role() {
+    return role;
   }
 
   @Override

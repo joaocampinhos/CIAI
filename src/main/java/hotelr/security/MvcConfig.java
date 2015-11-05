@@ -9,8 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -31,7 +29,6 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     return new ApplicationSecurity();
   }
 
-  //@Order(Ordered.HIGHEST_PRECEDENCE)
   @Configuration
   protected static class AuthenticationSecurity extends
       GlobalAuthenticationConfigurerAdapter {
@@ -45,7 +42,6 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     }
   }
 
-  //@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
   protected static class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 
     @Override

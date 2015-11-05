@@ -42,7 +42,7 @@ public abstract class User {
     this.name = name;
     this.email = email;
     this.role = role;
-    this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+    this.password = password;//BCrypt.hashpw(password, BCrypt.gensalt());
   }
 
   public long getId() {
@@ -74,11 +74,11 @@ public abstract class User {
   }
 
   public void setPassword(String password) {
-    this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+    this.password = password;//BCrypt.hashpw(password, BCrypt.gensalt());
   }
 
   public boolean checkPassword(String candidate) {
-    return BCrypt.checkpw(candidate, this.password);
+    return password == candidate;//BCrypt.checkpw(candidate, this.password);
   }
 
   public String role() {

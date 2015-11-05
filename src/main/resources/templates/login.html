@@ -5,7 +5,7 @@
   </head>
   <body>
     <div th:fragment="content">
-      <form method="post" action="/login" th:fragment="content">
+      <form name="form" method="POST" th:action="@{/login}" th:fragment="content">
         <input placeholder="Username" type="text" name="username"/>
         <input placeholder="Password" type="password" name="password"/>
         <button type="submit">Log-in</button>

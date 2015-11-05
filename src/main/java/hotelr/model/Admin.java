@@ -8,10 +8,10 @@ import javax.persistence.Table;
 public class Admin extends User {
 
   public Admin() {
-    super("ADMIN");
+    super("ROLE_ADMIN");
   }
 
   public Admin(long id, String name, String email, String password) {
-    super(id, name, email, password, "ADMIN");
+    super(id, name, email, password, "ROLE_ADMIN");
   }
 }

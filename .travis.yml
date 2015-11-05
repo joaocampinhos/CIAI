@@ -1,0 +1,6 @@
+language: java
+notifications:
+  slack: ciaifct:hhy8VkehgilQ3FxhS3b40cgR
+branches:
+   only: 
+      - master

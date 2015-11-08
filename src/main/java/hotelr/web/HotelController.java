@@ -265,11 +265,22 @@ public class HotelController {
     return "redirect:/hotels/{id}";
   }
 
+  // GET /hotels/{id}/comments              - returns list of comments in the hotel
+  @RequestMapping(value="{id}/roomtypes.json", method=RequestMethod.GET, produces={"text/plain","application/json"})
+  public @ResponseBody String roomsJSON(@PathVariable("id") long id, Model model) {
+    LinkedList<String> tmp = new LinkedList<String>();
+      Iterator<Room> it = hotels.findOne(id).getRooms().iterator();
+      JSONArray roomArray = new JSONArray();
+      while(it.hasNext()){
+        Room r = it.next();
+        JSONObject roomJSON = new JSONObject();
+        roomJSON.put("id", r.getId());
+        roomJSON.put("name", r.getType());
+        roomArray.put(userJSON);
+      }
+    return roomArray.toString();
+  }
+
 }
-
-
-
-
-
 
 

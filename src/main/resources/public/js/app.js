@@ -56,4 +56,9 @@ Array.prototype.slice.call(document.querySelectorAll('.message-close')).forEach(
 });
 
 
+var hotelselect = document.getElementById("hotel-ajax");
 
+hotelselect.addEventListener("change", function() {
+    var options = hotelselect.querySelectorAll("option");
+    console.log("/hotels/"+options[this.selectedIndex].value+"/roomtypes.json");
+});

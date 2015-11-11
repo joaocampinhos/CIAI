@@ -11,6 +11,7 @@
           <div class="panel">
             <!-- <div class="title"/> -->
             <div class="body">
+              <p th:text="${hotel.name}"/>
               <div th:include="rooms/form :: roomform(@{|/dashboards/manager/hotels/${hotel.id}/rooms/|})"/>
             </div>
           </div>

@@ -76,6 +76,7 @@ public class ManagerDashboardController {
   @RequestMapping(value="hotels", method=RequestMethod.POST)
   public String createHotel(@ModelAttribute Hotel hotel, Model model, RedirectAttributes redirectAttrs) {
     hotel.setManager(managers.findByName("O Chefe"));
+    /*
     Room singleRoom = new Room(hotel, roomTypes.findByName("Single"), hotel.getSingleRooms(), hotel.getSinglePrice());
     Room doubleRoom = new Room(hotel, roomTypes.findByName("Double"), hotel.getDoubleRooms(), hotel.getDoublePrice());
     Room suiteRoom = new Room(hotel, roomTypes.findByName("Suite"), hotel.getSuiteRooms(), hotel.getSuitePrice());
@@ -84,10 +85,16 @@ public class ManagerDashboardController {
     tmp.add(doubleRoom);
     tmp.add(suiteRoom);
     hotel.setRooms(tmp);
-    hotels.save(hotel);
-    
+    */
+    //hotels.save(hotel);
+
+    model.addAttribute("hotel", hotel);
+    model.addAttribute("room", new Room());
+    model.addAttribute("types", roomTypes.findAll());
+
     redirectAttrs.addFlashAttribute("message", "Hotel created!");
-    return "redirect:/dashboards/manager";
+
+    return "rooms/create";
   }
 
   @RequestMapping(value="hotels/{id}",method=RequestMethod.POST)
@@ -125,8 +132,10 @@ public class ManagerDashboardController {
     }
   }
 
-  @RequestMapping(value="hotels/{id}/rooms", method=RequestMethod.POST)
-  public String createRoom(@PathVariable("id") long id, @ModelAttribute Room room, Model model, RedirectAttributes redirectAttrs) {
+  @RequestMapping(value="hotels/0/rooms", method=RequestMethod.POST)
+  public String createRoom(@RequestParam("hotel") Hotel hotel, @ModelAttribute Room room, Model model, RedirectAttributes redirectAttrs) {
+    System.out.println(hotel);
+    /*
     if (hotels.exists(id)) {
       room.setHotel(hotels.findOne(id));
       rooms.save(room);
@@ -135,6 +144,7 @@ public class ManagerDashboardController {
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
     }
+    */
     return "redirect:/dashboards/manager";
   }
 

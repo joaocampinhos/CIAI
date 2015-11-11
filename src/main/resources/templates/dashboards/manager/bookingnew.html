@@ -26,7 +26,6 @@
                 <label>RoomType</label>
                 <select id="roomtype-ajax" name="roomtype">
                   <option selected="" disabled="">RoomTypes</option>
-                  <option th:each="type: ${roomtype}" th:value="${{type}}" th:text="${type.name}"/>
                 </select>
                 <label>Check-in</label>
                 <input name="arrival" th:value="${param.arrival[0]}" th:unless="${param.arrival == null}" class="clear" type="date"/>

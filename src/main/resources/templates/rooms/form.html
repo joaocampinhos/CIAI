@@ -8,17 +8,22 @@
     <div th:fragment="roomform(url)">
       <form  action="#" th:action="${url}" th:object="${room}" method="post">
         <p>
-        <input type="hidden" th:field="*{id}" />
-        Number: <input type="text" th:field="*{number}" />
-        Price: <input type="text" th:field="*{price}" />
-        <input type="hidden" th:field="*{hotel}" />
-        <input type="hidden" th:field="*{type}" th:unless="${types != null}"/>
-        <select name="type" th:unless="${types == null || types.isEmpty() }">
+        <!--<input type="hidden" th:field="*{id}" />-->
+        Room Type:
+        <!--<input type="hidden" th:field="*{type}" th:unless="${types != null}"/>-->
+        <select name="type">
+          <option disabled="" selected="">Room Type</option>
           <option th:each="type: ${types}" th:field="*{type}" th:value="${{type}}" th:unless="${types == null || types.isEmpty()}" th:text="${type.name}" />
         </select>
-        <input class="button button-small button-green block" type="submit" value="Submit" />
-        <input class="button button-small button-blue block" type="reset" value="Reset" />
+        Or Create a new Room Type: <input type="text" name="type" />
+        Number: <input type="text" th:field="*{number}" />
+        Price: <input type="text" th:field="*{price}" />
+        <input type="hidden" th:name="hotel" th:value="${hotel}" />
+        <input class="button button-small button-green block" type="submit" value="Save Room" />
         </p>
+      </form>
+      <form>
+        <input class="button button-blue block" type="Submit" value="Save Hotel" />
       </form>
     </div>
   </body>

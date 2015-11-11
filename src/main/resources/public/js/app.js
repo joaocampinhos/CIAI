@@ -70,7 +70,6 @@ hotelselect.addEventListener("change", function() {
       //Apagar options
       var select = document.getElementById("roomtype-ajax");
       for(var i=select.options.length-1;i>0;i--) {
-        console.log(i);
         select.remove(i);
       }
       //Adicionar novos options

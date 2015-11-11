@@ -59,6 +59,29 @@ Array.prototype.slice.call(document.querySelectorAll('.message-close')).forEach(
 var hotelselect = document.getElementById("hotel-ajax");
 
 hotelselect.addEventListener("change", function() {
-    var options = hotelselect.querySelectorAll("option");
-    console.log("/hotels/"+options[this.selectedIndex].value+"/roomtypes.json");
+  var options = hotelselect.querySelectorAll("option");
+
+  var request = new XMLHttpRequest();
+  request.open('GET', '/hotels/'+options[this.selectedIndex].value+'/roomtypes.json', true);
+
+  request.onload = function() {
+    if (request.status >= 200 && request.status < 400) {
+      var data = JSON.parse(request.responseText);
+      //Apagar options
+      var select = document.getElementById("roomtype-ajax");
+      for(var i=select.options.length-1;i>0;i--) {
+        console.log(i);
+        select.remove(i);
+      }
+      //Adicionar novos options
+      for (var i = 0; i<data.length; i++){
+        var opt = document.createElement('option');
+        opt.value = data[i].id;
+        opt.innerHTML = data[i].name;
+        select.appendChild(opt);
+      }
+    }
+  };
+
+  request.send();
 });

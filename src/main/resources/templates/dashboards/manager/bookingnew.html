@@ -24,7 +24,7 @@
                   <option th:each="hotel: ${manager.hotels}" th:value="${hotel.id}" th:text="${hotel.name}"/>
                 </select>
                 <label>RoomType</label>
-                <select name="roomtype">
+                <select id="roomtype-ajax" name="roomtype">
                   <option selected="" disabled="">RoomTypes</option>
                   <option th:each="type: ${roomtype}" th:value="${{type}}" th:text="${type.name}"/>
                 </select>

@@ -60,7 +60,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
           .and()
         .formLogin()
             .loginPage("/login")
-            .defaultSuccessUrl("/hotels")
+            .defaultSuccessUrl("/dashboards")
             .permitAll()
             .and()
         .logout()

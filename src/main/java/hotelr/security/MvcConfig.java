@@ -55,6 +55,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
           .antMatchers("/dashboards/guest/**").hasRole("GUEST")
           .antMatchers("/dashboards/admin/**").hasRole("ADMIN")
           .antMatchers("/dashboards/manager/**").hasRole("MANAGER")
+          //.antMatchers("/dashboards/moderator/**").hasRole("MODERATOR")
           .anyRequest().authenticated()
           .and()
         .formLogin()

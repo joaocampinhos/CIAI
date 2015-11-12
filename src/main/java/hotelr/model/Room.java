@@ -107,4 +107,11 @@ public class Room {
   public String toString() {
     return "Id: " + id + "\nHotel: " + hotel.getName() + "\nType: " + type.getName() + "\nNumber: " + getNumber();
   }
+
+  public String toJSON() {
+    return "{"+
+      "\"id\": \""+id+"\","+
+      "\"name\": \""+type.getName()+"\""+
+      "}";
+  }
 }

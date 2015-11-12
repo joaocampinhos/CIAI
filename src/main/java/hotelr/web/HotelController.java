@@ -265,11 +265,17 @@ public class HotelController {
     return "redirect:/hotels/{id}";
   }
 
+  @RequestMapping(value="{id}/roomtypes.json", method=RequestMethod.GET, produces={"text/plain","application/json"})
+  public @ResponseBody String roomsJSON(@PathVariable("id") long id, Model model) {
+    String tmp = "[";
+    Iterator<Room> it = hotels.findOne(id).getRooms().iterator();
+    while(it.hasNext()){
+      tmp += it.next().toJSON();
+      if (it.hasNext()) tmp += ",";
+    }
+    return tmp + " ] ";
+  }
+
 }
-
-
-
-
-
 
 

@@ -14,28 +14,26 @@
             </div>
             <div class="body">
               <form th:action="'/dashboards/manager/bookings/'" method="POST">
-            <label>Guest</label>
-            <select name="guest">
-              <option th:each="guest: ${guests}" th:value="${guest.id}" th:text="${guest.name}"/>
-            </select>
-            <label>Hotel</label>
-            <select name="hotel">
-              <option th:each="hotel: ${manager.hotels}" th:value="${hotel.id}" th:text="${hotel.name}"/>
-            </select>
-            <label>RoomType</label>
-            <select name="roomtype">
-              <option th:each="type: ${roomtype}" th:value="${{type}}" th:text="${type.name}"/>
-            </select>
-            <label>Check-in</label>
-            <input name="arrival" th:value="${param.arrival[0]}" th:unless="${param.arrival == null}" class="clear" type="date"/>
-            <input name="arrival" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.arrival != null}" type="date"/>
-            <label>Check-out</label>
-            <input name="departure" th:value="${param.departure[0]}" th:unless="${param.departure == null}" class="clear" type="date"/>
-            <input name="departure" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.departure != null}" type="date"/>
-            <button class="button button-primary" type="submit">Book</button>
-                <p th:text="${manager.hotels}"/>
-                <p th:text="${guests}"/>
-            <p th:text="${roomtype}"/>
+                <label>Guest</label>
+                <select name="guest">
+                  <option th:each="guest: ${guests}" th:value="${guest.id}" th:text="${guest.name}"/>
+                </select>
+                <label>Hotel</label>
+                <select id="hotel-ajax" name="hotel">
+                  <option selected="" disabled="">Hotel</option>
+                  <option th:each="hotel: ${manager.hotels}" th:value="${hotel.id}" th:text="${hotel.name}"/>
+                </select>
+                <label>RoomType</label>
+                <select id="roomtype-ajax" name="roomtype">
+                  <option selected="" disabled="">RoomTypes</option>
+                </select>
+                <label>Check-in</label>
+                <input name="arrival" th:value="${param.arrival[0]}" th:unless="${param.arrival == null}" class="clear" type="date"/>
+                <input name="arrival" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.arrival != null}" type="date"/>
+                <label>Check-out</label>
+                <input name="departure" th:value="${param.departure[0]}" th:unless="${param.departure == null}" class="clear" type="date"/>
+                <input name="departure" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.departure != null}" type="date"/>
+                <button class="button button-primary" type="submit">Book</button>
               </form>
             </div>
           </div>

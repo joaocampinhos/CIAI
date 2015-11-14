@@ -71,7 +71,6 @@ public class ManagerDashboardController {
   public String newHotel(Model model) {
     Hotel a = new Hotel();
     model.addAttribute("hotel", a);
-    System.out.println(a.getId());
     return "hotels/create";
   }
 
@@ -117,27 +116,43 @@ public class ManagerDashboardController {
       List<RoomType> listTypes = roomTypes.findTypesNotInHotel(hotels.findOne(id));
 
         model.addAttribute("hotel", hotels.findOne(id));
-        model.addAttribute("room", new Room());
+          model.addAttribute("room", new Room());
         model.addAttribute("types", listTypes);
         return "rooms/create";
       }
-    } else {
+     else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
       return "redirect:/dashboards/manager";
     }
   }
 
   @RequestMapping(value="hotels/{id}/rooms", method=RequestMethod.POST)
-  public String createRoom(@PathVariable("id") long id, @ModelAttribute Room room, Model model, RedirectAttributes redirectAttrs) {
-    if (hotels.exists(id)) {
-      room.setHotel(hotels.findOne(id));
-      rooms.save(room);
-      redirectAttrs.addFlashAttribute("message", "Hotel created!");
-    } else {
-      redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
+    public String createRoom(@PathVariable("id") long id, @ModelAttribute Room room, @RequestParam("newtype") String newtype, Model model, RedirectAttributes redirectAttrs) {
+      if (hotels.exists(id)) {
+        room.setHotel(hotels.findOne(id));
+        if (!newtype.equals("")) {
+          RoomType type = new RoomType();
+          type.setName(newtype);
+          roomTypes.save(type);
+          room.setType(type);
+          rooms.save(room);
+          redirectAttrs.addFlashAttribute("message", "Room created!");
+        }
+        else {
+          if (room.getType() != null) {
+            rooms.save(room);
+            redirectAttrs.addFlashAttribute("message", "Room created!");
+          }
+          else {
+            redirectAttrs.addFlashAttribute("error", "You need to provide a valid Room Type");
+          }
+        }
+      }
+      else {
+        redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
+      }
+      return "redirect:/dashboards/manager/hotels/"+id+"/rooms/new";
     }
-    return "redirect:hotels/"+id+"/rooms";
-  }
 
   @RequestMapping(value="hotels/{id}/rooms/{roomid}/edit",method=RequestMethod.GET)
   public String editRoom(@PathVariable("id") long id, @PathVariable("roomid") long roomid, Model model, RedirectAttributes redirectAttrs) {
@@ -163,12 +178,13 @@ public class ManagerDashboardController {
 
   @RequestMapping(value="hotels/{id}/rooms/{roomid}",method=RequestMethod.POST)
   public String updateRoom(@PathVariable("id") long id, @PathVariable("roomid") long roomid, Room room, Model model, RedirectAttributes redirectAttrs) {
-    if (hotels.exists(id)) {
+      if (hotels.exists(id)) {
       if (rooms.exists(roomid)) {
         if (room.getId() == roomid) {
           Room oldRoom = rooms.findOne(roomid);
 
           if (oldRoom.getNumber() <= room.getNumber()) {
+            room.setHotel(hotels.findOne(id));
             rooms.save(room);
             redirectAttrs.addFlashAttribute("message", "Room edited!");
           } else {

@@ -9,20 +9,20 @@
       <form  action="#" th:action="${url}" th:object="${room}" method="post">
         <p>
         <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:field="*{type}" th:unless="*{type == null}" />
+        <div th:unless="*{type} != null">
         Room Type:
         <select name="type">
           <option disabled="" selected="">Room Type</option>
           <option th:each="type: ${types}" th:field="*{type}" th:value="${{type}}" th:unless="${types == null || types.isEmpty()}" th:text="${type.name}" />
         </select>
-        Or Create a new Room Type: <input type="text" name="type" />
+        Or Create a new Room Type: <input type="text" name="newtype" />
+        </div>
         Number: <input type="text" th:field="*{number}" />
         Price: <input type="text" th:field="*{price}" />
         <!--<input type="hidden" th:name="hotel" th:value="${hotel}" />-->
         <input class="button button-small button-green block" type="submit" value="Save Room" />
         </p>
-      </form>
-      <form>
-        <input class="button button-blue block" type="Submit" value="Save Hotel" />
       </form>
     </div>
   </body>

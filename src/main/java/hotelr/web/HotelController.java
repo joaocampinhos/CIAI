@@ -198,7 +198,7 @@ public class HotelController {
           Timestamp tDeparture = new Timestamp(dDeparture.getTime());
 
           if (tArrival.before(tDeparture)){
-            Booking booking = new Booking(tArrival, tDeparture, room.getType(), room, hotel, guest);
+            Booking booking = new Booking(tArrival, tDeparture, room.getType(), room, hotel, guest, true);
             bookings.save(booking);
 
             redirectAttrs.addFlashAttribute("message", "Booking created!");

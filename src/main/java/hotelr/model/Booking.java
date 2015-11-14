@@ -42,18 +42,22 @@ public class Booking {
   @JoinColumn(name="BOOKING_GUEST")
   private Guest guest;
 
+  @Column(name="BOOKING_PENDING")
+  private boolean pending;
+
   public Booking() {}
 
-  public Booking(Timestamp arrival, Timestamp departure, RoomType roomType, Room room, Hotel hotel, Guest guest) {
+  public Booking(Timestamp arrival, Timestamp departure, RoomType roomType, Room room, Hotel hotel, Guest guest, boolean pending) {
     this.arrival = arrival;
     this.departure = departure;
     this.roomType = roomType;
     this.room = room;
     this.hotel = hotel;
     this.guest = guest;
+    this.pending = pending;
   }
 
-  public Booking(long id, Timestamp arrival, Timestamp departure, RoomType roomType, Room room, Hotel hotel, Guest guest) {
+  public Booking(long id, Timestamp arrival, Timestamp departure, RoomType roomType, Room room, Hotel hotel, Guest guest, boolean pending) {
     this.id = id;
     this.arrival = arrival;
     this.departure = departure;
@@ -61,6 +65,7 @@ public class Booking {
     this.room = room;
     this.hotel = hotel;
     this.guest = guest;
+    this.pending = pending;
   }
 
   public long getId() {
@@ -117,5 +122,13 @@ public class Booking {
 
   public void setGuest(Guest guest) {
     this.guest = guest;
+  }
+
+  public boolean getPending() {
+    return pending;
+  }
+
+  public void setPending(boolean pending) {
+    this.pending = pending;
   }
 }

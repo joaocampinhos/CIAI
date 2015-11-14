@@ -69,7 +69,9 @@ public class ManagerDashboardController {
 
   @RequestMapping(value="hotels/new", method=RequestMethod.GET)
   public String newHotel(Model model) {
-    model.addAttribute("hotel", new Hotel());
+    Hotel a = new Hotel();
+    model.addAttribute("hotel", a);
+    System.out.println(a.getId());
     return "hotels/create";
   }
 
@@ -86,15 +88,12 @@ public class ManagerDashboardController {
     tmp.add(suiteRoom);
     hotel.setRooms(tmp);
     */
-    //hotels.save(hotel);
+    hotels.save(hotel);
 
-    model.addAttribute("hotel", hotel);
-    model.addAttribute("room", new Room());
-    model.addAttribute("types", roomTypes.findAll());
 
     redirectAttrs.addFlashAttribute("message", "Hotel created!");
 
-    return "rooms/create";
+    return "redirect:/dashboards/manager/hotels/"+hotel.getId()+"/rooms/new";
   }
 
   @RequestMapping(value="hotels/{id}",method=RequestMethod.POST)
@@ -117,14 +116,10 @@ public class ManagerDashboardController {
     if (hotels.exists(id)) {
       List<RoomType> listTypes = roomTypes.findTypesNotInHotel(hotels.findOne(id));
 
-      if (!listTypes.isEmpty()) {
         model.addAttribute("hotel", hotels.findOne(id));
         model.addAttribute("room", new Room());
         model.addAttribute("types", listTypes);
         return "rooms/create";
-      } else {
-        redirectAttrs.addFlashAttribute("error", "Hotel already has room collections for all the room types!");
-        return "redirect:/dashboards/manager";
       }
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
@@ -132,20 +127,16 @@ public class ManagerDashboardController {
     }
   }
 
-  @RequestMapping(value="hotels/0/rooms", method=RequestMethod.POST)
-  public String createRoom(@RequestParam("hotel") Hotel hotel, @ModelAttribute Room room, Model model, RedirectAttributes redirectAttrs) {
-    System.out.println(hotel);
-    /*
+  @RequestMapping(value="hotels/{id}/rooms", method=RequestMethod.POST)
+  public String createRoom(@PathVariable("id") long id, @ModelAttribute Room room, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(id)) {
       room.setHotel(hotels.findOne(id));
       rooms.save(room);
-      System.out.println(room.getType());
       redirectAttrs.addFlashAttribute("message", "Hotel created!");
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
     }
-    */
-    return "redirect:/dashboards/manager";
+    return "redirect:hotels/"+id+"/rooms";
   }
 
   @RequestMapping(value="hotels/{id}/rooms/{roomid}/edit",method=RequestMethod.GET)

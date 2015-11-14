@@ -8,9 +8,8 @@
     <div th:fragment="roomform(url)">
       <form  action="#" th:action="${url}" th:object="${room}" method="post">
         <p>
-        <!--<input type="hidden" th:field="*{id}" />-->
+        <input type="hidden" th:field="*{id}" />
         Room Type:
-        <!--<input type="hidden" th:field="*{type}" th:unless="${types != null}"/>-->
         <select name="type">
           <option disabled="" selected="">Room Type</option>
           <option th:each="type: ${types}" th:field="*{type}" th:value="${{type}}" th:unless="${types == null || types.isEmpty()}" th:text="${type.name}" />
@@ -18,7 +17,7 @@
         Or Create a new Room Type: <input type="text" name="type" />
         Number: <input type="text" th:field="*{number}" />
         Price: <input type="text" th:field="*{price}" />
-        <input type="hidden" th:name="hotel" th:value="${hotel}" />
+        <!--<input type="hidden" th:name="hotel" th:value="${hotel}" />-->
         <input class="button button-small button-green block" type="submit" value="Save Room" />
         </p>
       </form>

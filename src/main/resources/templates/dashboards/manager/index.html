@@ -95,7 +95,7 @@
                 </thead>
                 <div th:each="hotel : ${manager.hotels}">
                   <div th:each="room: ${hotel.rooms}">
-                  <div th:each="booking: ${room.bookings}">
+                  <div th:each="booking: ${room.bookings}" th:if="${booking.pending}==true">
                     <tr>
                       <td th:text="${booking.hotel.name}"/>
                       <td th:text="${booking.room.type.name}"/>
@@ -116,6 +116,9 @@
                       <p><b>Room type: </b><span th:text="${booking.roomType.name}"/></p>
                       <p><b>Price: </b><span th:text="${booking.room.price}"/>€</p>
                       <div class="right">
+                        <form class="clear inline-block" th:action="'/dashboards/manager/bookings/'+${booking.id}+'/aprove'" th:method="post">
+                          <button class="button button-small button-green" type="submit">Aprove</button>
+                        </form>
                         <form class="clear inline-block" th:action="'/dashboards/manager/bookings/'+${booking.id}" th:method="delete">
                           <button class="button button-small button-red" type="submit">Cancel</button>
                         </form>

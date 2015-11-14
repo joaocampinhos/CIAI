@@ -30,13 +30,13 @@ Array.prototype.slice.call(document.querySelectorAll('a.gohotel')).forEach(funct
 
 // change room price based on room type
 var e = document.getElementsByName("roomtype")[0];
-if (e) { e.onchange=updatePrice; }
+if (e) { e.onchange=updatePrice; updatePrice(); }
 function updatePrice() {
   var p = document.getElementById('price');
   if (p) {
     p.textContent = e.options[e.selectedIndex].getAttribute("data-price");
   }
-};updatePrice();
+};
 
 // Dashboard expand button
 Array.prototype.slice.call(document.querySelectorAll('button.view')).forEach(function(e) {
@@ -58,29 +58,31 @@ Array.prototype.slice.call(document.querySelectorAll('.message-close')).forEach(
 
 var hotelselect = document.getElementById("hotel-ajax");
 
-hotelselect.addEventListener("change", function() {
-  var options = hotelselect.querySelectorAll("option");
+if (hotelselect) {
+  hotelselect.addEventListener("change", function() {
+    var options = hotelselect.querySelectorAll("option");
 
-  var request = new XMLHttpRequest();
-  request.open('GET', '/hotels/'+options[this.selectedIndex].value+'/roomtypes.json', true);
+    var request = new XMLHttpRequest();
+    request.open('GET', '/hotels/'+options[this.selectedIndex].value+'/roomtypes.json', true);
 
-  request.onload = function() {
-    if (request.status >= 200 && request.status < 400) {
-      var data = JSON.parse(request.responseText);
-      //Apagar options
-      var select = document.getElementById("roomtype-ajax");
-      for(var i=select.options.length-1;i>0;i--) {
-        select.remove(i);
+    request.onload = function() {
+      if (request.status >= 200 && request.status < 400) {
+        var data = JSON.parse(request.responseText);
+        //Apagar options
+        var select = document.getElementById("roomtype-ajax");
+        for(var i=select.options.length-1;i>0;i--) {
+          select.remove(i);
+        }
+        //Adicionar novos options
+        for (var i = 0; i<data.length; i++){
+          var opt = document.createElement('option');
+          opt.value = data[i].id;
+          opt.innerHTML = data[i].name;
+          select.appendChild(opt);
+        }
       }
-      //Adicionar novos options
-      for (var i = 0; i<data.length; i++){
-        var opt = document.createElement('option');
-        opt.value = data[i].id;
-        opt.innerHTML = data[i].name;
-        select.appendChild(opt);
-      }
-    }
-  };
+    };
 
-  request.send();
-});
+    request.send();
+  });
+}

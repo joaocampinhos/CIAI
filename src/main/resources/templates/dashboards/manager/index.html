@@ -117,7 +117,7 @@
                       <p><b>Price: </b><span th:text="${booking.room.price}"/>€</p>
                       <div class="right">
                         <form class="clear inline-block" th:action="'/dashboards/manager/bookings/'+${booking.id}+'/aprove'" th:method="post">
-                          <button class="button button-small button-green" type="submit">Aprove</button>
+                          <button class="button button-small button-green" type="submit">Approve</button>
                         </form>
                         <form class="clear inline-block" th:action="'/dashboards/manager/bookings/'+${booking.id}" th:method="delete">
                           <button class="button button-small button-red" type="submit">Cancel</button>

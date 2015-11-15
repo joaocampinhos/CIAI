@@ -24,6 +24,18 @@ html, body {
 </style>
   </head>
   <body>
+    <div th:if="${message != null}" class="message-info">
+      <div class="container message isle-1-v">
+        <span th:text="${message}"/>
+        <span class="message-close right">✖</span>
+      </div>
+    </div>
+    <div th:if="${error != null}" class="message-error">
+      <div class="container message isle-1-v">
+        <span th:text="${error}"/>
+        <span class="message-close right">✖</span>
+      </div>
+    </div>
 
     <div class="log-form">
 

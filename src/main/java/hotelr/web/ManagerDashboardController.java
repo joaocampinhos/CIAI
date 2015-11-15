@@ -213,7 +213,7 @@ public class ManagerDashboardController {
       Booking tmp = bookings.findOne(id);
       tmp.setPending(false);
       bookings.save(tmp);
-      redirectAttrs.addFlashAttribute("message", "Booking aproved!");
+      redirectAttrs.addFlashAttribute("message", "Booking approved!");
     } else {
       redirectAttrs.addFlashAttribute("error", "Booking doesn't exist!");
     }

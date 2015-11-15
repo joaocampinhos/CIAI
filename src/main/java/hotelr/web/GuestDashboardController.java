@@ -96,6 +96,7 @@ public class GuestDashboardController {
               current.setDeparture(tDeparture);
               current.setRoom(room);
               current.setRoomType(room.getType());
+              current.setPending(true);
               bookings.save(current);
 
               redirectAttrs.addFlashAttribute("message", "Booking edited!");

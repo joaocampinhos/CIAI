@@ -42,8 +42,8 @@
                       <p><b>Check-out: </b><span th:text="${#dates.format(booking.departure , 'yyyy-MM-dd')}"/></p>
                       <p><b>Room type: </b><span th:text="${booking.roomType.name}"/></p>
                       <p><b>Price: </b><span th:text="${booking.room.price}"/>€</p>
-                      <p th:if="${booking.pending} == true"><b>Status: </b>Pending aproval</p>
-                      <p th:if="${booking.pending} == false"><b>Status: </b>Aproved</p>
+                      <p th:if="${booking.pending} == true"><b>Status: </b>Pending approval</p>
+                      <p th:if="${booking.pending} == false"><b>Status: </b>Approved</p>
                       <div class="right">
                         <a class="button button-small button-blue" th:href="@{|/dashboards/guest/bookings/${booking.id}/edit|}">Edit</a>
                         <form class="clear inline-block" th:action="'/dashboards/guest/bookings/'+${booking.id}" th:method="delete">

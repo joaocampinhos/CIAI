@@ -12,6 +12,7 @@
           <input name="arrival" th:value="${#dates.format(booking.arrival, 'yyyy-MM-dd')}" class="clear" type="date"/>
         <label>Check-out</label>
             <input name="departuree" th:value="${#dates.format(booking.departure, 'yyyy-MM-dd')}" class="clear" type="date"/>
+        <label>Room Type</label>
         <select name="roomtype">
           <option th:each="room: ${booking.hotel.rooms}" data-th-attr="data-price=${room.price}" th:value="${room.type.id}" th:text="${room.type.name}"/>
         </select>

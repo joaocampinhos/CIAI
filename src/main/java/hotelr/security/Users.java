@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hotelr.model.*;
@@ -18,18 +18,17 @@ import hotelr.repository.*;
 @Service
 class Users implements UserDetailsService {
 
+  @Autowired
   private GuestRepository guests;
-  private ManagerRepository managers;
-  private AdminRepository admins;
-  private ModeratorRepository moderators;
 
   @Autowired
-  public Users(GuestRepository guests, ManagerRepository managers, AdminRepository admins,  ModeratorRepository moderators) {
-    this.guests = guests;
-    this.managers = managers;
-    this.admins = admins;
-    this.moderators = moderators;
-  }
+  private ManagerRepository managers;
+
+  @Autowired
+  private AdminRepository admins;
+
+  @Autowired
+  private ModeratorRepository moderators;
 
   @Override
   public UserDetails loadUserByUsername(String username)

@@ -48,10 +48,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
       http
         .authorizeRequests()
-          .antMatchers("/js/**", "/css/**", "/images/**").permitAll()
-          .antMatchers("/").permitAll()
-          .antMatchers("/login").permitAll()
-          .antMatchers("/register").permitAll()
+          .antMatchers("/js/**", "/css/**", "/images/**", "/", "/login", "/register").permitAll()
           .antMatchers("/hotels/**").hasRole("GUEST")
           .antMatchers("/dashboards/guest/**").hasRole("GUEST")
           .antMatchers("/dashboards/admin/**").hasRole("ADMIN")

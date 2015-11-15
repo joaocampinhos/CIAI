@@ -41,6 +41,9 @@ public class Hotel {
   @JoinColumn(name="MANAGER_ID")
   private Manager manager;
 
+  @Column(name="HOTEL_PENDING")
+  private boolean pending;
+
   @OneToMany(mappedBy="hotel", cascade=CascadeType.ALL, targetEntity=Room.class, fetch=FetchType.LAZY)
   public List<Room> rooms;
 
@@ -59,7 +62,7 @@ public class Hotel {
     this.comments = new ArrayList<Comment>();
   }
 
-  public Hotel(long id, String name, String address, String category, int rating, Manager manager) {
+  public Hotel(long id, String name, String address, String category, int rating, Manager manager, boolean pending) {
     this.id = id;
     this.name = name;
     this.address = address;
@@ -68,6 +71,7 @@ public class Hotel {
     this.manager = manager;
     this.rooms = new ArrayList<Room>();
     this.comments = new ArrayList<Comment>();
+    this.pending = pending;
   }
 
   public Hotel(long id, String name, String address, String category, int rating, Manager manager, int singleRooms, int singlePrice, int doubleRooms, int doublePrice, int suiteRooms, int suitePrice) {
@@ -201,6 +205,14 @@ public class Hotel {
 
   public void setRooms(ArrayList<Room> rooms){
     this.rooms = rooms;
+  }
+
+  public boolean getPending(){
+    return pending;
+  }
+
+  public void setPending(boolean pending){
+    this.pending = pending;
   }
 
   @Override

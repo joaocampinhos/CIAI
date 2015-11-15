@@ -80,12 +80,12 @@ public class Application implements CommandLineRunner {
     admins.save(admin);
 
     hotels.deleteAll();
-    Hotel myHotels[] = {new Hotel(1,"Marriot", "address", "category", 5, boss),
-                        new Hotel(2,"Intercontinental", "address", "category", 3, boss),
-                        new Hotel(3,"Trip", "address", "category", 3, boss),
-                        new Hotel(4,"Holiday Inn", "address", "category", 4, boss),
-                        new Hotel(5,"Tulip", "address", "category", 4, boss),
-                        new Hotel(6,"Hostel da Costa", "address", "category", 3, boss)};
+    Hotel myHotels[] = {new Hotel(1,"Marriot", "address", "category", 5, boss, false),
+                        new Hotel(2,"Intercontinental", "address", "category", 3, boss, false),
+                        new Hotel(3,"Trip", "address", "category", 3, boss, false),
+                        new Hotel(4,"Holiday Inn", "address", "category", 4, boss, false),
+                        new Hotel(5,"Tulip", "address", "category", 4, boss, false),
+                        new Hotel(6,"Hostel da Costa", "address", "category", 3, boss, false)};
 
     RoomType myRoomTypes[] = {
       new RoomType(1, "Suite"),

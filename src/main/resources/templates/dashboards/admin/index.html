@@ -8,6 +8,47 @@
         <div class="container">
           <br/>
           <h3>Dashboard</h3>
+          
+          
+          <div class="panel">
+            <div class="title">
+              Pending Hotels
+            </div>
+            <div class="body">
+              <table th:if="${pendingHotels.size() > 0}" class="table-dash">
+                <div th:each="hotel : ${pendingHotels}">
+                  <tr>
+                    <td th:text="${hotel.name}"/>
+                  <td>
+                    <button class="view button-primary button-small">view</button>
+                  </td>
+                </tr>
+                <tr class="hidden details">
+                  <td colspan="5" class="details">
+                    <div>
+                      <p><b>Manager: </b><span th:text="${hotel.manager.name}"/></p>
+                      <p><b>Address: </b> <span th:text="${hotel.address}"/></p>
+                      <p><b>Category: </b><span th:text="${hotel.category}"/></p>
+                      <p><b>Rating: </b><span th:text="${hotel.rating}"/></p>
+                      <div class="right">
+                      <form class="clear inline-block" th:method="POST" th:action="'/dashboards/admin/hotels/'+${hotel.id}+'/approve'">
+                        <button class="button-green button-small">Approve</button>
+                      </form>
+                      <form class="clear inline-block" th:method="DELETE" th:action="'/hotels/'+${hotel.id}">
+                        <button class="button-red button-small">Remove</button>
+                      </form>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                </div>
+              </table>
+              <!--<h5 th:if="${managers.size() == 0}" class="clear isle-1-v isle-1-h">There are no managers</h5>-->
+            </div>
+          </div>
+          <br/>
+          
+          
           <div class="panel">
             <div class="title">
               Managers

@@ -77,6 +77,7 @@ public class ManagerDashboardController {
   @RequestMapping(value="hotels", method=RequestMethod.POST)
   public String createHotel(@ModelAttribute Hotel hotel, Model model, RedirectAttributes redirectAttrs) {
     hotel.setManager(managers.findByName("O Chefe"));
+    hotel.setPending(true);
     hotels.save(hotel);
     redirectAttrs.addFlashAttribute("message", "Hotel created!");
     return "redirect:/dashboards/manager/hotels/"+hotel.getId()+"/rooms/new";
@@ -86,6 +87,7 @@ public class ManagerDashboardController {
   public String update(@PathVariable("id") long id, Hotel hotel, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(id)) {
       if (hotel.getId() == id) {
+        hotel.setPending(true);
         hotels.save(hotel);
         redirectAttrs.addFlashAttribute("message", "Hotel edited!");
       } else {
@@ -211,8 +213,8 @@ public class ManagerDashboardController {
     return "redirect:/dashboards/manager";
   }
 
-  @RequestMapping(value="bookings/{id}/aprove", method=RequestMethod.POST)
-  public String aproveBooking(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
+  @RequestMapping(value="bookings/{id}/approve", method=RequestMethod.POST)
+  public String approveBooking(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
     if (bookings.exists(id)) {
       Booking tmp = bookings.findOne(id);
       tmp.setPending(false);

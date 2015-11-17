@@ -16,6 +16,12 @@
             </div>
             <div class="body">
               <table th:if="${pendingComments.size() > 0}" class="table-dash">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th></th>
+                  </tr>
+                </thead>
                 <div th:each="comment : ${pendingComments}">
                   <tr>
                     <td th:text="${comment.guest.name}"/>
@@ -26,14 +32,14 @@
                 <tr class="hidden details">
                   <td colspan="5" class="details">
                     <div>
-                      <p><b>Message: </b><span th:text="${coment.comment}"/></p>
+                      <p><b>Message: </b><span th:text="${comment.comment}"/></p>
                       <p><b>creation Date: </b> <span th:text="${#dates.format(comment.creationDate , 'yyyy-MM-dd')}"/></p>
                       <p><b>Hotel: </b><span th:text="${comment.hotel.name}"/></p>
                       <div class="right">
-                      <form class="clear inline-block" th:method="POST" th:action="'/dashboards/admin/hotels/'+${hotel.id}+'/approve'">
+                      <form class="clear inline-block" th:method="POST" th:action="'/dashboards/moderator/comments/'+${comment.id}+'/approve'">
                         <button class="button-green button-small">Approve</button>
                       </form>
-                      <form class="clear inline-block" th:method="DELETE" th:action="'/hotels/'+${hotel.id}">
+                      <form class="clear inline-block" th:method="DELETE" th:action="'/dashboards/moderator/comments/'+${comment.id}">
                         <button class="button-red button-small">Remove</button>
                       </form>
                       </div>
@@ -53,6 +59,12 @@
             </div>
             <div class="body">
               <table th:if="${pendingReplies.size() > 0}" class="table-dash">
+              <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th></th>
+                  </tr>
+                </thead>
                 <div th:each="reply : ${pendingReplies}">
                   <tr>
                     <td th:text="${reply.manager.name}"/>
@@ -63,14 +75,16 @@
                 <tr class="hidden details">
                   <td colspan="5" class="details">
                     <div>
-                      <p><b>Message: </b><span th:text="${coment.comment}"/></p>
-                      <p><b>creation Date: </b> <span th:text="${#dates.format(comment.creationDate , 'yyyy-MM-dd')}"/></p>
-                      <p><b>Parent Comment: </b><span th:text="${comment.parent.comment}"/></p>
+                      <p><b>Message: </b><span th:text="${reply.comment}"/></p>
+                      <p><b>creation Date: </b> <span th:text="${#dates.format(reply.creationDate , 'yyyy-MM-dd')}"/></p>
+                      <p><span>Replying to </span></p>
+                      <p><b>Author: </b><span th:text="${reply.parent.guest.name}"/></p>
+                      <p><b>Comment: </b><span th:text="${reply.parent.comment}"/></p>
                       <div class="right">
-                      <form class="clear inline-block" th:method="POST" th:action="'/dashboards/admin/hotels/'+${hotel.id}+'/approve'">
+                      <form class="clear inline-block" th:method="POST" th:action="'/dashboards/moderator/replies/'+${reply.id}+'/approve'">
                         <button class="button-green button-small">Approve</button>
                       </form>
-                      <form class="clear inline-block" th:method="DELETE" th:action="'/hotels/'+${hotel.id}">
+                      <form class="clear inline-block" th:method="DELETE" th:action="'/replies/'+${reply.id}">
                         <button class="button-red button-small">Remove</button>
                       </form>
                       </div>

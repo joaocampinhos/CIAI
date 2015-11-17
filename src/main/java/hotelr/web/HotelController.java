@@ -58,7 +58,7 @@ public class HotelController {
   @RequestMapping(method=RequestMethod.GET)
   public String index(@RequestParam(value="arrival", required=false) String arrival, @RequestParam(value="departure", required=false) String departure, @RequestParam(value="roomtype", required=false) String roomType, Model model) throws Exception {
     model.addAttribute("roomTypes", roomTypes.findAll());
-    if (arrival == null || departure == null) model.addAttribute("hotels", hotels.findAll());
+    if (arrival == null || departure == null) model.addAttribute("hotels", hotels.findByPending(false));
     else {
       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
       Date dArrival = sdf.parse(arrival);

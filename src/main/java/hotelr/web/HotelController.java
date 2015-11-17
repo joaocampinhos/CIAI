@@ -104,7 +104,7 @@ public class HotelController {
   @RequestMapping(value="{id}", method=RequestMethod.GET)
   public String show(@PathVariable("id") long id, @RequestParam(value="arrival", required=false) String arrival, @RequestParam(value="departure", required=false) String departure, @RequestParam(value="roomtype", required=false) String roomType, Model model) throws Exception {
     Hotel hotel = hotels.findOne(id);
-    if( hotel == null )
+    if( hotel == null || hotel.getPending())
       throw new HotelNotFoundException();
 
     if (arrival != null && departure != null) {
@@ -186,32 +186,36 @@ public class HotelController {
     if (hotels.exists(id)) {
       Hotel hotel = hotels.findOne(id);
 
-      if (rooms.exists(roomid)) {
-        Room room = rooms.findOne(roomid);
+      if(hotel.getPending() == false){
 
-        try {
-          SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-          Date dArrival = sdf.parse(arrival);
-          Date dDeparture = sdf.parse(departure);
+        if (rooms.exists(roomid)) {
+          Room room = rooms.findOne(roomid);
 
-          Timestamp tArrival = new Timestamp(dArrival.getTime());
-          Timestamp tDeparture = new Timestamp(dDeparture.getTime());
+          try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date dArrival = sdf.parse(arrival);
+            Date dDeparture = sdf.parse(departure);
 
-          if (tArrival.before(tDeparture)){
-            Booking booking = new Booking(tArrival, tDeparture, room.getType(), room, hotel, guest, true);
-            bookings.save(booking);
+            Timestamp tArrival = new Timestamp(dArrival.getTime());
+            Timestamp tDeparture = new Timestamp(dDeparture.getTime());
 
-            redirectAttrs.addFlashAttribute("message", "Booking created!");
-          } else {
-            redirectAttrs.addFlashAttribute("error", "Arrival date has to be before departure!");
+            if (tArrival.before(tDeparture)){
+              Booking booking = new Booking(tArrival, tDeparture, room.getType(), room, hotel, guest, true);
+              bookings.save(booking);
+
+              redirectAttrs.addFlashAttribute("message", "Booking created!");
+            } else {
+              redirectAttrs.addFlashAttribute("error", "Arrival date has to be before departure!");
+            }
+          } catch (Exception e) {
+            redirectAttrs.addFlashAttribute("error", "Dates are incorrect!");
           }
-        } catch (Exception e) {
-          redirectAttrs.addFlashAttribute("error", "Dates are incorrect!");
+        } else {
+          redirectAttrs.addFlashAttribute("error", "Room doesn't exist!");
         }
       } else {
-        redirectAttrs.addFlashAttribute("error", "Room doesn't exist!");
+        redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
       }
-
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
     }

@@ -13,4 +13,5 @@ public interface CommentRepository extends CrudRepository<Comment, Long>{
   @Query("SELECT c FROM Comment c LEFT JOIN c.reply r WHERE c.hotel.manager = :manager AND r is null")
   List<Comment> findWithNoReply(@Param("manager") Manager manager);
 
+  List<Comment> findByPending(boolean pending);
 }

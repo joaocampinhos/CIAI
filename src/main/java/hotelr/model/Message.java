@@ -25,6 +25,9 @@ public abstract class Message {
   @Column(name="COMMENT_CREATION_DATE")
   private Timestamp creationDate;
 
+  @Column(name="COMMENT_PENDING")
+  private boolean pending;
+
   public Message() {}
 
   public Message(String comment, Timestamp creationDate) {
@@ -60,5 +63,13 @@ public abstract class Message {
 
   public void setCreationDate(Timestamp creationDate) {
     this.creationDate = creationDate;
+  }
+
+  public boolean getPending(){
+    return pending;
+  }
+
+  public void setPending(boolean pending){
+    this.pending = pending;
   }
 }

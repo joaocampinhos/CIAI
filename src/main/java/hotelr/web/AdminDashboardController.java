@@ -35,11 +35,15 @@ public class AdminDashboardController {
   @Autowired
   BookingRepository bookings;
 
+  @Autowired
+  HotelRepository hotels;
+
   @RequestMapping(method=RequestMethod.GET)
   public String index(Model model) {
     // Admin admin = admins.findByName("Jessica Pearson");
     model.addAttribute("managers", managers.findAll());
     model.addAttribute("guests", guests.findAll());
+    model.addAttribute("pendingHotels", hotels.findByPending(true));
     return "dashboards/admin/index";
   }
 
@@ -103,6 +107,19 @@ public class AdminDashboardController {
       redirectAttrs.addFlashAttribute("error", "Guest doesn't exist!");
     }
     return "redirect:/dashboards/admin/";
+  }
+
+  @RequestMapping(value="hotels/{id}/approve", method=RequestMethod.POST)
+  public String approveHotel(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
+    if (hotels.exists(id)) {
+      Hotel tmp = hotels.findOne(id);
+      tmp.setPending(false);
+      hotels.save(tmp);
+      redirectAttrs.addFlashAttribute("message", "Hotel approved!");
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
+    }
+    return "redirect:/dashboards/admin";
   }
 
 }

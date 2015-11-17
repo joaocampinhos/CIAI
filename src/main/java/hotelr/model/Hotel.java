@@ -69,7 +69,7 @@ public class Hotel {
     this.rooms = new ArrayList<Room>();
     this.comments = new ArrayList<Comment>();
   }
-  
+
   public Hotel(long id, String name, String address, String category, int rating, Manager manager, int singleRooms, int singlePrice, int doubleRooms, int doublePrice, int suiteRooms, int suitePrice) {
     this.id = id;
     this.name = name;

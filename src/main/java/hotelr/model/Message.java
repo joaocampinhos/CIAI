@@ -30,15 +30,17 @@ public abstract class Message {
 
   public Message() {}
 
-  public Message(String comment, Timestamp creationDate) {
+  public Message(String comment, Timestamp creationDate, boolean pending) {
     this.comment = comment;
     this.creationDate = creationDate;
+    this.pending = pending;
   }
 
-  public Message(long id, String comment, Timestamp creationDate) {
+  public Message(long id, String comment, Timestamp creationDate, boolean pending) {
     this.id = id;
     this.comment = comment;
     this.creationDate = creationDate;
+    this.pending = pending;
   }
 
   public long getId() {

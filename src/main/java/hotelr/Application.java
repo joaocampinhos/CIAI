@@ -111,9 +111,9 @@ public class Application implements CommandLineRunner {
     }
 
     Comment myComments[] = {
-        new Comment(1, myGuests[0], "mlg 420 blaze it", new Timestamp(System.currentTimeMillis()), myHotels[0]),
-        new Comment(2, myGuests[1], "OMG!", new Timestamp(System.currentTimeMillis()), myHotels[0]),
-        new Comment(3, myGuests[1], "WoW!", new Timestamp(System.currentTimeMillis()), myHotels[1])
+        new Comment(1, myGuests[0], "mlg 420 blaze it", new Timestamp(System.currentTimeMillis()), myHotels[0], false),
+        new Comment(2, myGuests[1], "OMG!", new Timestamp(System.currentTimeMillis()), myHotels[0], false),
+        new Comment(3, myGuests[1], "WoW!", new Timestamp(System.currentTimeMillis()), myHotels[1], false)
     };
 
     // myHotels[0].addComment(myComments[0]);
@@ -123,8 +123,8 @@ public class Application implements CommandLineRunner {
     for(Comment comment: myComments) comments.save(comment);
 
     Reply myReplies[] = {
-        new Reply(myComments[0], "noScope", new Timestamp(System.currentTimeMillis()), boss),
-        new Reply(myComments[1], "Thank you, very nice!", new Timestamp(System.currentTimeMillis()), boss)
+        new Reply(myComments[0], "noScope", new Timestamp(System.currentTimeMillis()), boss, false),
+        new Reply(myComments[1], "Thank you, very nice!", new Timestamp(System.currentTimeMillis()), boss, false)
     };
 
     for(Reply reply: myReplies) replies.save(reply);

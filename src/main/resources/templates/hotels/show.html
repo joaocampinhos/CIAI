@@ -81,7 +81,7 @@
       <div class="comments">
         <div class="container">
           <h3 class="thin">Comments</h3>
-          <div th:each="comment: ${hotel.comments}" class="media comment">
+          <div th:each="comment: ${comments}" class="media comment">
             <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
             <div class="media__body">
               <h5 class="clear">
@@ -92,13 +92,15 @@
             </div>
             <hr class="clear isle-1-v"/>
             <div th:each="reply: ${comment.reply}" class="media comment reply">
-              <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
-              <div class="media__body">
-                <h5 class="clear">
-                  <span th:text="${reply.manager.name}"/>
-                    <small class="thin">(<small class="thin" th:text="${#dates.format(reply.creationDate, 'yyy-MM-dd HH:mm')}"/>)</small>
-                </h5>
-                <span th:text="${reply.comment}"/>
+              <div th:if="${reply.getPending()} == false">
+                <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
+                <div class="media__body">
+                  <h5 class="clear">
+                    <span th:text="${reply.manager.name}"/>
+                      <small class="thin">(<small class="thin" th:text="${#dates.format(reply.creationDate, 'yyy-MM-dd HH:mm')}"/>)</small>
+                  </h5>
+                  <span th:text="${reply.comment}"/>
+                </div>
               </div>
             </div>
             <hr class="clear isle-1-v"/>

@@ -14,4 +14,6 @@ public interface CommentRepository extends CrudRepository<Comment, Long>{
   List<Comment> findWithNoReply(@Param("manager") Manager manager);
 
   List<Comment> findByPending(boolean pending);
+
+  List<Comment> findByHotelAndPending(Hotel hotel, boolean pending);
 }

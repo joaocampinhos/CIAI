@@ -78,6 +78,7 @@ public class ManagerDashboardController {
   @RequestMapping(value="hotels", method=RequestMethod.POST)
   public String createHotel(@ModelAttribute Hotel hotel, Model model, Principal principal, RedirectAttributes redirectAttrs) {
     hotel.setManager(managers.findByName(principal.getName()));
+    hotel.setPending(true);
     hotels.save(hotel);
     redirectAttrs.addFlashAttribute("message", "Hotel created!");
     return "redirect:/dashboards/manager/hotels/"+hotel.getId()+"/rooms/new";
@@ -87,6 +88,7 @@ public class ManagerDashboardController {
   public String update(@PathVariable("id") long id, Hotel hotel, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(id)) {
       if (hotel.getId() == id) {
+        hotel.setPending(true);
         hotels.save(hotel);
         redirectAttrs.addFlashAttribute("message", "Hotel edited!");
       } else {
@@ -212,6 +214,19 @@ public class ManagerDashboardController {
     return "redirect:/dashboards/manager";
   }
 
+  @RequestMapping(value="bookings/{id}/approve", method=RequestMethod.POST)
+  public String approveBooking(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
+    if (bookings.exists(id)) {
+      Booking tmp = bookings.findOne(id);
+      tmp.setPending(false);
+      bookings.save(tmp);
+      redirectAttrs.addFlashAttribute("message", "Booking approved!");
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Booking doesn't exist!");
+    }
+    return "redirect:/dashboards/manager";
+  }
+
   @RequestMapping(value="bookings/new",method=RequestMethod.GET)
   public String newBooking(Model model, Principal principal, RedirectAttributes redirectAttrs) {
     Manager manager = managers.findByName(principal.getName());
@@ -240,7 +255,7 @@ public class ManagerDashboardController {
             Timestamp tDeparture = new Timestamp(dDeparture.getTime());
 
             if (tArrival.before(tDeparture)){
-              Booking booking = new Booking(tArrival, tDeparture, room.getType(), room, hotel, guest);
+              Booking booking = new Booking(tArrival, tDeparture, room.getType(), room, hotel, guest, false);
               bookings.save(booking);
 
               redirectAttrs.addFlashAttribute("message", "Booking created!");

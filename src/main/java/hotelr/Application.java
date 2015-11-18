@@ -46,6 +46,9 @@ public class Application implements CommandLineRunner {
   GuestRepository guests;
 
   @Autowired
+  ModeratorRepository moderators;
+
+  @Autowired
   RoomTypeRepository roomTypes;
 
   @Autowired
@@ -78,6 +81,12 @@ public class Application implements CommandLineRunner {
     admins.deleteAll();
     Admin admin = new Admin(4, "Jessica Pearson", "jessica@pearsonspecterlitt.com", "god");
     admins.save(admin);
+
+    moderators.deleteAll();
+    Moderator myModerators[] = {
+        new Moderator(5, "Jose Rodrigues", "zerodrigues@rtp1.pt", "mod")
+    };
+    for(Moderator moderator: myModerators) moderators.save(moderator);
 
     hotels.deleteAll();
     Hotel myHotels[] = {new Hotel(1,"Marriot", "address", "category", 5, boss, false),

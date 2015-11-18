@@ -30,6 +30,9 @@ public class AdminDashboardController {
   ManagerRepository managers;
 
   @Autowired
+  ModeratorRepository moderators;
+
+  @Autowired
   GuestRepository guests;
 
   @Autowired
@@ -42,6 +45,7 @@ public class AdminDashboardController {
   public String index(Model model) {
     // Admin admin = admins.findByName("Jessica Pearson");
     model.addAttribute("managers", managers.findAll());
+    model.addAttribute("moderators", moderators.findAll());
     model.addAttribute("guests", guests.findAll());
     model.addAttribute("pendingHotels", hotels.findByPending(true));
     return "dashboards/admin/index";
@@ -119,6 +123,59 @@ public class AdminDashboardController {
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
     }
+    return "redirect:/dashboards/admin";
+  }
+
+  @RequestMapping(value="moderators/{id}", method=RequestMethod.DELETE)
+  public String deleteModerator(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
+    if (moderators.exists(id)) {
+      moderators.delete(id);
+      redirectAttrs.addFlashAttribute("message", "Moderator deleted!");
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Moderator doesn't exist!");
+    }
+    return "redirect:/dashboards/admin/";
+  }
+
+  @RequestMapping(value="moderators/{id}/edit",method=RequestMethod.GET)
+  public String edit(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
+    if (moderators.exists(id)) {
+      model.addAttribute("moderator", moderators.findOne(id));
+
+      return "/dashboards/admin/moderatorEdit";
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Moderator doesn't exist!");
+
+      return "redirect:/dashboards/admin";
+    }
+  }
+
+  @RequestMapping(value="moderators/{id}",method=RequestMethod.POST)
+  public String update(@PathVariable("id") long id, Moderator moderator, Model model, RedirectAttributes redirectAttrs) {
+    if (moderators.exists(id)) {
+      if (moderator.getId() == id) {
+        moderators.save(moderator);
+        redirectAttrs.addFlashAttribute("message", "Moderator edited!");
+      } else {
+        redirectAttrs.addFlashAttribute("error", "Id doesn't match with the given Moderator!");
+      }
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Moderator doesn't exist!");
+    }
+    return "redirect:/dashboards/admin";
+  }
+
+  @RequestMapping(value="moderators/new", method=RequestMethod.GET)
+  public String newModerator(Model model) {
+    Moderator a = new Moderator();
+    model.addAttribute("moderator", a);
+    return "/dashboards/admin/moderatorNew";
+  }
+
+  @RequestMapping(value="moderators", method=RequestMethod.POST)
+  public String createModerator(@ModelAttribute Moderator moderator, Model model, RedirectAttributes redirectAttrs) {
+    moderators.save(moderator);
+    redirectAttrs.addFlashAttribute("message", "Moderator created!");
     return "redirect:/dashboards/admin";
   }
 

@@ -87,6 +87,42 @@
             </div>
           </div>
           <br/>
+          
+          
+          <div class="panel">
+            <div class="title">
+              Comment Moderators
+            </div>
+            <div class="body">
+              <table th:if="${moderators.size() > 0}" class="table-dash">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <div th:each="moderator : ${moderators}">
+                  <tr>
+                    <td th:text="${moderator.name}"/>
+                    <td th:text="${moderator.email}"/>
+                    <td>
+                      <a class="button button-small button-blue" th:href="@{|/dashboards/admin/moderators/${moderator.id}/edit|}">Edit</a>
+                      <form class="clear inline-block" th:method="DELETE" th:action="'/dashboards/admin/moderators/'+${moderator.id}">
+                        <button class="button-red button-small">Remove</button>
+                      </form>
+                    </td>
+                  </tr>
+                </div>
+              </table>
+            </div>
+          </div>
+          <br/>
+          <a class="button button-blue" href="/dashboards/admin/moderators/new">New Moderator</a>
+          <br/>
+          <br/>
+          <br/>
+          
           <div class="panel">
             <div class="title">
               Guests

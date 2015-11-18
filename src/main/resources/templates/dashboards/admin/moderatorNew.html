@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+ th:include="layouts/dashboard :: page">
+<head>
+</head>
+<body>
+  <div th:fragment="content">
+    <div class="secondary">
+      <div class="container">
+      <h1>Create Moderator</h1>
+      <div th:include="dashboards/admin/moderatorForm :: moderatorform(@{|/dashboards/admin/moderators|})"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

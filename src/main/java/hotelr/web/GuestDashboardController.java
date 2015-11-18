@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.sql.Timestamp;
+import java.security.Principal;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,15 +34,15 @@ public class GuestDashboardController {
   RoomRepository rooms;
 
   @RequestMapping(method=RequestMethod.GET)
-  public String index(Model model) {
-    Guest guest = guests.findByName("Harvey Specter");
+  public String index(Model model, Principal principal) {
+    Guest guest = guests.findByEmail(principal.getName());
     model.addAttribute("bookings", guest.getBookings());
     return "dashboards/guest/index";
   }
 
   @RequestMapping(value="bookings", method=RequestMethod.GET)
-  public String bookings(Model model) {
-    Guest guest = guests.findByName("Harvey Specter");
+  public String bookings(Model model, Principal principal) {
+    Guest guest = guests.findByEmail(principal.getName());
     model.addAttribute("bookings", guest.getBookings());
     return "dashboards/guest/bookings";
   }

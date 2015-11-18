@@ -25,14 +25,14 @@ public class Reply extends Message{
     super();
   }
 
-  public Reply(long id, Comment parent, String comment, Timestamp creationDate, Manager manager) {
-    super(id, comment, creationDate);
+  public Reply(long id, Comment parent, String comment, Timestamp creationDate, Manager manager, boolean pending) {
+    super(id, comment, creationDate, pending);
     this.parent = parent;
     this.manager = manager;
   }
 
-  public Reply(Comment parent, String comment, Timestamp creationDate, Manager manager) {
-    super(comment, creationDate);
+  public Reply(Comment parent, String comment, Timestamp creationDate, Manager manager, boolean pending) {
+    super(comment, creationDate, pending);
     this.parent = parent;
     this.manager = manager;
   }

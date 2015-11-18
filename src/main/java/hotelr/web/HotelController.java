@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -92,9 +93,8 @@ public class HotelController {
 
   // POST /hotels             - creates a new hotel
   @RequestMapping(method=RequestMethod.POST)
-  public String saveIt(@ModelAttribute Hotel hotel, Model model) {
-    // TODO: set to the manager current logged in instead of manually assigning this
-    hotel.setManager(managers.findByName("O Chefe"));
+  public String saveIt(@ModelAttribute Hotel hotel, Model model, Principal principal) {
+    hotel.setManager(managers.findByEmail(principal.getName()));
     hotels.save(hotel);
     model.addAttribute("hotel", hotel);
     return "redirect:/hotels";
@@ -260,9 +260,8 @@ public class HotelController {
 
   // POST /hotels/{id}/comments/{commentId} - creates a new reply for the comment
   @RequestMapping(value="{id}/comments/{commentId}", method=RequestMethod.POST)
-  public String saveReply(@PathVariable("id") long id, @PathVariable("commentId") long commentId, @RequestParam("comment") String comment, Model model){
-    //É sempre O Chefe a responder
-    Manager manager = managers.findByName("O Chefe");
+  public String saveReply(@PathVariable("id") long id, @PathVariable("commentId") long commentId, @RequestParam("comment") String comment, Model model, Principal principal) {
+    Manager manager = managers.findByEmail(principal.getName());
     Comment commentObj = comments.findOne(commentId);
     Reply reply = new Reply(commentObj, comment, new Timestamp(System.currentTimeMillis()), manager);
     replies.save(reply);

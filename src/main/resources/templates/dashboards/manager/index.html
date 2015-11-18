@@ -80,7 +80,7 @@
           <br/>
           <br/>
           <br/>
-          <div class="panel">
+          <div class="panel" th:if="${manager.hotels.size() > 0}">
             <div class="title">
               Bookings
             </div>
@@ -136,7 +136,7 @@
             </div>
           </div>
           <br/>
-          <a class="button button-blue" href="/dashboards/manager/bookings/new">New Booking</a>
+          <a class="button button-blue" href="/dashboards/manager/bookings/new" th:if="${manager.hotels.size() > 0}">New Booking</a>
           <br/>
           <br/>
           <br/>

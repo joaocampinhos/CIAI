@@ -1,10 +1,15 @@
 <header th:fragment="header">
   <div class="container">
     <div class="nav row">
-      <a href="/"><h3 class="logo four columns">Hotelr</h3></a>
-      <div class="eight columns">
-        <!-- nav é baseado no tipo de user -->
-        hotels
+      <a href="/"><h3 class="logo six columns">Hotelr</h3></a>
+      <div class="logged six columns">
+        <div th:unless="${user} == null" class="">
+          <a href="dashboard">Dashboard</a>
+          &middot;
+          <span th:text="${user.name}"/>
+          &middot;
+          <a href="logout"></a>
+        </div>
       </div>
     </div>
   </div>

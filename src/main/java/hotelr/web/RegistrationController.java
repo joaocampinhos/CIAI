@@ -11,6 +11,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Controller
 @RequestMapping(value="/register")
@@ -50,17 +52,19 @@ public class RegistrationController {
       return "redirect:/register";
     }
 
+    PasswordEncoder encoder = new BCryptPasswordEncoder();
+
     if (type.equals("manager")) {
       Manager manager = new Manager();
       manager.setName(name);
       manager.setEmail(email);
-      manager.setPassword(password);
+      manager.setPassword(encoder.encode(password));
       managers.save(manager);
     } else if (type.equals("guest")) {
       Guest guest = new Guest();
       guest.setName(name);
       guest.setEmail(email);
-      guest.setPassword(password);
+      guest.setPassword(encoder.encode(password));
       guests.save(guest);
     }
 

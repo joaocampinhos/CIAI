@@ -52,7 +52,6 @@ public class ManagerDashboardController {
     Manager manager = managers.findByName(principal.getName());
     model.addAttribute("comments", comments.findWithNoReply(manager));
     model.addAttribute("manager", manager);
-    model.addAttribute("user", manager);
     return "dashboards/manager/index";
   }
 

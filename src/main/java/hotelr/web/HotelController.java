@@ -122,6 +122,7 @@ public class HotelController {
     }
 
     model.addAttribute("hotel", hotel);
+    model.addAttribute("comments", comments.findByHotelAndPending(hotel, false));
     return "hotels/show";
   }
 
@@ -236,13 +237,13 @@ public class HotelController {
 
   // POST /hotels/{id}/comments   - creates a new comment for the hotel
   @RequestMapping(value="{id}/comments", method=RequestMethod.POST)
-  public String saveComment(@PathVariable("id") long id, @RequestParam("comment") String comment, Model model) {
+  public String saveComment(@PathVariable("id") long id, @RequestParam("comment") String comment, Model model, RedirectAttributes redirectAttrs) {
     //É sempre o Toni a postar
     Guest guest = guests.findByName("Harvey Specter");
     Hotel hotel = hotels.findOne(id);
-    Comment commentObj = new Comment(guest, comment, new Timestamp(System.currentTimeMillis()), hotel);
+    Comment commentObj = new Comment(guest, comment, new Timestamp(System.currentTimeMillis()), hotel, true);
     comments.save(commentObj);
-
+    redirectAttrs.addFlashAttribute("message", "Comment Posted for approval!");
     return "redirect:/hotels/{id}";
   }
 
@@ -260,11 +261,12 @@ public class HotelController {
 
   // POST /hotels/{id}/comments/{commentId} - creates a new reply for the comment
   @RequestMapping(value="{id}/comments/{commentId}", method=RequestMethod.POST)
-  public String saveReply(@PathVariable("id") long id, @PathVariable("commentId") long commentId, @RequestParam("comment") String comment, Model model, Principal principal) {
+  public String saveReply(@PathVariable("id") long id, @PathVariable("commentId") long commentId, @RequestParam("comment") String comment, Model model, Principal principal, RedirectAttributes redirectAttrs) {
     Manager manager = managers.findByEmail(principal.getName());
     Comment commentObj = comments.findOne(commentId);
-    Reply reply = new Reply(commentObj, comment, new Timestamp(System.currentTimeMillis()), manager);
+    Reply reply = new Reply(commentObj, comment, new Timestamp(System.currentTimeMillis()), manager, true);
     replies.save(reply);
+    redirectAttrs.addFlashAttribute("message", "Reply Posted for approval!");
     return "redirect:/hotels/{id}";
   }
 

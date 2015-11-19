@@ -36,14 +36,14 @@ public class Comment extends Message{
     super();
   }
 
-  public Comment(long id, Guest guest, String comment, Timestamp creationDate, Hotel hotel){
-    super(id, comment, creationDate);
+  public Comment(long id, Guest guest, String comment, Timestamp creationDate, Hotel hotel, boolean pending){
+    super(id, comment, creationDate, pending);
     this.guest = guest;
     this.hotel = hotel;
   }
 
-  public Comment(Guest guest, String comment, Timestamp creationDate, Hotel hotel){
-    super(comment, creationDate);
+  public Comment(Guest guest, String comment, Timestamp creationDate, Hotel hotel, boolean pending){
+    super(comment, creationDate, pending);
     this.guest = guest;
     this.hotel = hotel;
   }

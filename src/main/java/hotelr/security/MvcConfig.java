@@ -28,7 +28,7 @@ public class MvcConfig extends WebSecurityConfigurerAdapter {
     http
       .authorizeRequests()
         .antMatchers("/js/**", "/css/**", "/images/**", "/", "/login/**", "/register/**").permitAll()
-        .antMatchers("/hotels/**").hasRole("GUEST")
+        .antMatchers("/hotels/**").permitAll()
         .antMatchers("/dashboards/guest/**").hasRole("GUEST")
         .antMatchers("/dashboards/admin/**").hasRole("ADMIN")
         .antMatchers("/dashboards/manager/**").hasRole("MANAGER")

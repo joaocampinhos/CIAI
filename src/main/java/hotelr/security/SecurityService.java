@@ -24,13 +24,13 @@ public class SecurityService {
   // hotels
 
   public boolean canEditOrDeleteHotel(User user, long hotelId) {
-    managesHotel(user, hotelId);
+    return managesHotel(user, hotelId);
   }
 
   // bookings
 
   public boolean managerCanCreateBooking(User user, long hotelId) {
-    managesHotel(user, hotelId);
+    return managesHotel(user, hotelId);
   }
 
   public boolean canEditBooking(User user, long bookingId) {
@@ -49,6 +49,6 @@ public class SecurityService {
   // replies
 
   public boolean canCreateReply(User user, long hotelId) {
-    managesHotel(user, hotelId);
+    return managesHotel(user, hotelId);
   }
 }

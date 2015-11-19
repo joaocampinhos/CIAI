@@ -203,16 +203,21 @@ public class Hotel {
     this.suitePrice = suitePrice;
   }
 
-  public void setRooms(ArrayList<Room> rooms){
+  public void setRooms(ArrayList<Room> rooms) {
     this.rooms = rooms;
   }
 
-  public boolean getPending(){
+  public boolean getPending() {
     return pending;
   }
 
-  public void setPending(boolean pending){
+  public void setPending(boolean pending) {
     this.pending = pending;
+  }
+
+  public boolean hasRoomType(long id) {
+    for(Room r : rooms) if (r.getType().getId() == id) return true;
+    return false;
   }
 
   @Override

@@ -49,7 +49,7 @@ public class ManagerDashboardController {
 
   @RequestMapping(method=RequestMethod.GET)
   public String index(Model model, Principal principal) {
-    Manager manager = managers.findByName(principal.getName());
+    Manager manager = managers.findByEmail(principal.getName());
     model.addAttribute("comments", comments.findWithNoReply(manager));
     model.addAttribute("manager", manager);
     return "dashboards/manager/index";
@@ -77,7 +77,7 @@ public class ManagerDashboardController {
 
   @RequestMapping(value="hotels", method=RequestMethod.POST)
   public String createHotel(@ModelAttribute Hotel hotel, Model model, Principal principal, RedirectAttributes redirectAttrs) {
-    hotel.setManager(managers.findByName(principal.getName()));
+    hotel.setManager(managers.findByEmail(principal.getName()));
     hotel.setPending(true);
     hotels.save(hotel);
     redirectAttrs.addFlashAttribute("message", "Hotel created!");
@@ -229,7 +229,7 @@ public class ManagerDashboardController {
 
   @RequestMapping(value="bookings/new",method=RequestMethod.GET)
   public String newBooking(Model model, Principal principal, RedirectAttributes redirectAttrs) {
-    Manager manager = managers.findByName(principal.getName());
+    Manager manager = managers.findByEmail(principal.getName());
     model.addAttribute("manager", manager);
     model.addAttribute("guests", guests.findAll());
     model.addAttribute("roomtype", roomTypes.findAll());

@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -92,9 +93,8 @@ public class HotelController {
 
   // POST /hotels             - creates a new hotel
   @RequestMapping(method=RequestMethod.POST)
-  public String saveIt(@ModelAttribute Hotel hotel, Model model) {
-    // TODO: set to the manager current logged in instead of manually assigning this
-    hotel.setManager(managers.findByName("O Chefe"));
+  public String saveIt(@ModelAttribute Hotel hotel, Model model, Principal principal) {
+    hotel.setManager(managers.findByEmail(principal.getName()));
     hotels.save(hotel);
     model.addAttribute("hotel", hotel);
     return "redirect:/hotels";
@@ -122,6 +122,7 @@ public class HotelController {
     }
 
     model.addAttribute("hotel", hotel);
+    model.addAttribute("comments", comments.findByHotelAndPending(hotel, false));
     return "hotels/show";
   }
 
@@ -180,16 +181,16 @@ public class HotelController {
 
   // POST /hotels/{id}/bookings    - creates a new booking
   @RequestMapping(value="{id}/bookings", method=RequestMethod.POST)
-  public String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") long roomid, Model model, RedirectAttributes redirectAttrs) throws Exception {
-    Guest guest = guests.findByName("Harvey Specter");
+  public String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") long roomid, Model model, RedirectAttributes redirectAttrs, Principal principal) throws Exception {
+    Guest guest = guests.findByEmail(principal.getName());
 
     if (hotels.exists(id)) {
       Hotel hotel = hotels.findOne(id);
 
       if(hotel.getPending() == false){
 
-        if (rooms.exists(roomid)) {
-          Room room = rooms.findOne(roomid);
+        if (roomTypes.exists(roomid) && hotel.hasRoomType(roomid)) {
+          Room room = rooms.findByHotelAndType(hotel, roomTypes.findOne(roomid));
 
           try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -236,13 +237,12 @@ public class HotelController {
 
   // POST /hotels/{id}/comments   - creates a new comment for the hotel
   @RequestMapping(value="{id}/comments", method=RequestMethod.POST)
-  public String saveComment(@PathVariable("id") long id, @RequestParam("comment") String comment, Model model) {
-    //É sempre o Toni a postar
-    Guest guest = guests.findByName("Harvey Specter");
+  public String saveComment(@PathVariable("id") long id, @RequestParam("comment") String comment, Model model, Principal principal, RedirectAttributes redirectAttrs) {
+    Guest guest = guests.findByEmail(principal.getName());
     Hotel hotel = hotels.findOne(id);
-    Comment commentObj = new Comment(guest, comment, new Timestamp(System.currentTimeMillis()), hotel);
+    Comment commentObj = new Comment(guest, comment, new Timestamp(System.currentTimeMillis()), hotel, true);
     comments.save(commentObj);
-
+    redirectAttrs.addFlashAttribute("message", "Comment Posted for approval!");
     return "redirect:/hotels/{id}";
   }
 
@@ -260,12 +260,12 @@ public class HotelController {
 
   // POST /hotels/{id}/comments/{commentId} - creates a new reply for the comment
   @RequestMapping(value="{id}/comments/{commentId}", method=RequestMethod.POST)
-  public String saveReply(@PathVariable("id") long id, @PathVariable("commentId") long commentId, @RequestParam("comment") String comment, Model model){
-    //É sempre O Chefe a responder
-    Manager manager = managers.findByName("O Chefe");
+  public String saveReply(@PathVariable("id") long id, @PathVariable("commentId") long commentId, @RequestParam("comment") String comment, Model model, RedirectAttributes redirectAttrs, Principal principal) {
+    Manager manager = managers.findByEmail(principal.getName());
     Comment commentObj = comments.findOne(commentId);
-    Reply reply = new Reply(commentObj, comment, new Timestamp(System.currentTimeMillis()), manager);
+    Reply reply = new Reply(commentObj, comment, new Timestamp(System.currentTimeMillis()), manager, true);
     replies.save(reply);
+    redirectAttrs.addFlashAttribute("message", "Reply Posted for approval!");
     return "redirect:/hotels/{id}";
   }
 

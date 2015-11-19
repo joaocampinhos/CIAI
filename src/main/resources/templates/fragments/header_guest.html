@@ -3,10 +3,21 @@
   <div class="container">
     <div class="row">
       <a href="/"><h3 class="logo six columns">Hotelr</h3></a>
-      <div class="login six columns">
+      <div sec:authorize="isAnonymous()" class="login six columns">
         <a th:href="@{/register/}">Register</a>
         &middot;
         <a href="/login">Login</a>
+      </div>
+      <div sec:authorize="isAuthenticated()" class="login six columns">
+        <a th:text="${#authentication.name}" href="/dashboards/manager" sec:authorize="hasRole('MANAGER')">Dashboard</a>
+        <a th:text="${#authentication.name}" href="/dashboards/guest" sec:authorize="hasRole('GUEST')">Dashboard</a>
+        <a th:text="${#authentication.name}" href="/dashboards/admin" sec:authorize="hasRole('ADMIN')">Dashboard</a>
+          &middot;
+        <a href="/dashboards/manager" sec:authorize="hasRole('MANAGER')">Dashboard</a>
+        <a href="/dashboards/guest" sec:authorize="hasRole('GUEST')">Dashboard</a>
+        <a href="/dashboards/admin" sec:authorize="hasRole('ADMIN')">Dashboard</a>
+        &middot;
+          <a href="/logout">Logout</a>
       </div>
     </div>
     <p class="copy">

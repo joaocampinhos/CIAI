@@ -44,10 +44,11 @@ public class AdminDashboardController {
   @RequestMapping(method=RequestMethod.GET)
   public String index(Model model) {
     // Admin admin = admins.findByName("Jessica Pearson");
-    model.addAttribute("managers", managers.findAll());
+    model.addAttribute("managers", managers.findByPending(false));
     model.addAttribute("moderators", moderators.findAll());
     model.addAttribute("guests", guests.findAll());
     model.addAttribute("pendingHotels", hotels.findByPending(true));
+    model.addAttribute("pendingManagers", managers.findByPending(true));
     return "dashboards/admin/index";
   }
 
@@ -176,6 +177,19 @@ public class AdminDashboardController {
   public String createModerator(@ModelAttribute Moderator moderator, Model model, RedirectAttributes redirectAttrs) {
     moderators.save(moderator);
     redirectAttrs.addFlashAttribute("message", "Moderator created!");
+    return "redirect:/dashboards/admin";
+  }
+
+  @RequestMapping(value="managers/{id}/approve", method=RequestMethod.POST)
+  public String approveManager(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
+    if (managers.exists(id)) {
+      Manager tmp = managers.findOne(id);
+      tmp.setPending(false);
+      managers.save(tmp);
+      redirectAttrs.addFlashAttribute("message", "Manager approved!");
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Manager doesn't exist!");
+    }
     return "redirect:/dashboards/admin";
   }
 

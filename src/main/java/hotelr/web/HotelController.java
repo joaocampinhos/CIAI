@@ -181,16 +181,16 @@ public class HotelController {
 
   // POST /hotels/{id}/bookings    - creates a new booking
   @RequestMapping(value="{id}/bookings", method=RequestMethod.POST)
-  public String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") long roomid, Model model, RedirectAttributes redirectAttrs) throws Exception {
-    Guest guest = guests.findByName("Harvey Specter");
+  public String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") long roomid, Model model, RedirectAttributes redirectAttrs, Principal principal) throws Exception {
+    Guest guest = guests.findByEmail(principal.getName());
 
     if (hotels.exists(id)) {
       Hotel hotel = hotels.findOne(id);
 
       if(hotel.getPending() == false){
 
-        if (rooms.exists(roomid)) {
-          Room room = rooms.findOne(roomid);
+        if (roomTypes.exists(roomid) && hotel.hasRoomType(roomid)) {
+          Room room = rooms.findByHotelAndType(hotel, roomTypes.findOne(roomid));
 
           try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -237,9 +237,8 @@ public class HotelController {
 
   // POST /hotels/{id}/comments   - creates a new comment for the hotel
   @RequestMapping(value="{id}/comments", method=RequestMethod.POST)
-  public String saveComment(@PathVariable("id") long id, @RequestParam("comment") String comment, Model model, RedirectAttributes redirectAttrs) {
-    //É sempre o Toni a postar
-    Guest guest = guests.findByName("Harvey Specter");
+  public String saveComment(@PathVariable("id") long id, @RequestParam("comment") String comment, Model model, Principal principal, RedirectAttributes redirectAttrs) {
+    Guest guest = guests.findByEmail(principal.getName());
     Hotel hotel = hotels.findOne(id);
     Comment commentObj = new Comment(guest, comment, new Timestamp(System.currentTimeMillis()), hotel, true);
     comments.save(commentObj);

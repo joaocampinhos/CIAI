@@ -95,7 +95,8 @@ header .logo {
   margin: 0;
 }
 
-.login {
+.login,
+.logged {
   display: inline block;
   line-height: 5rem;
   text-align: right;
@@ -106,6 +107,11 @@ header .logo {
 
 .login a {
   color: white;
+  text-decoration: none;
+}
+
+.logged a {
+  color: #43bb95;
   text-decoration: none;
 }
 

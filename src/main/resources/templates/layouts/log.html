@@ -24,10 +24,28 @@ html, body {
 </style>
   </head>
   <body>
+    <div th:if="${message != null}" class="message-info">
+      <div class="container message isle-1-v">
+        <span th:text="${message}"/>
+        <span class="message-close right">✖</span>
+      </div>
+    </div>
+    <div th:if="${error != null}" class="message-error">
+      <div class="container message isle-1-v">
+        <span th:text="${error}"/>
+        <span class="message-close right">✖</span>
+      </div>
+    </div>
+    <div th:if="${param.error != null}" class="message-error">
+      <div class="container message isle-1-v">
+        <span th:text="${'Bad credentials.'}"/>
+        <span class="message-close right">✖</span>
+      </div>
+    </div>
 
     <div class="log-form">
 
-      <img src="/images/logo.png" class="logo-img"/>
+      <a href="/"><img src="/images/logo.png" class="logo-img"/></a>
 
       <div th:include="this :: content"></div>
 

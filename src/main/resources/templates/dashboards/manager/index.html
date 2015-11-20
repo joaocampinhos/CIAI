@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" th:include="layouts/dashboard :: page">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" th:include="layouts/dashboard :: page">
   <head>
   </head>
   <body>
@@ -77,10 +77,10 @@
           </div>
           <br/>
           <a class="button button-blue" href="/dashboards/manager/hotels/new">New Hotel</a>
+          <div th:if="${manager.hotels.size() > 0}">
           <br/>
           <br/>
-          <br/>
-          <div class="panel">
+          <div class="panel" th:if="${manager.hotels.size() > 0}">
             <div class="title">
               Bookings
             </div>
@@ -136,7 +136,7 @@
             </div>
           </div>
           <br/>
-          <a class="button button-blue" href="/dashboards/manager/bookings/new">New Booking</a>
+          <a class="button button-blue" href="/dashboards/manager/bookings/new" th:if="${manager.hotels.size() > 0}">New Booking</a>
           <br/>
           <br/>
           <br/>
@@ -182,6 +182,7 @@
               </table>
               <h5 th:if="${comments.size() == 0}" class="clear isle-1-v isle-1-h">There are no new comments</h5>
             </div>
+          </div>
           </div>
           <br/>
         </div>

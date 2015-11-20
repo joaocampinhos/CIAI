@@ -169,7 +169,7 @@ public class HotelController {
   }
 
   @RequestMapping(value="{id}/bookings", method=RequestMethod.GET)
-  @AllowedForEditOrDeleteHotel // TODO: is this ok?
+  @AllowedForEditOrDeleteHotel
   public String listBookings(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam(value="roomtype", required=false) String roomType, Model model) throws Exception {
     Hotel hotel = hotels.findOne(id);
 

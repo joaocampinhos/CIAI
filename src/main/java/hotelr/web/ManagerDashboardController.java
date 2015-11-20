@@ -68,7 +68,7 @@ public class ManagerDashboardController {
 
   @AllowedForEditOrDeleteHotel
   @RequestMapping(value="hotels/{id}/occupancy",method=RequestMethod.GET, produces={"text/plain","application/json"})
-  public @ResponseBody String occupancy(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure) {
+  public @ResponseBody String occupancy(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure) throws Exception {
     Hotel hotel = hotels.findOne(id);
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -78,7 +78,7 @@ public class ManagerDashboardController {
     int occupied = bookings.countBookingsGivenDate(hotel, new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()));
     int total = rooms.countRooms(hotel);
 
-    double result = (occupied / total) * 100.0
+    double result = (occupied / total) * 100.0;
 
     return "{\"occupancy\":" + result + "}";
   }

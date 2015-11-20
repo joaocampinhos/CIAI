@@ -78,7 +78,7 @@ public class ManagerDashboardController {
     int occupied = bookings.countBookingsGivenDate(hotel, new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()));
     int total = rooms.countRooms(hotel);
 
-    double result = (occupied / total) * 100.0;
+    double result = ((double) occupied / (double) total) * 100.0;
 
     return "{\"occupancy\":" + result + "}";
   }

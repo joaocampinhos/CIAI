@@ -120,7 +120,7 @@
               </div>
             </div>
             <hr class="clear isle-1-v"/>
-            <div th:unless="${comment.reply}" class="media comment comment-write">
+            <div th:unless="${comment.reply}"  th:if="${#authentication.name == hotel.manager.email }" class="media comment comment-write">
               <form method="post" th:action="@{|/hotels/${hotel.id}/comments/${comment.id}|}">
                 <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
                 <p class="media__body">
@@ -131,7 +131,7 @@
             </div>
           </div>
           <div class="media comment comment-write">
-            <form method="post" th:action="@{|/hotels/${hotel.id}/comments|}">
+            <form sec:authorize="hasRole('GUEST')" method="post" th:action="@{|/hotels/${hotel.id}/comments|}">
               <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" class="avatar media__img"/>
               <p class="media__body">
               <textarea name="comment"></textarea>

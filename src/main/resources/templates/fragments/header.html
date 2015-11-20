@@ -11,10 +11,12 @@
       <a th:text="${#authentication.name}" href="/dashboards/manager" sec:authorize="hasRole('MANAGER')">Dashboard</a>
       <a th:text="${#authentication.name}" href="/dashboards/guest" sec:authorize="hasRole('GUEST')">Dashboard</a>
       <a th:text="${#authentication.name}" href="/dashboards/admin" sec:authorize="hasRole('ADMIN')">Dashboard</a>
+      <a th:text="${#authentication.name}" href="/dashboards/moderator" sec:authorize="hasRole('MODERATOR')">Dashboard</a>
       &middot;
       <a href="/dashboards/manager" sec:authorize="hasRole('MANAGER')">Dashboard</a>
       <a href="/dashboards/guest" sec:authorize="hasRole('GUEST')">Dashboard</a>
       <a href="/dashboards/admin" sec:authorize="hasRole('ADMIN')">Dashboard</a>
+      <a href="/dashboards/moderator" sec:authorize="hasRole('MODERATOR')">Dashboard</a>
       &middot;
       <a href="/logout">Logout</a>
     </div>

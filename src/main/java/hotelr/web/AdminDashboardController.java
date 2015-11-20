@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Controller
 @RequestMapping(value="/dashboards/admin")
@@ -175,6 +177,8 @@ public class AdminDashboardController {
 
   @RequestMapping(value="moderators", method=RequestMethod.POST)
   public String createModerator(@ModelAttribute Moderator moderator, Model model, RedirectAttributes redirectAttrs) {
+    PasswordEncoder encoder = new BCryptPasswordEncoder();
+    moderator.setPassword(encoder.encode(moderator.getPassword()));
     moderators.save(moderator);
     redirectAttrs.addFlashAttribute("message", "Moderator created!");
     return "redirect:/dashboards/admin";

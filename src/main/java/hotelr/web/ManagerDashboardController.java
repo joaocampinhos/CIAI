@@ -50,9 +50,6 @@ public class ManagerDashboardController {
 
   @RequestMapping(method=RequestMethod.GET)
   public String index(Model model, Principal principal, RedirectAttributes redirectAttrs) {
-    long time = System.currentTimeMillis();
-    Timestamp begin = new Timestamp(time);
-    Timestamp end = new Timestamp(time + (24*60*60*1000));
     if(managers.exists(managers.findByEmail(principal.getName()).getId())) {
       Manager manager = managers.findByEmail(principal.getName());
       if(manager.getPending() == false) {
@@ -67,6 +64,23 @@ public class ManagerDashboardController {
       redirectAttrs.addFlashAttribute("error", "Manager doesn't exist!");
       return "redirect:/";
     }
+  }
+
+  @AllowedForEditOrDeleteHotel
+  @RequestMapping(value="hotels/{id}/occupancy",method=RequestMethod.GET, produces={"text/plain","application/json"})
+  public @ResponseBody String occupancy(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure) {
+    Hotel hotel = hotels.findOne(id);
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Date dArrival = sdf.parse(arrival);
+    Date dDeparture = sdf.parse(departure);
+
+    int occupied = bookings.countBookingsGivenDate(hotel, new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()));
+    int total = rooms.countRooms(hotel);
+
+    double result = (occupied / total) * 100.0
+
+    return "{\"occupancy\":" + result + "}";
   }
 
   @AllowedForEditOrDeleteHotel

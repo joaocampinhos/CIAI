@@ -1,13 +1,8 @@
 package hotelr.repository;
 
 import hotelr.model.*;
+import org.springframework.transaction.annotation.Transactional;
 
-import org.springframework.data.repository.CrudRepository;
-
-
-public interface ModeratorRepository extends CrudRepository<Moderator, Long> {
-
-  Moderator findByName(String name);
-
-}
+@Transactional
+public interface ModeratorRepository extends UserRepository<Moderator> {}
 

@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -19,6 +22,7 @@ import java.sql.Timestamp;
 
 
 @SpringBootApplication
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled=true)
 public class Application implements CommandLineRunner {
 
   private static final Logger log = LoggerFactory.getLogger(Application.class);
@@ -64,19 +68,21 @@ public class Application implements CommandLineRunner {
   public void run(String... strings) throws Exception {
     log.info("Setting up seed data");
 
+    PasswordEncoder encoder = new BCryptPasswordEncoder();
+
     managers.deleteAll();
-    Manager boss = new Manager(1, "O Chefe", "boss@hotelr.com", "boss123");
+    Manager boss = new Manager(1, "O Chefe", "boss@hotelr.com", encoder.encode("boss123"));
     managers.save(boss);
 
     guests.deleteAll();
     Guest myGuests[] = {
-        new Guest(2, "Harvey Specter", "harvey@pearsonspecterlitt.com", "imthebest"),
-        new Guest(3, "Toni", "toni@vitominas.pt", "12345")
+        new Guest(2, "Harvey Specter", "harvey@pearsonspecterlitt.com", encoder.encode("imthebest")),
+        new Guest(3, "Toni", "toni@vitominas.pt", encoder.encode("12345"))
     };
     for(Guest guest: myGuests) guests.save(guest);
 
     admins.deleteAll();
-    Admin admin = new Admin(4, "Jessica Pearson", "jessica@pearsonspecterlitt.com", "god");
+    Admin admin = new Admin(4, "Jessica Pearson", "jessica@pearsonspecterlitt.com", encoder.encode("god"));
     admins.save(admin);
 
     hotels.deleteAll();

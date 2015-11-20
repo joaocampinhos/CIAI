@@ -1,13 +1,8 @@
 package hotelr.repository;
 
 import hotelr.model.*;
+import org.springframework.transaction.annotation.Transactional;
 
-import org.springframework.data.repository.CrudRepository;
-
-
-public interface AdminRepository extends CrudRepository<Admin, Long> {
-
-  Admin findByName(String name);
-
-}
+@Transactional
+public interface AdminRepository extends UserRepository<Admin> {}
 

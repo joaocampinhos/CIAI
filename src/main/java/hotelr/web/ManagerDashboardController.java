@@ -49,8 +49,8 @@ public class ManagerDashboardController {
 
   @RequestMapping(method=RequestMethod.GET)
   public String index(Model model, Principal principal, RedirectAttributes redirectAttrs) {
-    if(managers.exists(managers.findByEmail(principal.getName()).getId())){
-      Manager manager = managers.findByEmail(principal.getName());
+  if(managers.exists(managers.findByEmail(principal.getName()).getId())){
+    Manager manager = managers.findByEmail(principal.getName());
       if(manager.getPending() == false){
         model.addAttribute("comments", comments.findWithNoReply(manager));
         model.addAttribute("manager", manager);

@@ -18,5 +18,8 @@ public interface RoomRepository extends CrudRepository<Room, Long> {
   Room findRoomByAvailability(@Param("arrival") Timestamp arrival, @Param("departure") Timestamp departure, @Param("hotel") Hotel hotel, @Param("roomtype") RoomType roomType);
 
   Room findByHotelAndType(Hotel hotel, RoomType roomType);
+
+  @Query("SELECT SUM(r.number) FROM Room r WHERE r.hotel = :hotel")
+  int countRooms(@Param("hotel") Hotel hotel);
 }
 

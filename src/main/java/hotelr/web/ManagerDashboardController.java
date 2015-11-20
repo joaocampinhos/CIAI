@@ -50,9 +50,9 @@ public class ManagerDashboardController {
 
   @RequestMapping(method=RequestMethod.GET)
   public String index(Model model, Principal principal, RedirectAttributes redirectAttrs) {
-  if(managers.exists(managers.findByEmail(principal.getName()).getId())){
-    Manager manager = managers.findByEmail(principal.getName());
-      if(manager.getPending() == false){
+    if(managers.exists(managers.findByEmail(principal.getName()).getId())) {
+      Manager manager = managers.findByEmail(principal.getName());
+      if(manager.getPending() == false) {
         model.addAttribute("comments", comments.findWithNoReply(manager));
         model.addAttribute("manager", manager);
         return "dashboards/manager/index";
@@ -64,6 +64,23 @@ public class ManagerDashboardController {
       redirectAttrs.addFlashAttribute("error", "Manager doesn't exist!");
       return "redirect:/";
     }
+  }
+
+  @AllowedForEditOrDeleteHotel
+  @RequestMapping(value="hotels/{id}/occupancy",method=RequestMethod.GET, produces={"text/plain","application/json"})
+  public @ResponseBody String occupancy(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure) throws Exception {
+    Hotel hotel = hotels.findOne(id);
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Date dArrival = sdf.parse(arrival);
+    Date dDeparture = sdf.parse(departure);
+
+    int occupied = bookings.countBookingsGivenDate(hotel, new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()));
+    int total = rooms.countRooms(hotel);
+
+    double result = ((double) occupied / (double) total) * 100.0;
+
+    return "{\"occupancy\":" + result + "}";
   }
 
   @AllowedForEditOrDeleteHotel
@@ -79,9 +96,8 @@ public class ManagerDashboardController {
   }
 
   @RequestMapping(value="hotels/new", method=RequestMethod.GET)
-  public String newHotel(Model model, RedirectAttributes redirectAttrs) {
-    //alterar isto para as auths!!!
-    Manager manager = managers.findOne(managers.findByName("O Chefe").getId());
+  public String newHotel(Model model, RedirectAttributes redirectAttrs, Principal principal) {
+    Manager manager = managers.findByEmail(principal.getName());
     if(manager.getPending() == false){
       Hotel a = new Hotel();
       model.addAttribute("hotel", a);
@@ -259,7 +275,6 @@ public class ManagerDashboardController {
   }
 
   @RequestMapping(value="bookings/new",method=RequestMethod.GET)
-  @AllowedForEditOrDeleteHotel
   public String newBooking(Model model, Principal principal, RedirectAttributes redirectAttrs) {
     Manager manager = managers.findByEmail(principal.getName());
     model.addAttribute("manager", manager);
@@ -269,14 +284,13 @@ public class ManagerDashboardController {
   }
 
   @RequestMapping(value="bookings",method=RequestMethod.POST)
-  @AllowedForEditOrDeleteHotel
-  public String update(@RequestParam("hotel") long hotelid, @RequestParam("guest") long guestid, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") RoomType roomType, Model model, RedirectAttributes redirectAttrs) {
-    if (hotels.exists(hotelid)) {
+  public String update(@RequestParam("hotel") long hotelid, @RequestParam("guest") long guestid, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") long roomType, Model model, RedirectAttributes redirectAttrs, Principal principal) {
+    if (hotels.exists(hotelid) && hotels.findOne(hotelid).getManager().getEmail().equals(principal.getName())) {
       Hotel hotel = hotels.findOne(hotelid);
 
       if (guests.exists(guestid)) {
         Guest guest = guests.findOne(guestid);
-        Room room = rooms.findByHotelAndType(hotel, roomType);
+        Room room = rooms.findOne(roomType);
 
         if (room != null) {
           try {
@@ -307,7 +321,7 @@ public class ManagerDashboardController {
       }
 
     } else {
-      redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
+      redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist or you don't manage it!");
     }
 
     return "redirect:/dashboards/manager";

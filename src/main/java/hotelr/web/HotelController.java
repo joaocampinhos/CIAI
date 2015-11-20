@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.security.access.annotation.Secured;
 
 import java.sql.Timestamp;
 import java.util.Iterator;
@@ -187,7 +188,7 @@ public class HotelController {
   }
 
   // POST /hotels/{id}/bookings    - creates a new booking
-  @AllowedForBookingCreation
+  @Secured("ROLE_GUEST")
   @RequestMapping(value="{id}/bookings", method=RequestMethod.POST)
   public String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") long roomid, Model model, RedirectAttributes redirectAttrs, Principal principal) throws Exception {
     Guest guest = guests.findByEmail(principal.getName());

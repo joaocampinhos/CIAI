@@ -45,7 +45,23 @@
         </div>
         <div class="five columns">
           <br/>
-          <form th:action="'/hotels/'+${hotel.id}+'/bookings'" method="POST">
+            <a th:href="'/hotels/'+${hotel.id}+'/edit'" th:if="${#authentication.name == hotel.manager.email }" class="button button-primary button-full">Edit Hotel</a>
+          <form sec:authorize="isAnonymous()" th:action="'/hotels/'+${hotel.id}+'/bookings'" method="POST">
+            <label>Check-in</label>
+            <input name="arrival" th:value="${param.arrival[0]}" th:unless="${param.arrival == null}" class="clear" type="date"/>
+            <input name="arrival" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.arrival != null}" class="clear" type="date"/>
+            <label>Check-out</label>
+            <input name="departure" th:value="${param.departure[0]}" th:unless="${param.departure == null}" class="clear" type="date"/>
+            <input name="departure" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.departure != null}" class="clear" type="date"/>
+            <label>Room type</label>
+            <select name="roomtype">
+              <option th:each="room: ${hotel.rooms}" data-th-attr="data-price=${room.price}" th:selected="${param.roomtype[0] == room.type.name+''}" th:value="${room.type.id}" th:unless="${param.roomtype == null}" th:text="${room.type.name}"/>
+              <option th:each="room: ${hotel.rooms}" data-th-attr="data-price=${room.price}" th:value="${room.type.id}" th:unless="${param.roomtype != null}" th:text="${room.type.name}"/>
+            </select>
+            <h4>Preço: <span id="price"></span>€</h4>
+            <button class="button button-primary" type="submit">Book</button>
+          </form>
+            <form sec:authorize="hasRole('GUEST')" th:action="'/hotels/'+${hotel.id}+'/bookings'" method="POST">
             <label>Check-in</label>
             <input name="arrival" th:value="${param.arrival[0]}" th:unless="${param.arrival == null}" class="clear" type="date"/>
             <input name="arrival" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.arrival != null}" class="clear" type="date"/>

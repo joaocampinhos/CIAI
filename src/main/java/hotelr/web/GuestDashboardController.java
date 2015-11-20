@@ -3,6 +3,7 @@ package hotelr.web;
 import hotelr.repository.*;
 import hotelr.model.*;
 import hotelr.exception.*;
+import hotelr.security.*;
 
 import java.util.List;
 import java.util.Date;
@@ -47,6 +48,7 @@ public class GuestDashboardController {
     return "dashboards/guest/bookings";
   }
 
+  @AllowedForDeleteBooking
   @RequestMapping(value="bookings/{id}", method=RequestMethod.DELETE)
   public String cancel(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
     if (bookings.exists(id)) {
@@ -58,6 +60,7 @@ public class GuestDashboardController {
     return "redirect:/dashboards/guest";
   }
 
+  @AllowedForEditBooking
   @RequestMapping(value="bookings/{id}/edit", method=RequestMethod.GET)
   public String edit(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
     if (bookings.exists(id)) {
@@ -72,6 +75,7 @@ public class GuestDashboardController {
     }
   }
 
+  @AllowedForEditBooking
   @RequestMapping(value="bookings/{id}", method=RequestMethod.POST)
   public String edit(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departuree") String departure, @RequestParam("roomtype") long roomid, Model model, RedirectAttributes redirectAttrs) throws Exception {
     if (bookings.exists(id)) {

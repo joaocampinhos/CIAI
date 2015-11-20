@@ -11,5 +11,5 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @PreAuthorize(AllowedForEditOrDeleteHotel.Condition)
 public @interface AllowedForEditOrDeleteHotel {
   String Condition = "@SecurityService.canEditOrDeleteHotel(principal,#id)";
-  String Condition2 = "@SecurityService.canEditOrDeleteHotel(principal, #vars.hotel.id)";
+  String Condition2 = "@SecurityService.canEditOrDeleteHotel(principal,#vars.hotel.id)";
 }

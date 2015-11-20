@@ -3,6 +3,7 @@ package hotelr.web;
 import hotelr.repository.*;
 import hotelr.model.*;
 import hotelr.exception.*;
+import hotelr.security.*;
 
 import java.util.List;
 import java.util.Date;
@@ -85,6 +86,7 @@ public class HotelController {
   }
 
   // GET  /hotels/new         - the form to fill the data for a new hotel
+  @AllowedForHotelCreation
   @RequestMapping(value="/new", method=RequestMethod.GET)
   public String newHotel(Model model) {
     model.addAttribute("hotel", new Hotel());
@@ -92,6 +94,7 @@ public class HotelController {
   }
 
   // POST /hotels             - creates a new hotel
+  @AllowedForHotelCreation
   @RequestMapping(method=RequestMethod.POST)
   public String saveIt(@ModelAttribute Hotel hotel, Model model, Principal principal) {
     hotel.setManager(managers.findByEmail(principal.getName()));
@@ -136,6 +139,7 @@ public class HotelController {
   }
 
   // GET  /hotels/{id}/edit   - the form to edit the hotel with identifier {id}
+  @AllowedForEditOrDeleteHotel
   @RequestMapping(value="{id}/edit", method=RequestMethod.GET)
   public String edit(@PathVariable("id") long id, Model model) {
     model.addAttribute("hotel", hotels.findOne(id));
@@ -143,6 +147,7 @@ public class HotelController {
   }
 
   // POST /hotels/{id}        - update the hotel with identifier {id}
+  @AllowedForEditOrDeleteHotel
   @RequestMapping(value="{id}", method=RequestMethod.POST)
   public String editSave(@PathVariable("id") long id, Hotel hotel, Model model) {
     hotels.save(hotel);
@@ -150,6 +155,7 @@ public class HotelController {
   }
 
   // DELETE /hotels/{id}  - deletes the hotel with identifier {id}
+  @AllowedForEditOrDeleteHotel
   @RequestMapping(value="{id}", method=RequestMethod.DELETE)
   public String cancel(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(id)) {
@@ -162,6 +168,7 @@ public class HotelController {
   }
 
   @RequestMapping(value="{id}/bookings", method=RequestMethod.GET)
+  @AllowedForEditOrDeleteHotel // TODO: is this ok?
   public String listBookings(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam(value="roomtype", required=false) String roomType, Model model) throws Exception {
     Hotel hotel = hotels.findOne(id);
 
@@ -180,6 +187,7 @@ public class HotelController {
   }
 
   // POST /hotels/{id}/bookings    - creates a new booking
+  @AllowedForBookingCreation
   @RequestMapping(value="{id}/bookings", method=RequestMethod.POST)
   public String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") long roomid, Model model, RedirectAttributes redirectAttrs, Principal principal) throws Exception {
     Guest guest = guests.findByEmail(principal.getName());
@@ -225,6 +233,7 @@ public class HotelController {
   }
 
   // POST /hotels/{id}/rooms   - creates a new collection of rooms for the hotel
+  @AllowedForEditOrDeleteHotel
   @RequestMapping(value="{id}/rooms", method=RequestMethod.POST)
   public String addRooms(@PathVariable("id") long id, @RequestParam("roomtype") String roomType, @RequestParam("number") int number, @RequestParam("price") int price, Model model) {
     Hotel hotel = hotels.findOne(id);
@@ -236,6 +245,7 @@ public class HotelController {
   }
 
   // POST /hotels/{id}/comments   - creates a new comment for the hotel
+  @AllowedForCommentCreation
   @RequestMapping(value="{id}/comments", method=RequestMethod.POST)
   public String saveComment(@PathVariable("id") long id, @RequestParam("comment") String comment, Model model, Principal principal, RedirectAttributes redirectAttrs) {
     Guest guest = guests.findByEmail(principal.getName());
@@ -259,6 +269,7 @@ public class HotelController {
 
 
   // POST /hotels/{id}/comments/{commentId} - creates a new reply for the comment
+  @AllowedForReplyCreation
   @RequestMapping(value="{id}/comments/{commentId}", method=RequestMethod.POST)
   public String saveReply(@PathVariable("id") long id, @PathVariable("commentId") long commentId, @RequestParam("comment") String comment, Model model, RedirectAttributes redirectAttrs, Principal principal) {
     Manager manager = managers.findByEmail(principal.getName());

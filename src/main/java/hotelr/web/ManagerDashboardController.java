@@ -3,6 +3,7 @@ package hotelr.web;
 import hotelr.repository.*;
 import hotelr.model.*;
 import hotelr.exception.*;
+import hotelr.security.*;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -65,6 +66,7 @@ public class ManagerDashboardController {
     }
   }
 
+  @AllowedForEditOrDeleteHotel
   @RequestMapping(value="hotels/{id}/edit",method=RequestMethod.GET)
   public String edit(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(id)) {
@@ -106,6 +108,7 @@ public class ManagerDashboardController {
   }
 
   @RequestMapping(value="hotels/{id}",method=RequestMethod.POST)
+  @AllowedForEditOrDeleteHotel
   public String update(@PathVariable("id") long id, Hotel hotel, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(id)) {
       if (hotel.getId() == id) {
@@ -122,6 +125,7 @@ public class ManagerDashboardController {
   }
 
   @RequestMapping(value="hotels/{id}/rooms/new", method=RequestMethod.GET)
+  @AllowedForEditOrDeleteHotel
   public String newRoom(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(id)) {
       List<RoomType> listTypes = roomTypes.findTypesNotInHotel(hotels.findOne(id));
@@ -138,34 +142,36 @@ public class ManagerDashboardController {
   }
 
   @RequestMapping(value="hotels/{id}/rooms", method=RequestMethod.POST)
-    public String createRoom(@PathVariable("id") long id, @ModelAttribute Room room, @RequestParam("newtype") String newtype, Model model, RedirectAttributes redirectAttrs) {
-      if (hotels.exists(id)) {
-        room.setHotel(hotels.findOne(id));
-        if (!newtype.equals("")) {
-          RoomType type = new RoomType();
-          type.setName(newtype);
-          roomTypes.save(type);
-          room.setType(type);
+  @AllowedForEditOrDeleteHotel
+  public String createRoom(@PathVariable("id") long id, @ModelAttribute Room room, @RequestParam("newtype") String newtype, Model model, RedirectAttributes redirectAttrs) {
+    if (hotels.exists(id)) {
+      room.setHotel(hotels.findOne(id));
+      if (!newtype.equals("")) {
+        RoomType type = new RoomType();
+        type.setName(newtype);
+        roomTypes.save(type);
+        room.setType(type);
+        rooms.save(room);
+        redirectAttrs.addFlashAttribute("message", "Room created!");
+      }
+      else {
+        if (room.getType() != null) {
           rooms.save(room);
           redirectAttrs.addFlashAttribute("message", "Room created!");
         }
         else {
-          if (room.getType() != null) {
-            rooms.save(room);
-            redirectAttrs.addFlashAttribute("message", "Room created!");
-          }
-          else {
-            redirectAttrs.addFlashAttribute("error", "You need to provide a valid Room Type");
-          }
+          redirectAttrs.addFlashAttribute("error", "You need to provide a valid Room Type");
         }
       }
-      else {
-        redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
-      }
-      return "redirect:/dashboards/manager/hotels/"+id+"/rooms/new";
     }
+    else {
+      redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
+    }
+    return "redirect:/dashboards/manager/hotels/"+id+"/rooms/new";
+  }
 
   @RequestMapping(value="hotels/{id}/rooms/{roomid}/edit",method=RequestMethod.GET)
+  @AllowedForEditOrDeleteHotel
   public String editRoom(@PathVariable("id") long id, @PathVariable("roomid") long roomid, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(id)) {
       if (rooms.exists(roomid)) {
@@ -188,6 +194,7 @@ public class ManagerDashboardController {
   }
 
   @RequestMapping(value="hotels/{id}/rooms/{roomid}",method=RequestMethod.POST)
+  @AllowedForEditOrDeleteHotel
   public String updateRoom(@PathVariable("id") long id, @PathVariable("roomid") long roomid, Room room, Model model, RedirectAttributes redirectAttrs) {
       if (hotels.exists(id)) {
       if (rooms.exists(roomid)) {
@@ -214,6 +221,7 @@ public class ManagerDashboardController {
   }
 
   @RequestMapping(value="hotels/{id}", method=RequestMethod.DELETE)
+  @AllowedForEditOrDeleteHotel
   public String deleteHotel(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(id)) {
       hotels.delete(id);
@@ -225,6 +233,7 @@ public class ManagerDashboardController {
   }
 
   @RequestMapping(value="bookings/{id}", method=RequestMethod.DELETE)
+  @AllowedForEditOrDeleteHotel
   public String cancel(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
     if (bookings.exists(id)) {
       bookings.delete(id);
@@ -236,6 +245,7 @@ public class ManagerDashboardController {
   }
 
   @RequestMapping(value="bookings/{id}/approve", method=RequestMethod.POST)
+  @AllowedForEditOrDeleteHotel
   public String approveBooking(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
     if (bookings.exists(id)) {
       Booking tmp = bookings.findOne(id);
@@ -249,6 +259,7 @@ public class ManagerDashboardController {
   }
 
   @RequestMapping(value="bookings/new",method=RequestMethod.GET)
+  @AllowedForEditOrDeleteHotel
   public String newBooking(Model model, Principal principal, RedirectAttributes redirectAttrs) {
     Manager manager = managers.findByEmail(principal.getName());
     model.addAttribute("manager", manager);
@@ -258,6 +269,7 @@ public class ManagerDashboardController {
   }
 
   @RequestMapping(value="bookings",method=RequestMethod.POST)
+  @AllowedForEditOrDeleteHotel
   public String update(@RequestParam("hotel") long hotelid, @RequestParam("guest") long guestid, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomtype") RoomType roomType, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(hotelid)) {
       Hotel hotel = hotels.findOne(hotelid);

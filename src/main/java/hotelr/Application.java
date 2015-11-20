@@ -80,7 +80,7 @@ public class Application implements CommandLineRunner {
     guests.deleteAll();
     Guest myGuests[] = {
         new Guest(2, "Harvey Specter", "harvey@pearsonspecterlitt.com", encoder.encode("imthebest")),
-        new Guest(3, "Toni", "toni@vitominas.pt", "12345")
+        new Guest(3, "Toni", "toni@vitominas.pt", encoder.encode("12345"))
     };
     for(Guest guest: myGuests) guests.save(guest);
 

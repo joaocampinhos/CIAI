@@ -86,3 +86,25 @@ if (hotelselect) {
     request.send();
   });
 }
+
+Array.prototype.slice.call(document.querySelectorAll('.occupation-ajax')).forEach(function(e) {
+  e.addEventListener("click", function(){
+    var hotelid = this.parentElement.parentElement.querySelectorAll('.id-ajax')[0].value;
+    var arrival = this.parentElement.parentElement.querySelectorAll('input[name=arrival]')[0].value;
+    var departure = this.parentElement.parentElement.querySelectorAll('input[name=departure]')[0].value;
+
+    var request = new XMLHttpRequest();
+    request.open('GET', '/dashboards/manager/hotels/'+hotelid+'/occupancy?arrival='+arrival+'&departure='+departure, true);
+    var self = this;
+
+    request.onload = function() {
+      if (request.status >= 200 && request.status < 400) {
+        var data = JSON.parse(request.responseText);
+        data = parseFloat(data.occupancy).toFixed(2);
+        self.parentElement.parentElement.parentElement.querySelectorAll('h5 small')[0].textContent = " - "+data+"%";
+      }
+    };
+
+    request.send();
+  });
+});

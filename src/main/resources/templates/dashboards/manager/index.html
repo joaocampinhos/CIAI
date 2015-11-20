@@ -32,7 +32,7 @@
                       <div>
                         <p th:if="${hotel.pending} == true"><b>Status: </b>Pending approval</p>
                         <p th:if="${hotel.pending} == false"><b>Status: </b>Approved</p>
-                        <h5> Ocupation rate </h5>
+                        <h5> Ocupation rate <small class="primary small"></small></h5>
                         <div class="row">
                           <div class="four columns">
                             <div class="isle-1-h">
@@ -46,8 +46,9 @@
                               <input name="departure" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.departure != null}" class="button-full clear" type="date"/>
                             </div>
                           </div>
+                          <input type="hidden" th:value="${hotel.id}" class="id-ajax"/>
                           <div class="four columns">
-                            <button type="submit" class="button-full button button-green">Calculate</button>
+                            <button type="submit" class="occupation-ajax button-full button button-green">Calculate</button>
                           </div>
                         </div>
                         <br/>

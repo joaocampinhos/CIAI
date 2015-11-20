@@ -50,11 +50,9 @@ public class ManagerDashboardController {
 
   @RequestMapping(method=RequestMethod.GET)
   public String index(Model model, Principal principal, RedirectAttributes redirectAttrs) {
-    System.out.println(rooms.countRooms(hotels.findOne(1L)));
     long time = System.currentTimeMillis();
     Timestamp begin = new Timestamp(time);
     Timestamp end = new Timestamp(time + (24*60*60*1000));
-    System.out.println(bookings.countBookingsGivenDate(hotels.findOne(1L), begin, end));
     if(managers.exists(managers.findByEmail(principal.getName()).getId())) {
       Manager manager = managers.findByEmail(principal.getName());
       if(manager.getPending() == false) {
@@ -278,7 +276,7 @@ public class ManagerDashboardController {
 
       if (guests.exists(guestid)) {
         Guest guest = guests.findOne(guestid);
-        Room room = rooms.findByHotelAndType(hotel, roomTypes.findOne(roomType));
+        Room room = rooms.findOne(roomType);
 
         if (room != null) {
           try {
@@ -291,7 +289,6 @@ public class ManagerDashboardController {
 
             if (tArrival.before(tDeparture)){
               Booking booking = new Booking(tArrival, tDeparture, room.getType(), room, hotel, guest, false);
-              System.out.println(booking);
               bookings.save(booking);
 
               redirectAttrs.addFlashAttribute("message", "Booking created!");

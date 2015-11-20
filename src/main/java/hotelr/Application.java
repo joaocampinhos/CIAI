@@ -74,7 +74,7 @@ public class Application implements CommandLineRunner {
     PasswordEncoder encoder = new BCryptPasswordEncoder();
 
     managers.deleteAll();
-    Manager boss = new Manager(1, "O Chefe", "boss@hotelr.com", encoder.encode("boss123"));
+    Manager boss = new Manager(1, "O Chefe", "boss@hotelr.com", "boss123", false);
     managers.save(boss);
 
     guests.deleteAll();
@@ -93,6 +93,9 @@ public class Application implements CommandLineRunner {
         new Moderator(5, "Jose Rodrigues", "zerodrigues@rtp1.pt", "mod")
     };
     for(Moderator moderator: myModerators) moderators.save(moderator);
+
+    Manager boss2 = new Manager(6, "O Chefe2", "boss2@hotelr.com", "boss2123", true);
+    managers.save(boss2);
 
     hotels.deleteAll();
     Hotel myHotels[] = {new Hotel(1,"Marriot", "address", "category", 5, boss, false),
@@ -130,10 +133,6 @@ public class Application implements CommandLineRunner {
         new Comment(2, myGuests[1], "OMG!", new Timestamp(System.currentTimeMillis()), myHotels[0], false),
         new Comment(3, myGuests[1], "WoW!", new Timestamp(System.currentTimeMillis()), myHotels[1], false)
     };
-
-    // myHotels[0].addComment(myComments[0]);
-    // myHotels[0].addComment(myComments[1]);
-    // myHotels[1].addComment(myComments[2]);
 
     for(Comment comment: myComments) comments.save(comment);
 

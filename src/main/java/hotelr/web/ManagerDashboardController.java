@@ -48,40 +48,61 @@ public class ManagerDashboardController {
   RoomTypeRepository roomTypes;
 
   @RequestMapping(method=RequestMethod.GET)
-  public String index(Model model, Principal principal) {
-    Manager manager = managers.findByEmail(principal.getName());
-    model.addAttribute("comments", comments.findWithNoReply(manager));
-    model.addAttribute("manager", manager);
-    return "dashboards/manager/index";
+  public String index(Model model, Principal principal, RedirectAttributes redirectAttrs) {
+    if(managers.exists(managers.findByEmail(principal.getName()).getId())){
+      Manager manager = managers.findByEmail(principal.getName());
+      if(manager.getPending() == false){
+        model.addAttribute("comments", comments.findWithNoReply(manager));
+        model.addAttribute("manager", manager);
+        return "dashboards/manager/index";
+      } else {
+        redirectAttrs.addFlashAttribute("error", "Manager has not been approved yet!");
+        return "redirect:/";
+      }
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Manager doesn't exist!");
+      return "redirect:/";
+    }
   }
 
   @RequestMapping(value="hotels/{id}/edit",method=RequestMethod.GET)
   public String edit(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
     if (hotels.exists(id)) {
       model.addAttribute("hotel", hotels.findOne(id));
-
       return "hotels/edit";
     } else {
       redirectAttrs.addFlashAttribute("error", "Hotel doesn't exist!");
-
       return "redirect:/dashboards/manager";
     }
   }
 
   @RequestMapping(value="hotels/new", method=RequestMethod.GET)
-  public String newHotel(Model model) {
-    Hotel a = new Hotel();
-    model.addAttribute("hotel", a);
-    return "hotels/create";
+  public String newHotel(Model model, RedirectAttributes redirectAttrs) {
+    //alterar isto para as auths!!!
+    Manager manager = managers.findOne(managers.findByName("O Chefe").getId());
+    if(manager.getPending() == false){
+      Hotel a = new Hotel();
+      model.addAttribute("hotel", a);
+      return "hotels/create";
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Manager has not been approved yet!");
+      return "redirect:/";
+    }
   }
 
   @RequestMapping(value="hotels", method=RequestMethod.POST)
   public String createHotel(@ModelAttribute Hotel hotel, Model model, Principal principal, RedirectAttributes redirectAttrs) {
-    hotel.setManager(managers.findByEmail(principal.getName()));
-    hotel.setPending(true);
-    hotels.save(hotel);
-    redirectAttrs.addFlashAttribute("message", "Hotel created!");
-    return "redirect:/dashboards/manager/hotels/"+hotel.getId()+"/rooms/new";
+    Manager manager = managers.findByEmail(principal.getName());
+    if(manager.getPending() == false){
+      hotel.setManager(manager);
+      hotel.setPending(true);
+      hotels.save(hotel);
+      redirectAttrs.addFlashAttribute("message", "Hotel created!");
+      return "redirect:/dashboards/manager/hotels/"+hotel.getId()+"/rooms/new";
+    } else {
+      redirectAttrs.addFlashAttribute("error", "Manager has not been approved yet!");
+      return "redirect:/";
+    }
   }
 
   @RequestMapping(value="hotels/{id}",method=RequestMethod.POST)

@@ -59,6 +59,7 @@ public class RegistrationController {
       manager.setName(name);
       manager.setEmail(email);
       manager.setPassword(encoder.encode(password));
+      manager.setPending(true);
       managers.save(manager);
     } else if (type.equals("guest")) {
       Guest guest = new Guest();

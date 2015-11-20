@@ -74,7 +74,7 @@ public class Application implements CommandLineRunner {
     PasswordEncoder encoder = new BCryptPasswordEncoder();
 
     managers.deleteAll();
-    Manager boss = new Manager(1, "O Chefe", "boss@hotelr.com", "boss123", false);
+    Manager boss = new Manager(1, "O Chefe", "boss@hotelr.com", encoder.encode("boss123"), false);
     managers.save(boss);
 
     guests.deleteAll();
@@ -90,11 +90,11 @@ public class Application implements CommandLineRunner {
 
     moderators.deleteAll();
     Moderator myModerators[] = {
-        new Moderator(5, "Jose Rodrigues", "zerodrigues@rtp1.pt", "mod")
+        new Moderator(5, "Jose Rodrigues", "zerodrigues@rtp1.pt", encoder.encode("mod"))
     };
     for(Moderator moderator: myModerators) moderators.save(moderator);
 
-    Manager boss2 = new Manager(6, "O Chefe2", "boss2@hotelr.com", "boss2123", true);
+    Manager boss2 = new Manager(6, "O Chefe2", "boss2@hotelr.com", encoder.encode("boss2123"), true);
     managers.save(boss2);
 
     hotels.deleteAll();

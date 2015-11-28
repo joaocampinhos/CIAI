@@ -8,3 +8,24 @@ ehthumbs.db
 
 node_modules/
 /dist
+
+###
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Maven
+log/
+target/
+/bin/
+
+#db
+*.trace.db
+data/

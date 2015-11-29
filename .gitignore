@@ -9,6 +9,8 @@ ehthumbs.db
 node_modules/
 /dist
 
+.sass-cache/
+
 ###
 
 # Eclipse
@@ -29,3 +31,4 @@ target/
 #db
 *.trace.db
 data/
+

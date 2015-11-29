@@ -1,23 +1,22 @@
 'use strict';
 
-var React = require('react'),
-    ExampleApp;
+var React = require('react');
+var Router = require('react-router').Router;
+var Route = require('react-router').Route;
+var Link = require('react-router').Link;
+var createBrowserHistory = require('history/lib/createBrowserHistory')
 
-ExampleApp = React.createClass({
-    render: function() {
-        return (
-            /*jshint ignore:start */
-            <div>
-                <h2>Hello, React</h2>
-            </div>
-            /*jshint ignore:end */
-        );
-    }
-});
+//Pages
+var home = require('./pages/home');
+var login = require('./pages/login');
+var hotels = require('./pages/hotels');
+var hotel = require('./pages/hotel');
 
-React.render(
-    /*jshint ignore:start */
-    <ExampleApp />,
-    /*jshint ignore:end */
-    document.getElementById('app')
-);
+React.render((
+  <Router history={createBrowserHistory()}>
+    <Route path="/" component={home}/>
+    <Route path="hotels" component={hotels}/>
+    <Route path="/hotels/:hotelid" component={hotel}/>
+    <Route path="login" component={login}/>
+  </Router>
+), document.body)

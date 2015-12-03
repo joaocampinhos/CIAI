@@ -25,21 +25,16 @@ public class MvcConfig extends WebSecurityConfigurerAdapter {
   }
 
   protected void configure(HttpSecurity http) throws Exception {
+    http.csrf().disable();
+
     http
       .authorizeRequests()
         .antMatchers("/js/**", "/css/**", "/images/**", "/", "/login/**", "/register/**").permitAll()
         .antMatchers("/hotels/**").permitAll()
+        .antMatchers("/login/**").permitAll()
         .antMatchers("/dashboards/guest/**").hasRole("GUEST")
-        .antMatchers("/dashboards/admin/**").hasRole("ADMIN")
-        .antMatchers("/dashboards/manager/**").hasRole("MANAGER")
-        .antMatchers("/dashboards/moderator/**").hasRole("MODERATOR")
         .anyRequest().authenticated()
         .and()
-      .formLogin()
-          .loginPage("/login")
-          .defaultSuccessUrl("/dashboards")
-          .permitAll()
-          .and()
       .logout()
         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
         .logoutSuccessUrl("/")

@@ -7,9 +7,25 @@ import Header from './Header-home';
 import Footer from './Footer';
 
 export default React.createClass({
+  getInitialState() {
+    fetch('http://localhost:8080/hotels.json')
+    .then(function(response) {
+      if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' + response.status);
+        return;
+      }
+      return response.json()
+    }).then(function(json) {
+      console.log('parsed json', json)
+    }).catch(function(ex) {
+      console.log('parsing failed', ex)
+    })
+    return {};
+  },
   render: function() {
     return (
       <div>
+        <Messages message={{type:'info',text:'lol'}}/>
         <div >
           <form className="clear" method="GET">
             <div className="container">

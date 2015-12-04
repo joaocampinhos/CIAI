@@ -3,10 +3,11 @@ import { Link }  from 'react-router';
 
 export default React.createClass({
   getInitialState: function() {
-    {/* so se houver mensagem */}
+    if (! this.props.message) return {hidden: true};
     return {
       hidden: false,
-      type: 'error'
+      type: this.props.message.type,
+      text: this.props.message.text
     };
   },
 
@@ -20,7 +21,7 @@ export default React.createClass({
       <div>
         <div className={'message-'+this.state.type+' '+classes}>
           <div className="container message isle-1-v">
-            <span>Texto</span>
+            <span>{this.state.text}</span>
             <span onClick={this.handleClick} className="message-close right">✖</span>
           </div>
         </div>

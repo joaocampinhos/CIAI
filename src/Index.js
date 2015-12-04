@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route } from 'react-router';
 import App from './components/App';
+import createBrowserHistory from 'history/lib/createBrowserHistory'
 
 // useless
 import PoweredBy from './components/Powered-by';
@@ -15,11 +16,11 @@ import Login from './components/Login';
 window.React = React;
 
 ReactDOM.render(
-  <Router>
+    <Router history={createBrowserHistory()}>
     <Route path="/" component={Home}/>
     <Route path="login" component={Login}/>
     <Route path="hotels" component={Hotels}/>
-    <Route path="/hotels/:hotelid" component={Hotel}/>
+    <Route path="hotels/:hotelid" component={Hotel}/>
   </Router>
   , document.getElementById('content')
 );

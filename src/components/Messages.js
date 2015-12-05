@@ -2,27 +2,37 @@ import React from 'react';
 import { Link }  from 'react-router';
 
 export default React.createClass({
-  getInitialState: function() {
-    if (! this.props.message) return {hidden: true};
+  getDefaultProps: function () {
     return {
-      hidden: false,
-      type: this.props.message.type,
-      text: this.props.message.text
+      message: {
+        type: '',
+        value: ''
+      }
+    }
+  },
+  getInitialState: function () {
+    return {
+      isVisible: false
     };
   },
-
-  handleClick: function(event) {
-    this.setState({hidden: true});
+  show: function () {
+    this.setState({isVisible: true});
   },
-
+  hide: function () {
+    this.setState({isVisible: false});
+  },
   render: function() {
-    let classes = this.state.hidden ? 'hidden' : '';
+    let classes = this.props.message ? 'hidden' : '';
+    let hide = 'hidden';
+    if (this.state.isVisible) {
+      hide = '';
+    }
     return (
       <div>
-        <div className={'message-'+this.state.type+' '+classes}>
+        <div className={'message-'+this.props.message.type+' '+hide}>
           <div className="container message isle-1-v">
-            <span>{this.state.text}</span>
-            <span onClick={this.handleClick} className="message-close right">✖</span>
+            <span>{this.props.message.value}</span>
+            <span onClick={this.hide} className="message-close right">✖</span>
           </div>
         </div>
       </div>

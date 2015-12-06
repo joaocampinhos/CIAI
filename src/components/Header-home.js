@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link }  from 'react-router';
+import auth from '../services/Auth';
 
 export default React.createClass({
   render: function() {
+    const logged = auth.loggedIn()
     return (
       <header>
         <div className="cover">
@@ -10,7 +12,11 @@ export default React.createClass({
             <div className="row">
               <a href="/"><h3 className="logo six columns">Hotelr</h3></a>
               <div className="login six columns">
-                <Link to={`/login`}>Login</Link>
+                {logged ? (
+                  <Link to="/logout">Log out</Link>
+                  ) : (
+                  <Link to="/login">Log in</Link>
+                  )}
               </div>
             </div>
             <p className="copy">

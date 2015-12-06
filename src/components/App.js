@@ -9,7 +9,6 @@ export default React.createClass({
     render: function() {
     return (
       <div>
-        <Messages/>
         <Header/>
         <Footer/>
       </div>

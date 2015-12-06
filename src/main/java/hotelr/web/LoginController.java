@@ -29,7 +29,7 @@ public class LoginController {
   public @ResponseBody String login(HttpServletResponse response, @RequestParam("login") String login, @RequestParam("password") String password) throws Exception {
     User user = guests.findByEmail(login);
     if (user == null) {
-      return "{ message: { value: \"User doesn't exist.\" , type: \"error\" }}";
+      return "{ \"message\": { \"value\": \"User doesn't exist.\" , \"type\": \"error\" }}";
     }
 
     PasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -38,9 +38,9 @@ public class LoginController {
       Cookie cookie = new Cookie("session", login);
       response.addCookie(cookie);
 
-      return "{ cookie: { name: \"" + cookie.getName() + "\", value: \"" + cookie.getValue() + "\" }, message: { value: \"Login successful.\", type: \"success\"}}";
+      return "{ \"cookie\": { \"name\": \"" + cookie.getName() + "\", \"value\": \"" + cookie.getValue() + "\" }, \"message\": { \"value\": \"Login successful.\", \"type\": \"success\"}}";
     } else {
-      return "{ message: { value: \"Wrong password.\" , type: \"error\" }}";
+      return "{ \"message\": { \"value\": \"Wrong password.\" , \"type\": \"error\" }}";
     }
   }
 }

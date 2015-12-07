@@ -102,9 +102,4 @@ public class ReactController {
     return json;
   }
 
-  // TODO
-  // lista de todos os hoteis: /hotels
-  // listar com filtro: /hotels?arrival=<>&departure=<>
-  // lista de cenas de um hotel: /hotels/{id}
-  // criar booking num hotel: /hotels/{id}/bookings/new
 }

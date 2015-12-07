@@ -42,6 +42,9 @@ public class ReactController {
   @Autowired
   RoomTypeRepository roomTypes;
 
+  @Autowired
+  RoomRepository rooms;
+
   List<String> cookies = new LinkedList();
 
   @RequestMapping(value="/login", method=RequestMethod.POST)
@@ -96,6 +99,51 @@ public class ReactController {
     Hotel hotel = hotels.findOne(id);
     if(hotel == null || hotel.getPending()) return "{ \"message\": { \"value\": \"Hotel does not exist.\" , \"type\": \"error\" }}";
     else return hotel.toJSON();
+  }
+
+  @RequestMapping(value="/hotels/{id}/bookings", method=RequestMethod.POST)
+  public @ResponseBody String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomid") long roomid, @RequestParam("cookie") String cookieValue) throws Exception {
+    if (cookies.contains(cookieValue)) {
+      Guest guest = guests.findByEmail(cookieValue);
+
+      if (hotels.exists(id)) {
+        Hotel hotel = hotels.findOne(id);
+
+        if(hotel.getPending() == false) {
+          if (roomTypes.exists(roomid) && hotel.hasRoomType(roomid)) {
+            Room room = rooms.findByHotelAndType(hotel, roomTypes.findOne(roomid));
+
+            try {
+              SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+              Date dArrival = sdf.parse(arrival);
+              Date dDeparture = sdf.parse(departure);
+
+              Timestamp tArrival = new Timestamp(dArrival.getTime());
+              Timestamp tDeparture = new Timestamp(dDeparture.getTime());
+
+              if (tArrival.before(tDeparture)){
+                Booking booking = new Booking(tArrival, tDeparture, room.getType(), room, hotel, guest, true);
+                bookings.save(booking);
+
+                return "{ \"message\": { \"value\": \"Booking created.\" , \"type\": \"success\" }}";
+              } else {
+                return "{ \"message\": { \"value\": \"Arrival date has to be before departure.\" , \"type\": \"error\" }}";
+              }
+            } catch (Exception e) {
+              return "{ \"message\": { \"value\": \"Dates are incorrect.\" , \"type\": \"error\" }}";
+            }
+          } else {
+            return "{ \"message\": { \"value\": \"That room does not exist.\" , \"type\": \"error\" }}";
+          }
+        } else {
+          return "{ \"message\": { \"value\": \"Hotel does not exist.\" , \"type\": \"error\" }}";
+        }
+      } else {
+        return "{ \"message\": { \"value\": \"Hotel does not exist.\" , \"type\": \"error\" }}";
+      }
+    } else {
+      return "{ \"message\": { \"value\": \"You are not logged in.\" , \"type\": \"error\" }}";
+    }
   }
 
   private String hotelsToJSON(Iterator<Hotel> hot) {

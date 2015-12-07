@@ -29,15 +29,6 @@ public class MvcConfig extends WebSecurityConfigurerAdapter {
 
     http
       .authorizeRequests()
-        .antMatchers("/js/**", "/css/**", "/images/**", "/", "/login/**", "/register/**").permitAll()
-        .antMatchers("/hotels/**").permitAll()
-        .antMatchers("/login/**").permitAll()
-        .antMatchers("/dashboards/guest/**").hasRole("GUEST")
-        .anyRequest().authenticated()
-        .and()
-      .logout()
-        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-        .logoutSuccessUrl("/")
-        .permitAll();
+        .antMatchers("/js/**", "/css/**", "/hotels/**","/images/**", "/", "/logoff/**", "/login/**").permitAll();
   }
 }

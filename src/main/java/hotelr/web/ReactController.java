@@ -4,6 +4,8 @@ import hotelr.model.*;
 import hotelr.repository.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+import java.util.LinkedList;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,27 +22,36 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Controller
-@RequestMapping(value="/login")
-public class LoginController {
+@RequestMapping(value="/")
+public class ReactController {
   @Autowired
   GuestRepository guests;
 
-  @RequestMapping(method=RequestMethod.POST)
-  public @ResponseBody String login(HttpServletResponse response, @RequestParam("login") String login, @RequestParam("password") String password) throws Exception {
+  List<String> cookies = new LinkedList();
+
+  @RequestMapping(value="/login", method=RequestMethod.POST)
+  public @ResponseBody String login(@RequestParam("login") String login, @RequestParam("password") String password) throws Exception {
     User user = guests.findByEmail(login);
     if (user == null) {
       return "{ \"message\": { \"value\": \"User doesn't exist.\" , \"type\": \"error\" }}";
     }
 
     PasswordEncoder encoder = new BCryptPasswordEncoder();
-    System.out.println(password + ";" + user.getPassword()   + ";" + encoder.encode(password));
     if (encoder.matches(password, user.getPassword())) {
-      Cookie cookie = new Cookie("session", login);
-      response.addCookie(cookie);
+      cookies.add(login);
 
-      return "{ \"cookie\": { \"name\": \"" + cookie.getName() + "\", \"value\": \"" + cookie.getValue() + "\" }, \"message\": { \"value\": \"Login successful.\", \"type\": \"success\"}}";
+      System.out.println(cookies);
+      return "{ \"cookie\": { \"name\": \"session\", \"value\": \"" + login + "\" }, \"message\": { \"value\": \"Login successful.\", \"type\": \"success\"}}";
     } else {
       return "{ \"message\": { \"value\": \"Wrong password.\" , \"type\": \"error\" }}";
     }
+  }
+
+  @RequestMapping(value="/logoff", method=RequestMethod.POST)
+  public @ResponseBody String logoff(@RequestParam("cookie") String cookieValue) throws Exception {
+    System.out.println(cookies);
+
+    if (cookies.remove(cookieValue)) return "{ \"message\": \"Logout successful.\", \"type\": \"success\" }";
+    else return "{ \"message\": \"Invalid cookie, could not logout successfully.\", \"type\": \"error\" }";
   }
 }

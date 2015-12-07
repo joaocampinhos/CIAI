@@ -15,7 +15,6 @@ import Login from './components/Login';
 import Messages from './components/Messages';
 
 import auth from './services/Auth';
-import messages from './services/messages';
 
 window.React = React;
 
@@ -98,7 +97,8 @@ const Logout = React.createClass({
 
   componentDidMount() {
     auth.logout()
-    this.history.replaceState({message: {type: 'info', value: 'Logout successful.'}}, '/');
+    console.log(this.props.location);
+    this.history.replaceState({message: {type: 'info', value: 'Logout successful.'}}, this.props.location.pathname);
   },
 
   render() {
@@ -112,9 +112,11 @@ ReactDOM.render(
         <Route path="/" component={Home}/>
         <Route path="login" component={Login}/>
         <Route path="logout" component={Logout}/>
-        <Route path="hotels" onEnter={requireAuth} component={Hotels}/>
+        <Route path="hotels" component={Hotels}/>
         <Route path="hotels/:hotelid" component={Hotel}/>
       </Route>
   </Router>
   , document.getElementById('content')
 );
+
+/* <Route path="hotels" onEnter={requireAuth} component={Hotels}/> */

@@ -2,8 +2,7 @@
 import React from 'react';
 import { Link }  from 'react-router';
 
-import Messages from './Messages';
-import Header from './Header-home';
+import Header from './Header';
 import Footer from './Footer';
 
 export default React.createClass({
@@ -25,7 +24,7 @@ export default React.createClass({
   render: function() {
     return (
       <div>
-        <Messages message={{type:'info',text:'lol'}}/>
+        <Header/>
         <div >
           <form className="clear" method="GET">
             <div className="container">

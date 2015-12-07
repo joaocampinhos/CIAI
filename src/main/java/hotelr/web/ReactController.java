@@ -146,6 +146,20 @@ public class ReactController {
     }
   }
 
+  @RequestMapping(value="/roomtypes", method=RequestMethod.GET)
+  public @ResponseBody String roomtypes() throws Exception {
+    String json = "{ \"roomtypes\": [";
+    Iterator<RoomType> rts = roomTypes.findAll().iterator();
+    while (rts.hasNext()) {
+      RoomType rt = rts.next();
+      json += rt.toJSON();
+      if (rts.hasNext()) json += ",";
+    }
+
+    json += "]}";
+    return json;
+  }
+
   private String hotelsToJSON(Iterator<Hotel> hot) {
     String json = "{ \"hotels\": [";
     while (hot.hasNext()) {

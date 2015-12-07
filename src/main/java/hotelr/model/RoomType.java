@@ -46,6 +46,10 @@ public class RoomType {
   public String toString() {
     return "Id: " + getId() + "\nName: " + getName();
   }
+
+  public String toJSON() {
+    return "{ \"id\": " + this.id + ", \"name\": \"" + this.name + "\" }";
+  }
 }
 
 

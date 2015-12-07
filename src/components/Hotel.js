@@ -6,30 +6,78 @@ import Header from './Header';
 import Footer from './Footer';
 
 export default React.createClass({
+  getInitialState() {
+    return {
+      price: 0,
+      hotel: {manager: {}, rooms: []},
+      arrival: this.date('today'),
+      departure: this.date('tomorrow')
+    };
+  },
+  date: function(date) {
+    if (date === 'today') {
+      return new Date().toJSON().slice(0,10);
+    }
+    if (date === 'tomorrow') {
+     return new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toJSON().slice(0,10);
+    }
+  },
+  componentWillMount() {
+    var that = this;
+    fetch('http://localhost:8080/hotels/'+this.props.params.hotelid)
+    .then(function(response) {
+      return response.json()
+    }).then(function(json) {
+      if (that.isMounted()) that.setState({hotel: json});
+      console.log('parsed json', json)
+    }).catch(function(ex) {
+      console.log('parsing failed', ex)
+    })
+  },
+  componentDidMount() {
+    console.log('sdafsdf');
+    console.log(this.state.arrival);
+  },
+  updatePrice: function(e) {
+    this.setState({price: e.target.options[e.target.selectedIndex].getAttribute('data-price')});
+  },
   render: function() {
+    const hotel = this.state.hotel;
+    const manager = this.state.hotel.manager;
+    const roomOpts = this.state.hotel.rooms.map(function (room) {
+      return <option data-price={room.price} value={room.id}>{room.type}</option>
+    });
+    const room = this.state.hotel.rooms.map(function (room) {
+      return (
+        <tr>
+          <td text="room.type.name">{room.type}</td>
+          <td text="room.price+'€'">{room.price} €</td>
+        </tr>
+      );
+    });
     return (
       <div>
         <Header/>
-        <div className="hotel-cover" style={{backgroundImage: 'url(https://images.unsplash.com/photo-1443479579455-1860f114bf77)'}}> </div>
+        <div className="hotel-cover" style={{backgroundImage: 'url(https://images.unsplash.com/photo-1447722939828-559fee94b1f5?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&s=bb08de9862897259abd5c17ffa75f085)'}}> </div>
         <div className="container row">
           <div className="seven columns">
             <div>
               <p className="clearmargin text-center isle-1-v">
-                <span className="star-3"></span>
+                <span className={'star-'+hotel.rating}></span>
                 <br/>
                 <span className="h3 thin uppercase">
-                  NOME
+                  {hotel.name}
                 </span>
               </p>
             </div>
             <h5 className="clearmargin thin">
               Category
             </h5>
-            <p><span>categoria</span></p>
+            <p><span>{hotel.category}</span></p>
             <h5 className="clearmargin thin">
               Adress
             </h5>
-            <p> <span>adress</span></p>
+            <p> <span>{hotel.address}</span></p>
             <h5 className="clearmargin thin">
               Photos
             </h5>
@@ -42,10 +90,10 @@ export default React.createClass({
             <div className="photo-thumb"><img src="https://placehold.it/80x80"/> </div> 
             <h4 className="thin">Manager </h4>
             <div className="media comment">
-              <img src="http://www.gravatar.com/avatar/b4e15cc67a93380cbf8f2a23b355f380" alt="" className="avatar media__img"/>
+              <img src="http://www.sustainablebrands.com/sites/default/files/imagecache/100x100/imagecache/thumbnail_img/profilepics/picture-40780.jpg" alt="" className="avatar media__img"/>
               <div className="media__body">
-                <h5><span text="hotel.manager.name"></span></h5>
-                email: <span text="hotel.manager.email"></span>
+                <h5><span>{manager.name}</span></h5>
+                email: <span>{manager.email}</span>
               </div>
             </div>
           </div>
@@ -53,14 +101,19 @@ export default React.createClass({
             <br/>
             <form action="'/hotels/'+hotel.id+'/bookings'" method="POST">
               <label>Check-in</label>
-              <input name="arrival" className="clear" type="date"/>
+              <input ref="arrival" name="arrival" className="clear" defaultValue={this.state.arrival} type="date"/>
               <label>Check-out</label>
-              <input name="departure" className="clear" type="date"/>
+              <input ref="departure" name="departure" className="clear" defaultValue={this.state.departure} type="date"/>
               <label>Room type</label>
-              <select name="roomtype">
-                <option value="room.type.id" text="room.type.name"/>
+              <select onChange={this.updatePrice} name="roomtype">
+                <option disabled>Room type</option>
+                {roomOpts}
               </select>
-              <h4>Preço: <span id="price"></span>€</h4>
+              {this.state.price !== 0 ?
+                <h4>Preço: <span id="price"></span>{this.state.price} €</h4>
+                :
+                <h4></h4>
+                }
               <button className="button button-primary" type="submit">Book</button>
             </form>
           </div>
@@ -76,10 +129,7 @@ export default React.createClass({
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td text="room.type.name"></td>
-                <td text="room.price+'€'"></td>
-              </tr>
+              {room}
             </tbody>
           </table>
         </div>
@@ -88,22 +138,3 @@ export default React.createClass({
     );
   }
 });
-/*
-   <br/>
-   <a href="'/hotels/'+${hotel.id}+'/edit'" th:if="${#authentication.name == hotel.manager.email }" className="button button-primary button-full">Edit Hotel</a>
-   <form sec:authorize="isAnonymous()" th:action="'/hotels/'+${hotel.id}+'/bookings'" method="POST">
-   <label>Check-in</label>
-   <input name="arrival" th:value="${param.arrival[0]}" th:unless="${param.arrival == null}" className="clear" type="date"/>
-   <input name="arrival" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.arrival != null}" className="clear" type="date"/>
-   <label>Check-out</label>
-   <input name="departure" th:value="${param.departure[0]}" th:unless="${param.departure == null}" className="clear" type="date"/>
-   <input name="departure" th:value="${#dates.format(#calendars.createToday(), 'yyyy-MM-dd')}" th:unless="${param.departure != null}" className="clear" type="date"/>
-   <label>Room type</label>
-   <select name="roomtype">
-   <option th:each="room: ${hotel.rooms}" data-th-attr="data-price=${room.price}" th:selected="${param.roomtype[0] == room.type.name+''}" th:value="${room.type.id}" th:unless="${param.roomtype == null}" th:text="${room.type.name}"/>
-   <option th:each="room: ${hotel.rooms}" data-th-attr="data-price=${room.price}" th:value="${room.type.id}" th:unless="${param.roomtype != null}" th:text="${room.type.name}"/>
-   </select>
-   <h4>Preço: <span id="price"></span>€</h4>
-   <button className="button button-primary" type="submit">Book</button>
-   </form>
-   */

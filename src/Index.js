@@ -14,7 +14,7 @@ import Login from './components/Login';
 
 import Messages from './components/Messages';
 
-import auth from './services/Auth';
+import auth from './services/auth';
 
 window.React = React;
 

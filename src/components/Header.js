@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link }  from 'react-router';
-import auth from '../services/Auth';
+import auth from '../services/auth';
 
 export default React.createClass({
   render: function() {

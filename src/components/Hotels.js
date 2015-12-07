@@ -7,12 +7,13 @@ import Footer from './Footer';
 
 export default React.createClass({
   getInitialState() {
-    fetch('http://localhost:8080/hotels.json')
+    fetch('http://localhost:8080/hotels')
     .then(function(response) {
       if (response.status !== 200) {
         console.log('Looks like there was a problem. Status Code: ' + response.status);
         return;
       }
+      console.log(response);
       return response.json()
     }).then(function(json) {
       console.log('parsed json', json)

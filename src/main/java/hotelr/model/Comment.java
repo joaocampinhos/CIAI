@@ -82,6 +82,6 @@ public class Comment extends Message{
 
   private String replyToJSON() {
     if (reply != null) return reply.toJSON();
-    else return "";
+    else return "\"\"";
   }
 }

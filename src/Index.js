@@ -3,17 +3,16 @@ import ReactDOM from 'react-dom';
 import { Router, Route, Link, History } from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory'
 
-// useless
-import PoweredBy from './components/Powered-by';
-import About from './components/About';
-
+//Pages
 import Home from './components/App';
 import Hotels from './components/Hotels';
 import Hotel from './components/Hotel';
 import Login from './components/Login';
 
+//Components
 import Messages from './components/Messages';
 
+//Sevices
 import auth from './services/auth';
 
 window.React = React;
@@ -107,7 +106,7 @@ const Logout = React.createClass({
 })
 
 ReactDOM.render(
-    <Router history={createBrowserHistory()}>
+    <Router onUpdate={() => window.scrollTo(0, 0)} history={createBrowserHistory()}>
       <Route component={App}>
         <Route path="/" component={Home}/>
         <Route path="login" component={Login}/>

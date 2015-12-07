@@ -9,12 +9,12 @@ export default React.createClass({
       <header>
         <div className="container">
           <div className="nav row">
-            <a href="/"><h3 className="logo six columns">Hotelr</h3></a>
+            <Link to="/"><h3 className="logo six columns">Hotelr</h3></Link>
             <div className="logged six columns">
               {logged ? (
-                <Link to="/logout">Log out</Link>
+                <Link className="button" to="/logout">Log out</Link>
                 ) : (
-                <Link to="/login">Log in</Link>
+                <Link className="button" to="/login">Log in</Link>
                 )}
               </div>
             </div>

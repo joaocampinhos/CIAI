@@ -43,7 +43,10 @@ export default React.createClass({
             <div className="media__body">
               <div className="row">
                 <div className="nine columns">
-                  <h5><a className="a-none" text="${hotel.name}" href="@{|/hotels/${hotel.id}|}">{hotel.name}</a> <span className={'star-' + hotel.rating}></span></h5>
+                  <h5>
+                    <Link to={"/hotels/"+hotel.id} className="a-none">{hotel.name}</Link> 
+                    <span className={'star-' + hotel.rating}></span>
+                  </h5>
                   <p className="clearmargin"> Address: <span>{hotel.address}</span></p>
                   <p className="clearmargin"> Category: <span>{hotel.category}</span></p>
                 </div>
@@ -57,7 +60,7 @@ export default React.createClass({
                 <div className="eight columns">
                 </div>
                 <div className="right four columns">
-                  <a href="@{|/hotels/${hotel.id}|}" className="gohotel clearmargin button button-full button-primary">Book now</a>
+                  <Link to={"/hotels/"+hotel.id} className="gohotel clearmargin button button-full button-primary">Book now</Link>
                 </div>
               </div>
             </div>

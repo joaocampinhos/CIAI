@@ -46,7 +46,7 @@ export default React.createClass({
       <div>
         <div className="container">
           <div className="log-form">
-            <a href="/"><img src="src/images/logo.png" className="logo-img"/></a>
+            <Link to="/"><img src="src/images/logo.png" className="logo-img"/></Link>
           </div>
           <div>
             <form onSubmit={this.onSubmit} name="form">

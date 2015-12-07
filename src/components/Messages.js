@@ -22,7 +22,6 @@ export default React.createClass({
     this.setState({isVisible: false});
   },
   render: function() {
-    let classes = this.props.message ? 'hidden' : '';
     let hide = 'hidden';
     if (this.state.isVisible) {
       hide = '';

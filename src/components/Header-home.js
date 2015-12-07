@@ -10,7 +10,7 @@ export default React.createClass({
         <div className="cover">
           <div className="container">
             <div className="row">
-              <a href="/"><h3 className="logo six columns">Hotelr</h3></a>
+              <Link to="/"><h3 className="logo six columns">Hotelr</h3></Link>
               <div className="login six columns">
                 {logged ? (
                   <Link to="/logout">Log out</Link>

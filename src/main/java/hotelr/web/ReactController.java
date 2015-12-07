@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.sql.Timestamp;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -90,12 +91,19 @@ public class ReactController {
     return hotelsToJSON(hot);
   }
 
+  @RequestMapping(value="/hotels/{id}", method=RequestMethod.GET)
+  public @ResponseBody String show(@PathVariable("id") long id) throws Exception {
+    Hotel hotel = hotels.findOne(id);
+    if(hotel == null || hotel.getPending()) return "{ \"message\": { \"value\": \"Hotel does not exist.\" , \"type\": \"error\" }}";
+    else return hotel.toJSON();
+  }
+
   private String hotelsToJSON(Iterator<Hotel> hot) {
     String json = "{ \"hotels\": [";
     while (hot.hasNext()) {
       Hotel h = hot.next();
-      if (hot.hasNext()) json += h.toJSON() + ",";
-      else json += h.toJSON();
+      json += h.toJSON();
+      if (hot.hasNext()) json += ",";
     }
 
     json += "]}";

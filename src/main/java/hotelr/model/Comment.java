@@ -75,4 +75,13 @@ public class Comment extends Message{
   public String toString() {
     return "Id: " + getId() + "\nGuest: " + getGuest().getName() + "\nComment: " + getComment() + "\nCreation Date: " + getCreationDate().toString() + "\nHotel: " + getHotel().getName();
   }
+
+  public String toJSON() {
+    return "{ \"hotel_id\": " + this.hotel.getId() + ", \"guest\": " + this.guest.toJSON() + ", \"comment\": \"" + this.getComment() + "\", \"date\": \"" + this.getCreationDate().toString() + "\", \"reply\": " + this.replyToJSON() + " }";
+  }
+
+  private String replyToJSON() {
+    if (reply != null) return reply.toJSON();
+    else return "";
+  }
 }

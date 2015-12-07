@@ -56,4 +56,8 @@ public class Reply extends Message{
   public String toString() {
     return "Id: " + getId() + "\nParent: " + getParent().getId() + "\nComment: " + getComment() + "\nCreation Date: " + getCreationDate().toString() + "\n Manager: " + getManager().getName();
   }
+
+  public String toJSON() {
+    return "{ \"manager\": " + this.manager.toJSON() + ", \"comment\": \"" + this.getComment() + "\", \"date\": \"" + this.getCreationDate().toString() + "\" }";
+  }
 }

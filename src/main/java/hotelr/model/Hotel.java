@@ -227,7 +227,7 @@ public class Hotel {
   }
 
   public String toJSON() {
-    return "{ \"id\": " + this.id + ", \"name\": \"" + this.name + "\", \"address\": \"" + this.address + "\", \"category\": \"" + this.category + "\", \"rating\": " + this.rating + ", \"manager\": " + manager.toJSON() + ", \"rooms\": " + this.roomsToJSON() + " }";
+    return "{ \"id\": " + this.id + ", \"name\": \"" + this.name + "\", \"address\": \"" + this.address + "\", \"category\": \"" + this.category + "\", \"rating\": " + this.rating + ", \"manager\": " + manager.toJSON() + ", \"rooms\": " + this.roomsToJSON() + ", \"comments\": " + this.commentsToJSON() + " }";
   }
 
   private String roomsToJSON() {
@@ -236,8 +236,22 @@ public class Hotel {
     Iterator<Room> roo = rooms.iterator();
     while (roo.hasNext()) {
       Room r = roo.next();
-      if (roo.hasNext()) json += "{ \"id\": " + r.getId() + ", \"type\": \"" + r.getType().getName() + "\", \"price\": " + r.getPrice() + ", \"number\": " + r.getPrice() + "},";
-      else json += "{ \"id\": " + r.getId() + ", \"type\": \"" + r.getType().getName() + "\", \"price\": " + r.getPrice() + ", \"number\": " + r.getPrice() + "}";
+      json += "{ \"id\": " + r.getId() + ", \"type\": \"" + r.getType().getName() + "\", \"price\": " + r.getPrice() + ", \"number\": " + r.getPrice() + "}";
+      if (roo.hasNext()) json += ",";
+    }
+
+    json += "]";
+    return json;
+  }
+
+  private String commentsToJSON() {
+    String json = "[";
+
+    Iterator<Comment> com = comments.iterator();
+    while (com.hasNext()) {
+      Comment r = com.next();
+      json += r.toJSON();
+      if (com.hasNext()) json += ",";
     }
 
     json += "]";

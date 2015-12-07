@@ -29,14 +29,9 @@ export default React.createClass({
       return response.json()
     }).then(function(json) {
       if (that.isMounted()) that.setState({hotel: json});
-      console.log('parsed json', json)
     }).catch(function(ex) {
       console.log('parsing failed', ex)
     })
-  },
-  componentDidMount() {
-    console.log('sdafsdf');
-    console.log(this.state.arrival);
   },
   updatePrice: function(e) {
     this.setState({price: e.target.options[e.target.selectedIndex].getAttribute('data-price')});

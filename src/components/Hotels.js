@@ -7,22 +7,64 @@ import Footer from './Footer';
 
 export default React.createClass({
   getInitialState() {
+    return {
+      arrival: this.date('today'),
+      departure: this.date('tomorrow'),
+      hotels: [],
+    };
+  },
+  date: function(date) {
+    if (date === 'today') {
+      return new Date().toJSON().slice(0,10);
+    }
+    if (date === 'tomorrow') {
+     return new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toJSON().slice(0,10);
+    }
+  },
+  componentWillMount() {
+    var that = this;
     fetch('http://localhost:8080/hotels')
     .then(function(response) {
-      if (response.status !== 200) {
-        console.log('Looks like there was a problem. Status Code: ' + response.status);
-        return;
-      }
-      console.log(response);
       return response.json()
     }).then(function(json) {
-      console.log('parsed json', json)
+      if (that.isMounted()) that.setState({hotels: json.hotels});
     }).catch(function(ex) {
       console.log('parsing failed', ex)
     })
-    return {};
   },
   render: function() {
+    var hotels = 'NOPE';
+    if (this.state.hotels.length > 0) {
+      var hotels = this.state.hotels.map(function (hotel) {
+        console.log(hotel.rating);
+        return (
+          <div className="media hotel-list">
+            <img src="https://placehold.it/150x150" alt="" className="media__img"/>
+            <div className="media__body">
+              <div className="row">
+                <div className="nine columns">
+                  <h5><a className="a-none" text="${hotel.name}" href="@{|/hotels/${hotel.id}|}">{hotel.name}</a> <span className={'star-' + hotel.rating}></span></h5>
+                  <p className="clearmargin"> Address: <span>{hotel.address}</span></p>
+                  <p className="clearmargin"> Category: <span>{hotel.category}</span></p>
+                </div>
+                <div className="three columns">
+                  <div className="right">
+                    {hotel.comments.length} comments
+                  </div>
+                </div>
+              </div>
+              <div className="row bottomrow">
+                <div className="eight columns">
+                </div>
+                <div className="right four columns">
+                  <a href="@{|/hotels/${hotel.id}|}" className="gohotel clearmargin button button-full button-primary">Book now</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      });
+      }
     return (
       <div>
         <Header/>
@@ -36,12 +78,27 @@ export default React.createClass({
                 </div>
                 <div className="four columns">
                   <div className="isle-1-h">
-                    <input name="arrival" className="clear" type="date"/>
+                    <input name="arrival" className="clear" defaultValue={this.state.arrival} type="date"/>
                   </div>
                 </div>
                 <div className="four columns">
                   <div className="isle-1-h">
-                    <input name="departure" className="clear" type="date"/>
+                    <input name="departure" className="clear" defaultValue={this.state.departure} type="date"/>
+                  </div>
+                </div>
+              </div>
+              <br/>
+              <hr className="clear"/>
+              <br/>
+            </div>
+            <div className="container">
+              <div className="row">
+                <div className="four columns">
+                  <label>Hotel Name</label>
+                </div>
+                <div className="eight columns">
+                  <div className="isle-1-h">
+                    <input type="text"></input>
                   </div>
                 </div>
               </div>
@@ -67,34 +124,13 @@ export default React.createClass({
             <div className="secondary">
               <div className="container isle-1-v">
                 <button type="submit">Filter</button>
-                <span className="right"><b><span></span> </b>Hotels Found</span>
+                <span className="right"><b><span>{this.state.hotels.length}</span> </b>Hotels Found</span>
               </div>
             </div>
           </form>
           <div className="secondary">
             <div className="container">
-              <div className="media hotel-list">
-                <img src="https://placehold.it/150x150" alt="" className="media__img"/>
-                <div className="media__body">
-                  <div className="row">
-                    <div className="nine columns">
-                      <h5><a className="a-none" text="${hotel.name}" href="@{|/hotels/${hotel.id}|}"></a> <span className="'star-' + ${hotel.rating}"></span></h5>
-                      <p className="clearmargin"> Adress: <span text="${hotel.address}"/></p>
-                      <p className="clearmargin"> Category: <span text="${hotel.category}"/></p>
-                    </div>
-                    <div className="three columns">
-                      comments
-                    </div>
-                  </div>
-                  <div className="row bottomrow">
-                    <div className="eight columns">
-                    </div>
-                    <div className="right four columns">
-                      <a href="@{|/hotels/${hotel.id}|}" className="gohotel clearmargin button button-full button-primary">Book now</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {hotels}
             </div>
           </div>
         </div>

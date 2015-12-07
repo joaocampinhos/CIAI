@@ -2,6 +2,7 @@ package hotelr.model;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -223,6 +224,24 @@ public class Hotel {
   @Override
   public String toString() {
     return "Id: " + getId() + "\nName: " + getName() + "\nAddress: " + getAddress() + "\nCategory: " + getCategory() + "\nRating: " + getRating() + "\nManager: " + getManager().getName();
+  }
+
+  public String toJSON() {
+    return "{ \"id\": " + this.id + ", \"name\": \"" + this.name + "\", \"address\": \"" + this.address + "\", \"category\": \"" + this.category + "\", \"rating\": " + this.rating + ", \"manager\": " + manager.toJSON() + ", \"rooms\": " + this.roomsToJSON() + " }";
+  }
+
+  private String roomsToJSON() {
+    String json = "[";
+
+    Iterator<Room> roo = rooms.iterator();
+    while (roo.hasNext()) {
+      Room r = roo.next();
+      if (roo.hasNext()) json += "{ \"id\": " + r.getId() + ", \"type\": \"" + r.getType().getName() + "\", \"price\": " + r.getPrice() + ", \"number\": " + r.getPrice() + "},";
+      else json += "{ \"id\": " + r.getId() + ", \"type\": \"" + r.getType().getName() + "\", \"price\": " + r.getPrice() + ", \"number\": " + r.getPrice() + "}";
+    }
+
+    json += "]";
+    return json;
   }
 
 }

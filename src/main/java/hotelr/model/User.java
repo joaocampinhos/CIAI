@@ -93,4 +93,8 @@ public abstract class User {
   public String toString() {
     return "Id: " + getId() + "\nName: " + getName() + "\nEmail: " + getEmail();
   }
+
+  public String toJSON() {
+    return "{ \"id\": " + this.getId() + ", \"name\": \"" + this.getName() + "\", \"email\": \"" + this.getEmail() + "\" }";
+  }
 }

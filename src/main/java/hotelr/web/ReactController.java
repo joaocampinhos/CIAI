@@ -6,6 +6,11 @@ import hotelr.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Iterator;
+
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +31,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class ReactController {
   @Autowired
   GuestRepository guests;
+
+  @Autowired
+  HotelRepository hotels;
+
+  @Autowired
+  BookingRepository bookings;
+
+  @Autowired
+  RoomTypeRepository roomTypes;
 
   List<String> cookies = new LinkedList();
 
@@ -54,4 +68,43 @@ public class ReactController {
     if (cookies.remove(cookieValue)) return "{ \"message\": \"Logout successful.\", \"type\": \"success\" }";
     else return "{ \"message\": \"Invalid cookie, could not logout successfully.\", \"type\": \"error\" }";
   }
+
+  @RequestMapping(value="/hotels", method=RequestMethod.GET)
+  public @ResponseBody String listHotels(@RequestParam(value="arrival", required=false) String arrival, @RequestParam(value="departure", required=false) String departure, @RequestParam(value="roomtype", required=false) String roomType) throws Exception {
+
+    Iterator<Hotel> hot;
+    if (arrival == null || departure == null) {
+      hot = hotels.findByPending(false).iterator();
+    } else {
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+      Date dArrival = sdf.parse(arrival);
+      Date dDeparture = sdf.parse(departure);
+
+      if (roomType != null) {
+        hot = hotels.findByAvailabilityWithRoomType(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime()), roomTypes.findByName(roomType)).iterator();
+      } else {
+        hot = hotels.findByAvailability(new Timestamp(dArrival.getTime()), new Timestamp(dDeparture.getTime())).iterator();
+      }
+    }
+
+    return hotelsToJSON(hot);
+  }
+
+  private String hotelsToJSON(Iterator<Hotel> hot) {
+    String json = "{ \"hotels\": [";
+    while (hot.hasNext()) {
+      Hotel h = hot.next();
+      if (hot.hasNext()) json += h.toJSON() + ",";
+      else json += h.toJSON();
+    }
+
+    json += "]}";
+    return json;
+  }
+
+  // TODO
+  // lista de todos os hoteis: /hotels
+  // listar com filtro: /hotels?arrival=<>&departure=<>
+  // lista de cenas de um hotel: /hotels/{id}
+  // criar booking num hotel: /hotels/{id}/bookings/new
 }

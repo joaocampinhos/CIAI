@@ -1,22 +1,24 @@
 class Auth {
 
-  login(email, pass, cb) {
+  login(form, cb) {
     cb = arguments[arguments.length - 1]
     if (localStorage.token) {
       if (cb) cb(true)
       this.onChange(true)
       return
     }
-    pretendRequest(email, pass, (res) => {
-      if (res.authenticated) {
-        localStorage.token = res.token
-        if (cb) cb(true)
+    log(form, (res) => {
+      console.log(res);
+      if(res.cookie) {
+        localStorage.token = res.cookie.value;
+        if (cb) cb(true, res.message);
         this.onChange(true)
-      } else {
-        if (cb) cb(false)
+      }
+      else {
+        if (cb) cb(false, res.message);
         this.onChange(false)
       }
-    })
+    });
   }
 
   getToken() {
@@ -51,3 +53,16 @@ function pretendRequest(email, pass, cb) {
   }, 0)
 }
 
+function log(form, cb) {
+  setTimeout(() => {
+    fetch('http://localhost:8080/login', {
+      method: 'post',
+      body: form
+    })
+    .then(function(response) {
+      return response.json()
+    }).then(function(json) {
+      cb(json)
+    }).catch(function(err) {})
+  }, 0)
+}

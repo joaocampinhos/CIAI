@@ -36,15 +36,15 @@ var App = React.createClass({
     auth.login()
   },
 
+  componentWillReceiveProps() {
+    if (this.props.location.pathname != '/login')
+      window.previousLocation = this.props.location
+  },
+
   componentDidUpdate() {
     const { location } = this.props
-    console.log(this.props.location.action);
-    //console.log(this.props.location.state);
     if (location.state && location.action === 'REPLACE') {
       if (location.state.message !== this.state.message) {
-        console.log(location.state.message);
-        console.log(this.state.message);
-        console.log('-------------------------------');
         this.setState({message: location.state.message});
         this.refs.flash.show();
       }
@@ -61,34 +61,17 @@ var App = React.createClass({
   }
 });
 
-/*
-const App = React.createClass({
-
-
-  render() {
-    return (
-      <div>
-        <ul>
-          <li>
-            {this.state.loggedIn ? (
-              <Link to="/logout">Log out</Link>
-              ) : (
-              <Link to="/login">Sign in</Link>
-              )}
-            </li>
-            <li><Link to="/about">About</Link></li>
-            <li><Link to="/dashboard">Dashboard</Link> (authenticated)</li>
-          </ul>
-          {this.props.children}
-        </div>
-    )
-  }
-})
-*/
-
 function requireAuth(nextState, replaceState) {
   if (!auth.loggedIn())
     replaceState({ nextPathname: nextState.location.pathname }, '/login')
+}
+
+function authed(nextState, replaceState) {
+  if (!window.previousLocation) {
+    window.previousLocation = {pathname: '/'}
+  }
+  if (auth.loggedIn())
+    replaceState(null, window.previousLocation.pathname)
 }
 
 const Logout = React.createClass({
@@ -96,8 +79,9 @@ const Logout = React.createClass({
 
   componentDidMount() {
     auth.logout()
-    console.log(this.props.location);
-    this.history.replaceState({message: {type: 'info', value: 'Logout successful.'}}, this.props.location.pathname);
+    const { location } = this.props
+    const last = window.previousLocation.pathname;
+    this.history.replaceState({message: {type: 'info', value: 'Logout successful.'}}, last);
   },
 
   render() {
@@ -109,7 +93,7 @@ ReactDOM.render(
     <Router onUpdate={() => window.scrollTo(0, 0)} history={createBrowserHistory()}>
       <Route component={App}>
         <Route path="/" component={Home}/>
-        <Route path="login" component={Login}/>
+        <Route path="login" onEnter={authed} component={Login}/>
         <Route path="logout" component={Logout}/>
         <Route path="hotels" component={Hotels}/>
         <Route path="hotels/:hotelid" component={Hotel}/>
@@ -118,4 +102,3 @@ ReactDOM.render(
   , document.getElementById('content')
 );
 
-/* <Route path="hotels" onEnter={requireAuth} component={Hotels}/> */

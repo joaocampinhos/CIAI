@@ -1,9 +1,6 @@
-
 import React from 'react';
 import auth from '../services/auth';
 import { History, Link }  from 'react-router';
-
-import Messages from './Messages';
 
 export default React.createClass({
 
@@ -13,34 +10,15 @@ export default React.createClass({
 
     event.preventDefault();
 
-    const email = this.refs.email.value
-    const pass = this.refs.pass.value
-
-    auth.login(email, pass, (loggedIn) => {
-      if (!loggedIn) {
-        return this.history.replaceState({message: {value: 'Login error', type: 'error'}}, '/login')
+    auth.login(new FormData(event.target), (logged, message) => {
+      if (!logged) {
+        return this.history.replaceState({message: message}, '/login')
       }
-
-      const { location } = this.props
-
-      if (location.state && location.state.nextPathname) {
-        return this.history.replaceState({message: {value: 'Login successful', type: 'info'}}, location.state.nextPathname)
-      } else {
-        return this.history.replaceState({message: {value: 'Login successful', type: 'info'}}, '/')
+      else {
+        return this.history.replaceState({message: message}, window.previousLocation.pathname)
       }
-    })
+    });
   },
-  /*
-
-    //var that = this;
-    //Auth.login(e.target)
-    //Sucesso, manda para a pagina anterior com uma mensagem de sucesso
-    //that.setState({message: json.message});
-    //that.refs.flash.show();
-    //that.history.goBack()
-    //Deu merda, mostra a mensagem de erro
-  },
-  */
   render: function() {
     return (
       <div>

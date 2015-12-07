@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link }  from 'react-router';
 
@@ -28,15 +27,12 @@ export default React.createClass({
       return response.json()
     }).then(function(json) {
       if (that.isMounted()) that.setState({hotels: json.hotels});
-    }).catch(function(ex) {
-      console.log('parsing failed', ex)
-    })
+    }).catch(function(ex) {})
   },
   render: function() {
     var hotels = 'NOPE';
     if (this.state.hotels.length > 0) {
       var hotels = this.state.hotels.map(function (hotel) {
-        console.log(hotel.rating);
         return (
           <div className="media hotel-list">
             <img src="https://placehold.it/150x150" alt="" className="media__img"/>
@@ -137,6 +133,7 @@ export default React.createClass({
             </div>
           </div>
         </div>
+        <Footer/>
       </div>
     );
   }

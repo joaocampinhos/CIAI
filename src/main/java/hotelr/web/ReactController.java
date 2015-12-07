@@ -59,7 +59,7 @@ public class ReactController {
       cookies.add(login);
 
       System.out.println(cookies);
-      return "{ \"cookie\": { \"name\": \"session\", \"value\": \"" + login + "\" }, \"message\": { \"value\": \"Login successful.\", \"type\": \"success\"}}";
+      return "{ \"user\": " + user.toJSON() +", \"cookie\": { \"name\": \"session\", \"value\": \"" + login + "\" }, \"message\": { \"value\": \"Login successful.\", \"type\": \"success\"}}";
     } else {
       return "{ \"message\": { \"value\": \"Wrong password.\" , \"type\": \"error\" }}";
     }

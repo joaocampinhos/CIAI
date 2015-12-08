@@ -43,7 +43,7 @@ export default React.createClass({
     }
   },
   updatePrice: function(e) {
-    this.setState({price: e.target.options[e.target.selectedIndex].getAttribute('data-price')});
+    this.setState({ roomtype: this.refs.room.options[this.refs.room.selectedIndex].value });
   },
   render: function() {
     const hotel = this.state.hotel;

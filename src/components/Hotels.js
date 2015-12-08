@@ -24,6 +24,9 @@ export default React.createClass({
      return new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toJSON().slice(0,10);
     }
   },
+  update: function(e) {
+    this.setState({ roomtype: this.refs.room.options[this.refs.room.selectedIndex].value });
+  },
   componentDidMount() {
     var that = this;
     fetch('http://localhost:8080/hotels')
@@ -138,7 +141,7 @@ export default React.createClass({
                 </div>
                 <div className="eight columns">
                   <div className="isle-1-h">
-                    <select name="roomtype" value={this.state.roomtype} className="clear">
+                    <select ref="room" onChange={this.update} name="roomtype" value={this.state.roomtype} className="clear">
                       <option value=''>Room Type</option>
                       {roomtype}
                     </select>

@@ -82,7 +82,7 @@ export default React.createClass({
                 <div className="eight columns">
                 </div>
                 <div className="right four columns">
-                  <Link to={"/hotels/"+hotel.id+'?arrival='} className="gohotel clearmargin button button-full button-primary">Book now</Link>
+                  <Link to={"/hotels/"+hotel.id+'?arrival='+that.state.arrival+'&departure='+that.state.departure+'&roomtype='+that.state.roomtype} className="gohotel clearmargin button button-full button-primary">Book now</Link>
                 </div>
               </div>
             </div>
@@ -138,7 +138,7 @@ export default React.createClass({
                 </div>
                 <div className="eight columns">
                   <div className="isle-1-h">
-                    <select name="roomtype" defaultValue={this.state.roomtype} className="clear">
+                    <select name="roomtype" value={this.state.roomtype} className="clear">
                       <option value=''>Room Type</option>
                       {roomtype}
                     </select>

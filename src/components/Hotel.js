@@ -12,7 +12,8 @@ export default React.createClass({
       price: 0,
       hotel: {manager: {}, rooms: []},
       arrival: query.arrival || this.date('today'),
-      departure: query.departure || this.date('tomorrow')
+      departure: query.departure || this.date('tomorrow'),
+      roomtype: query.roomtype || ''
     };
   },
   date: function(date) {
@@ -33,6 +34,13 @@ export default React.createClass({
     }).catch(function(ex) {
       console.log('parsing failed', ex)
     })
+  },
+  componentDidUpdate() {
+    if (this.props.location.query.roomtype) {
+      const price = this.refs.room.options[this.refs.room.selectedIndex].getAttribute('data-price')
+      if (this.state.price !== price)
+        this.setState({price: price});
+    }
   },
   updatePrice: function(e) {
     this.setState({price: e.target.options[e.target.selectedIndex].getAttribute('data-price')});
@@ -101,7 +109,7 @@ export default React.createClass({
               <label>Check-out</label>
               <input ref="departure" name="departure" className="clear" defaultValue={this.state.departure} type="date"/>
               <label>Room type</label>
-              <select onChange={this.updatePrice} name="roomtype">
+              <select ref="room" onChange={this.updatePrice} value={this.state.roomtype} name="roomtype">
                 <option disabled>Room type</option>
                 {roomOpts}
               </select>

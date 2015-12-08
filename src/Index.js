@@ -37,7 +37,7 @@ var App = React.createClass({
   },
 
   componentWillReceiveProps() {
-    if (this.props.location.pathname != '/login')
+    if (this.props.location.pathname !== '/login')
       window.previousLocation = this.props.location
   },
 

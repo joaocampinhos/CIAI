@@ -5,18 +5,24 @@ import auth from '../services/auth';
 export default React.createClass({
   render: function() {
     const logged = auth.loggedIn()
+    if (logged) {
+      const user = auth.getUser();
+    }
     return (
       <header>
         <div className="container">
           <div className="nav row">
             <Link to="/"><h3 className="logo six columns">Hotelr</h3></Link>
-            <div className="logged six columns">
               {logged ? (
+            <div className="logged six columns">
+                <Link style={{paddingRight: '10px'}} to="/aindanaosei">{auth.getUser().name}</Link>
                 <Link className="button" to="/logout">Log out</Link>
-                ) : (
-                <Link className="button" to="/login">Log in</Link>
-                )}
               </div>
+                ) : (
+            <div className="logged six columns">
+                <Link className="button" to="/login">Log in</Link>
+              </div>
+                )}
             </div>
           </div>
         </header>

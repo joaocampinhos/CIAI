@@ -6,10 +6,14 @@ import Footer from './Footer';
 
 export default React.createClass({
   getInitialState() {
+    let { query } = this.props.location
     return {
-      arrival: this.date('today'),
-      departure: this.date('tomorrow'),
+      arrival: query.arrival || this.date('today'),
+      departure: query.departure || this.date('tomorrow'),
+      roomtype: query.roomtype || '',
+      name: query.name || undefined,
       hotels: [],
+      roomtypes: []
     };
   },
   date: function(date) {
@@ -20,19 +24,41 @@ export default React.createClass({
      return new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toJSON().slice(0,10);
     }
   },
-  componentWillMount() {
+  componentDidMount() {
     var that = this;
     fetch('http://localhost:8080/hotels')
     .then(function(response) {
       return response.json()
     }).then(function(json) {
-      if (that.isMounted()) that.setState({hotels: json.hotels});
+      that.setState({hotels: json.hotels});
+    }).catch(function(ex) {})
+    fetch('http://localhost:8080/roomtypes')
+    .then(function(response) {
+      return response.json()
+    }).then(function(json) {
+     that.setState({roomtypes: json.roomtypes});
     }).catch(function(ex) {})
   },
   render: function() {
-    var hotels = 'NOPE';
+    var hots = [];
+    var that = this;
+    const roomtype = this.state.roomtypes.map(function(room) {
+      return (
+        <option value={room.id}>{room.name}</option>
+      );
+    });
+    var hotels = '';
     if (this.state.hotels.length > 0) {
-      var hotels = this.state.hotels.map(function (hotel) {
+      var hots = this.state.hotels.filter(function(el) {
+        if (that.state.name) {
+          if (el.name.toUpperCase().indexOf(that.state.name.toUpperCase()) !== -1)
+            return true;
+          else
+            return false;
+        }
+        return true;
+      });
+      var hotels = hots.map(function (hotel) {
         return (
           <div className="media hotel-list">
             <img src="https://placehold.it/150x150" alt="" className="media__img"/>
@@ -56,14 +82,14 @@ export default React.createClass({
                 <div className="eight columns">
                 </div>
                 <div className="right four columns">
-                  <Link to={"/hotels/"+hotel.id} className="gohotel clearmargin button button-full button-primary">Book now</Link>
+                  <Link to={"/hotels/"+hotel.id+'?arrival='} className="gohotel clearmargin button button-full button-primary">Book now</Link>
                 </div>
               </div>
             </div>
           </div>
         );
       });
-      }
+    }
     return (
       <div>
         <Header/>
@@ -97,7 +123,7 @@ export default React.createClass({
                 </div>
                 <div className="eight columns">
                   <div className="isle-1-h">
-                    <input type="text"></input>
+                    <input name="name" defaultValue={this.state.name} type="text"></input>
                   </div>
                 </div>
               </div>
@@ -112,8 +138,9 @@ export default React.createClass({
                 </div>
                 <div className="eight columns">
                   <div className="isle-1-h">
-                    <select name="roomtype" className="clear">
-                      <option defaultValue disabled="">Room Type</option>
+                    <select name="roomtype" defaultValue={this.state.roomtype} className="clear">
+                      <option value=''>Room Type</option>
+                      {roomtype}
                     </select>
                   </div>
                 </div>
@@ -123,7 +150,7 @@ export default React.createClass({
             <div className="secondary">
               <div className="container isle-1-v">
                 <button type="submit">Filter</button>
-                <span className="right"><b><span>{this.state.hotels.length}</span> </b>Hotels Found</span>
+                <span className="right" style={{lineHeight: '48px'}}><b><span>{hots.length}</span> </b>Hotels Found</span>
               </div>
             </div>
           </form>

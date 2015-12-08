@@ -11,6 +11,7 @@ class Auth {
       console.log(res);
       if(res.cookie) {
         localStorage.token = res.cookie.value;
+        localStorage.user = JSON.stringify(res.user);
         if (cb) cb(true, res.message);
         this.onChange(true)
       }
@@ -22,11 +23,16 @@ class Auth {
   }
 
   getToken() {
-    return localStorage.token
+    return localStorage.token;
+  }
+
+  getUser() {
+    return JSON.parse(localStorage.user);
   }
 
   logout(cb) {
     delete localStorage.token
+    delete localStorage.user
     if (cb) cb()
     this.onChange(false)
   }
@@ -39,19 +45,6 @@ class Auth {
 }
 
 export default new Auth()
-
-function pretendRequest(email, pass, cb) {
-  setTimeout(() => {
-    if (email === 'joe@example.com' && pass === 'password1') {
-      cb({
-        authenticated: true,
-        token: Math.random().toString(36).substring(7)
-      })
-    } else {
-      cb({ authenticated: false })
-    }
-  }, 0)
-}
 
 function log(form, cb) {
   setTimeout(() => {

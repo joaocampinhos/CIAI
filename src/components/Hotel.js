@@ -7,11 +7,12 @@ import Footer from './Footer';
 
 export default React.createClass({
   getInitialState() {
+    let { query } = this.props.location
     return {
       price: 0,
       hotel: {manager: {}, rooms: []},
-      arrival: this.date('today'),
-      departure: this.date('tomorrow')
+      arrival: query.arrival || this.date('today'),
+      departure: query.departure || this.date('tomorrow')
     };
   },
   date: function(date) {

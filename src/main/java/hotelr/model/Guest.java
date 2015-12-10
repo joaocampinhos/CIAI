@@ -2,6 +2,7 @@ package hotelr.model;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -33,5 +34,19 @@ public class Guest extends User {
 
   public List<Booking> getBookings() {
     return this.bookings;
+  }
+
+  public String bookingsToJSON() {
+    String json = "[";
+
+    Iterator<Booking> boo = bookings.iterator();
+    while (boo.hasNext()) {
+      Booking b = boo.next();
+      json += "{ \"id\": " + b.getId() + ", \"arrival\": \"" + b.getArrival() + "\", \"departure\": \"" + b.getDeparture() + "\", \"roomtype\": " + b.getRoomType().toJSON() + ", \"hotel\": " + b.getHotel().toJSON() + "}";
+      if (boo.hasNext()) json += ",";
+    }
+
+    json += "]";
+    return json;
   }
 }

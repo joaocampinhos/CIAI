@@ -101,6 +101,17 @@ public class ReactController {
     else return hotel.toJSON();
   }
 
+  @RequestMapping(value="/user/{id}/bookings", method=RequestMethod.GET)
+  public @ResponseBody String getBookings(@PathVariable("id") long id, @RequestParam("cookie") String cookieValue) throws Exception {
+    if (cookies.contains(cookieValue)) {
+      Guest guest = guests.findByEmail(cookieValue);
+
+      return "{ \"bookings\": " + guest.bookingsToJSON() + "}";
+    } else {
+      return "{ \"message\": { \"value\": \"You are not logged in.\" , \"type\": \"error\" }}";
+    }
+  }
+
   @RequestMapping(value="/hotels/{id}/bookings", method=RequestMethod.POST)
   public @ResponseBody String bookIt(@PathVariable("id") long id, @RequestParam("arrival") String arrival, @RequestParam("departure") String departure, @RequestParam("roomid") long roomid, @RequestParam("cookie") String cookieValue) throws Exception {
     if (cookies.contains(cookieValue)) {

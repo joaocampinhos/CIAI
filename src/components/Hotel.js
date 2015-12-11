@@ -1,11 +1,14 @@
-
 import React from 'react';
-import { Link }  from 'react-router';
+import auth from '../services/auth';
+import { History, Link }  from 'react-router';
 
 import Header from './Header';
 import Footer from './Footer';
 
 export default React.createClass({
+
+  mixins: [ History ],
+
   getInitialState() {
     let { query } = this.props.location
     return {
@@ -42,8 +45,39 @@ export default React.createClass({
         this.setState({price: price});
     }
   },
+  book: function(e) {
+    var that = this;
+    e.preventDefault();
+    var body = new FormData(e.target);
+    body.append('cookie', auth.getToken());
+    fetch('http://localhost:8080/hotels/'+this.props.params.hotelid+'/bookings', {
+      method: 'post',
+      body: body
+    })
+    .then(function(response) {
+      return response.json()
+    }).then(function(json) {
+      //console.log(that.location.pathname);
+      console.log(that.props.location.pathname);
+      if (json.status === 400) {
+        return that.history.replaceState({message: {
+          type: 'error',
+          value: 'Could not book the desired room'
+        }}, that.props.location.pathname)
+      }
+      else {
+        return that.history.replaceState({message: json.message}, that.props.location.pathname)
+      }
+    }).catch(function(ex) {
+      console.log('parsing failed', ex)
+    })
+
+  },
   updatePrice: function(e) {
-    this.setState({ roomtype: this.refs.room.options[this.refs.room.selectedIndex].value });
+    this.setState({
+      roomtype: this.refs.room.options[this.refs.room.selectedIndex].value,
+      price: this.refs.room.options[this.refs.room.selectedIndex].getAttribute('data-price')
+    });
   },
   render: function() {
     const hotel = this.state.hotel;
@@ -103,13 +137,13 @@ export default React.createClass({
           </div>
           <div className="five columns">
             <br/>
-            <form action="'/hotels/'+hotel.id+'/bookings'" method="POST">
+            <form action="'/hotels/'+hotel.id+'/bookings'" onSubmit={this.book} method="POST">
               <label>Check-in</label>
               <input ref="arrival" name="arrival" className="clear" defaultValue={this.state.arrival} type="date"/>
               <label>Check-out</label>
               <input ref="departure" name="departure" className="clear" defaultValue={this.state.departure} type="date"/>
               <label>Room type</label>
-              <select ref="room" onChange={this.updatePrice} value={this.state.roomtype} name="roomtype">
+              <select ref="room" name="roomid" onChange={this.updatePrice} value={this.state.roomtype}>
                 <option disabled>Room type</option>
                 {roomOpts}
               </select>
@@ -118,7 +152,11 @@ export default React.createClass({
                 :
                 <h4></h4>
                 }
-              <button className="button button-primary" type="submit">Book</button>
+              {auth.loggedIn() ? (
+                <button className="button button-primary" type="submit">Book</button>
+                ) : (
+                <Link className="button button-primary" to='/login'>Book</Link>
+              )}
             </form>
           </div>
         </div>

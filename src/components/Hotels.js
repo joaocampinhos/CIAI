@@ -109,7 +109,7 @@ export default React.createClass({
         return true;
       });
       var hotels = hots.map(function (hotel) {
-        console.log('wat'+that.state.roomtype);
+        const id = hotel.rooms.map( (r) => { if (r.type === that.state.roomname) return r.id; }).reduce( (_,e) => { return e; });
         return (
           <div className="media hotel-list">
             <img src="https://placehold.it/150x150" alt="" className="media__img"/>
@@ -133,7 +133,7 @@ export default React.createClass({
                 <div className="eight columns">
                 </div>
                 <div className="right four columns">
-                  <Link to={"/hotels/"+hotel.id+'?arrival='+that.state.arrival+'&departure='+that.state.departure+(that.state.roomtype?'&roomtype='+that.state.roomtype:'')} className="gohotel clearmargin button button-full button-primary">Book now</Link>
+                  <Link to={"/hotels/"+hotel.id+'?arrival='+that.state.arrival+'&departure='+that.state.departure+(id?'&roomtype='+id:'')} className="gohotel clearmargin button button-full button-primary">Book now</Link>
                 </div>
               </div>
             </div>

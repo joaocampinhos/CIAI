@@ -14,7 +14,7 @@ export default React.createClass({
       arrival: query.arrival || this.date('today'),
       departure: query.departure || this.date('tomorrow'),
       roomtype: undefined,
-      roomname: query.roomtype || '',
+      roomname: query.roomtype || undefined,
       name: query.name || undefined,
       hotels: [],
       roomtypes: []
@@ -42,7 +42,7 @@ export default React.createClass({
     q += '&departure='+this.state.departure;
     if (this.state.name)
       q += '&name='+this.state.name;
-    if (this.state.roomtype !== '')
+    if (this.state.roomname !== undefined)
       q += '&roomtype='+this.state.roomname;
     fetch('http://localhost:8080/hotels'+q)
     .then(function(response) {
@@ -69,7 +69,7 @@ export default React.createClass({
     q += '&departure='+this.state.departure;
     if (this.state.name)
       q += '&name='+this.state.name;
-    if (this.state.roomtype !== '')
+    if (this.state.roomname !== undefined)
       q += '&roomtype='+this.state.roomname;
     fetch('http://localhost:8080/hotels'+q)
     .then(function(response) {
@@ -109,6 +109,7 @@ export default React.createClass({
         return true;
       });
       var hotels = hots.map(function (hotel) {
+        console.log('wat'+that.state.roomtype);
         return (
           <div className="media hotel-list">
             <img src="https://placehold.it/150x150" alt="" className="media__img"/>
@@ -132,7 +133,7 @@ export default React.createClass({
                 <div className="eight columns">
                 </div>
                 <div className="right four columns">
-                  <Link to={"/hotels/"+hotel.id+'?arrival='+that.state.arrival+'&departure='+that.state.departure+'&roomtype='+that.state.roomtype} className="gohotel clearmargin button button-full button-primary">Book now</Link>
+                  <Link to={"/hotels/"+hotel.id+'?arrival='+that.state.arrival+'&departure='+that.state.departure+(that.state.roomtype?'&roomtype='+that.state.roomtype:'')} className="gohotel clearmargin button button-full button-primary">Book now</Link>
                 </div>
               </div>
             </div>

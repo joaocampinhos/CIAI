@@ -29,11 +29,15 @@ export default React.createClass({
   },
   componentWillMount() {
     var that = this;
+    const re = window.previousLocation ? window.previousLocation.pathname : '/';
     fetch('http://localhost:8080/hotels/'+this.props.params.hotelid)
     .then(function(response) {
       return response.json()
     }).then(function(json) {
-      if (that.isMounted()) that.setState({hotel: json});
+      that.setState({hotel: json});
+      if (json.message.value === "Hotel does not exist.") {
+        that.history.replaceState({message: json.message }, re);
+      }
     }).catch(function(ex) { })
   },
   componentDidUpdate() {

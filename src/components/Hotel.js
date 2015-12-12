@@ -34,9 +34,7 @@ export default React.createClass({
       return response.json()
     }).then(function(json) {
       if (that.isMounted()) that.setState({hotel: json});
-    }).catch(function(ex) {
-      console.log('parsing failed', ex)
-    })
+    }).catch(function(ex) { })
   },
   componentDidUpdate() {
     if (this.props.location.query.roomtype) {
@@ -57,8 +55,6 @@ export default React.createClass({
     .then(function(response) {
       return response.json()
     }).then(function(json) {
-      //console.log(that.location.pathname);
-      console.log(that.props.location.pathname);
       if (json.status === 400) {
         return that.history.replaceState({message: {
           type: 'error',
@@ -66,11 +62,13 @@ export default React.createClass({
         }}, that.props.location.pathname)
       }
       else {
+        if (json.message.value === "You are not logged in.") {
+          auth.logout();
+          return that.history.replaceState({message: json.message}, '/login')
+        }
         return that.history.replaceState({message: json.message}, that.props.location.pathname)
       }
-    }).catch(function(ex) {
-      console.log('parsing failed', ex)
-    })
+    }).catch(function(ex) { })
 
   },
   updatePrice: function(e) {

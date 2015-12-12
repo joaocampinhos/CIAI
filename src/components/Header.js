@@ -15,7 +15,7 @@ export default React.createClass({
             <Link to="/"><h3 className="logo six columns">Hotelr</h3></Link>
               {logged ? (
             <div className="logged six columns">
-                <Link style={{paddingRight: '10px'}} to="/aindanaosei">{auth.getUser().name}</Link>
+                <Link style={{paddingRight: '10px'}} to="/dashboard">{auth.getUser().name}</Link>
                 <Link className="button" to="/logout">Log out</Link>
               </div>
                 ) : (

@@ -8,6 +8,7 @@ import Home from './components/App';
 import Hotels from './components/Hotels';
 import Hotel from './components/Hotel';
 import Login from './components/Login';
+import Dashboard from './components/Dashboard';
 
 //Components
 import Messages from './components/Messages';
@@ -97,6 +98,7 @@ ReactDOM.render(
         <Route path="logout" component={Logout}/>
         <Route path="hotels" component={Hotels}/>
         <Route path="hotels/:hotelid" component={Hotel}/>
+        <Route path="dashboard" onEnter={requireAuth} component={Dashboard}/>
       </Route>
   </Router>
   , document.getElementById('content')

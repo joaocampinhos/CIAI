@@ -42,7 +42,7 @@ public class Guest extends User {
     Iterator<Booking> boo = bookings.iterator();
     while (boo.hasNext()) {
       Booking b = boo.next();
-      json += "{ \"id\": " + b.getId() + ", \"arrival\": \"" + b.getArrival() + "\", \"departure\": \"" + b.getDeparture() + "\", \"roomtype\": " + b.getRoomType().toJSON() + ", \"hotel\": " + b.getHotel().toJSON() + "}";
+      json += "{ \"id\": " + b.getId() + ", \"arrival\": \"" + b.getArrival() + "\", \"departure\": \"" + b.getDeparture() + "\", \"price\": " + b.getRoom().getPrice() + ", \"roomtype\": " + b.getRoomType().toJSON() + ", \"hotel\": " + b.getHotel().toJSON() + "}";
       if (boo.hasNext()) json += ",";
     }
 

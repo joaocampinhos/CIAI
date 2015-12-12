@@ -45,7 +45,7 @@ public class ReactController {
   @Autowired
   RoomRepository rooms;
 
-  List<String> cookies = new LinkedList();
+  List<String> cookies = new LinkedList<String>();
 
   @RequestMapping(value="/login", method=RequestMethod.POST)
   public @ResponseBody String login(@RequestParam("login") String login, @RequestParam("password") String password) throws Exception {

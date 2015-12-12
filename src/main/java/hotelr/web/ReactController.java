@@ -121,27 +121,31 @@ public class ReactController {
         Hotel hotel = hotels.findOne(id);
 
         if(hotel.getPending() == false) {
-          if (roomTypes.exists(roomid) && hotel.hasRoomType(roomid)) {
-            Room room = rooms.findByHotelAndType(hotel, roomTypes.findOne(roomid));
+          if (rooms.exists(roomid)) {
+            Room room = rooms.findOne(roomid);
 
-            try {
-              SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-              Date dArrival = sdf.parse(arrival);
-              Date dDeparture = sdf.parse(departure);
+            if (room.getHotel() == hotel) {
+              try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date dArrival = sdf.parse(arrival);
+                Date dDeparture = sdf.parse(departure);
 
-              Timestamp tArrival = new Timestamp(dArrival.getTime());
-              Timestamp tDeparture = new Timestamp(dDeparture.getTime());
+                Timestamp tArrival = new Timestamp(dArrival.getTime());
+                Timestamp tDeparture = new Timestamp(dDeparture.getTime());
 
-              if (tArrival.before(tDeparture)){
-                Booking booking = new Booking(tArrival, tDeparture, room.getType(), room, hotel, guest, true);
-                bookings.save(booking);
+                if (tArrival.before(tDeparture)){
+                  Booking booking = new Booking(tArrival, tDeparture, room.getType(), room, hotel, guest, true);
+                  bookings.save(booking);
 
-                return "{ \"message\": { \"value\": \"Booking created.\" , \"type\": \"success\" }}";
-              } else {
-                return "{ \"message\": { \"value\": \"Arrival date has to be before departure.\" , \"type\": \"error\" }}";
+                  return "{ \"message\": { \"value\": \"Booking created.\" , \"type\": \"success\" }}";
+                } else {
+                  return "{ \"message\": { \"value\": \"Arrival date has to be before departure.\" , \"type\": \"error\" }}";
+                }
+              } catch (Exception e) {
+                return "{ \"message\": { \"value\": \"Dates are incorrect.\" , \"type\": \"error\" }}";
               }
-            } catch (Exception e) {
-              return "{ \"message\": { \"value\": \"Dates are incorrect.\" , \"type\": \"error\" }}";
+            } else {
+              return "{ \"message\": { \"value\": \"That room does not exist in this hotel.\" , \"type\": \"error\" }}";
             }
           } else {
             return "{ \"message\": { \"value\": \"That room does not exist.\" , \"type\": \"error\" }}";

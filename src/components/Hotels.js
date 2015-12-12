@@ -1,16 +1,20 @@
 import React from 'react';
-import { Link }  from 'react-router';
+import { History, Link }  from 'react-router';
 
 import Header from './Header';
 import Footer from './Footer';
 
 export default React.createClass({
+
+  mixins: [ History ],
+
   getInitialState() {
     let { query } = this.props.location
     return {
       arrival: query.arrival || this.date('today'),
       departure: query.departure || this.date('tomorrow'),
-      roomtype: query.roomtype || '',
+      roomtype: undefined,
+      roomname: query.roomtype || '',
       name: query.name || undefined,
       hotels: [],
       roomtypes: []
@@ -26,10 +30,21 @@ export default React.createClass({
   },
   update: function(e) {
     this.setState({ roomtype: this.refs.room.options[this.refs.room.selectedIndex].value });
+    this.setState({ roomname: this.refs.room.options[this.refs.room.selectedIndex].text });
+    this.setState({ name: this.refs.name.value });
+    this.setState({ arrival: this.refs.arrival.value });
+    this.setState({ departure: this.refs.departure.value });
   },
-  componentDidMount() {
+  filter: function(e) {
+    e.preventDefault();
     var that = this;
-    fetch('http://localhost:8080/hotels')
+    var q = '?arrival='+this.state.arrival;
+    q += '&departure='+this.state.departure;
+    if (this.state.name)
+      q += '&name='+this.state.name;
+    if (this.state.roomtype !== '')
+      q += '&roomtype='+this.state.roomname;
+    fetch('http://localhost:8080/hotels'+q)
     .then(function(response) {
       return response.json()
     }).then(function(json) {
@@ -39,7 +54,39 @@ export default React.createClass({
     .then(function(response) {
       return response.json()
     }).then(function(json) {
-     that.setState({roomtypes: json.roomtypes});
+      json.roomtypes.forEach(function(a) {
+        if (a.name === that.state.roomname) {
+          that.setState({roomtype: a.id});
+        }
+      });
+      that.setState({roomtypes: json.roomtypes});
+    }).catch(function(ex) {})
+    return this.history.replaceState(null, this.props.location.pathname+q)
+  },
+  componentDidMount() {
+    var that = this;
+    var q = '?arrival='+this.state.arrival;
+    q += '&departure='+this.state.departure;
+    if (this.state.name)
+      q += '&name='+this.state.name;
+    if (this.state.roomtype !== '')
+      q += '&roomtype='+this.state.roomname;
+    fetch('http://localhost:8080/hotels'+q)
+    .then(function(response) {
+      return response.json()
+    }).then(function(json) {
+      that.setState({hotels: json.hotels});
+    }).catch(function(ex) {})
+    fetch('http://localhost:8080/roomtypes')
+    .then(function(response) {
+      return response.json()
+    }).then(function(json) {
+      json.roomtypes.forEach(function(a) {
+        if (a.name === that.state.roomname) {
+          that.setState({roomtype: a.id});
+        }
+      });
+      that.setState({roomtypes: json.roomtypes});
     }).catch(function(ex) {})
   },
   render: function() {
@@ -97,7 +144,7 @@ export default React.createClass({
       <div>
         <Header/>
         <div >
-          <form className="clear" method="GET">
+          <form className="clear" onSubmit={this.filter} method="GET">
             <div className="container">
               <br/>
               <div className="row">
@@ -106,12 +153,12 @@ export default React.createClass({
                 </div>
                 <div className="four columns">
                   <div className="isle-1-h">
-                    <input name="arrival" className="clear" defaultValue={this.state.arrival} type="date"/>
+                    <input name="arrival" ref="arrival" onChange={this.update} className="clear" defaultValue={this.state.arrival} type="date"/>
                   </div>
                 </div>
                 <div className="four columns">
                   <div className="isle-1-h">
-                    <input name="departure" className="clear" defaultValue={this.state.departure} type="date"/>
+                    <input name="departure" ref="departure" onChange={this.update}  className="clear" defaultValue={this.state.departure} type="date"/>
                   </div>
                 </div>
               </div>
@@ -126,7 +173,7 @@ export default React.createClass({
                 </div>
                 <div className="eight columns">
                   <div className="isle-1-h">
-                    <input name="name" defaultValue={this.state.name} type="text"></input>
+                    <input ref="name" onChange={this.update} name="name" defaultValue={this.state.name} type="text"></input>
                   </div>
                 </div>
               </div>
